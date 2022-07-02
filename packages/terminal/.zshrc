@@ -2,10 +2,19 @@ export PATH=$PATH:$HOME/scripts
 export GIT_CLONE_PATH="$HOME"/projects/github.com/TatsuyaSagara
 
 # Homebrew, asdf-vm
-if [ -f "/opt/homebrew/bin/brew"  ]; then
-    eval "$(/opt/homebrew/bin/brew shellenv)"
+arch_name="$(uname -m)"
+if [ "${arch_name}" = "x86_64" ]; then
+    if [ -f "/usr/local/bin/brew"  ]; then
+        eval "$(/usr/local/bin/brew shellenv)"
 
-    . $(brew --prefix asdf)/libexec/asdf.sh
+        . $(brew --prefix asdf)/libexec/asdf.sh
+    fi
+elif [ "${arch_name}" = "arm64" ]; then
+    if [ -f "/opt/homebrew/bin/brew"  ]; then
+        eval "$(/opt/homebrew/bin/brew shellenv)"
+
+        . $(brew --prefix asdf)/libexec/asdf.sh
+    fi
 fi
 
 alias code="open -a 'Visual Studio Code'"
