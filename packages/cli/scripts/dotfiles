@@ -190,18 +190,18 @@ if ! is_dir ~/.config/yarn/global/node_modules; then
     yarn global add
 fi
 
-if ! is_file ~/prysm/prysm.sh; then
-    log 'Setup Ethereum 2.0 client'
-    if ! is_dir ~/prysm; then
-        mkdir ~/prysm
-    fi
-
-    (
-        cd ~/prysm
-        curl https://raw.githubusercontent.com/prysmaticlabs/prysm/master/prysm.sh --output prysm.sh
-        chmod +x prysm.sh
-    )
-fi
+#if ! is_file ~/prysm/prysm.sh; then
+#    log 'Setup Ethereum 2.0 client'
+#    if ! is_dir ~/prysm; then
+#        mkdir ~/prysm
+#    fi
+#
+#    (
+#        cd ~/prysm
+#        curl https://raw.githubusercontent.com/prysmaticlabs/prysm/master/prysm.sh --output prysm.sh
+#        chmod +x prysm.sh
+#    )
+#fi
 
 ###########################################################
 # Alacritty
