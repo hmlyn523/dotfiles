@@ -5,13 +5,17 @@ dotfiles managed with
 - [Homebrew Bundle](https://github.com/Homebrew/homebrew-bundle)
 - [asdf](https://asdf-vm.com/#/)
 
+## Introduction
+
+This repository is a forked and modified version of [@JunichiSugiura](https://github.com/JunichiSugiura/dotfiles) repository. Thank you very much.
+
 ## Installation
 
 1. Sign in to App store manually (Temporary solution. See more: <https://github.com/mas-cli/mas/issues/164>)
 2. Run install
 
 ```sh
-curl -o - https://raw.githubusercontent.com/JunichiSugiura/dotfiles/master/packages/cli/scripts/dotfiles | sh
+curl -o - https://raw.githubusercontent.com/TatsuyaSagara/dotfiles/main/packages/cli/scripts/dotfiles | sh
 ```
 
 3. Start Yabai and skhd
