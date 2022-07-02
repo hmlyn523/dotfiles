@@ -3,7 +3,7 @@
 set -e 
 
 GITHUB_PATH=~/projects/github.com
-GIT_CLONE_PATH="$GITHUB_PATH/JunichiSugiura"
+GIT_CLONE_PATH="$GITHUB_PATH/TatsuyaSagara"
 STOW_PACKAGES_PATH="$GIT_CLONE_PATH"/dotfiles/packages
 
 ###########################################################
@@ -85,7 +85,7 @@ ensure_dir "$GIT_CLONE_PATH"
 if ! is_dir "$GIT_CLONE_PATH"/dotfiles; then
     log 'Clone dotfiles'
     cd "$GIT_CLONE_PATH"
-    git clone https://github.com/JunichiSugiura/dotfiles.git
+    git clone https://github.com/TatsuyaSagara/dotfiles.git
 fi
 
 if [ ! "$skip_apps" ]; then
