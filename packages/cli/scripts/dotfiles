@@ -167,9 +167,9 @@ is_runtime_versions_changed () {
 
 for plugin in $(asdf plugin list); do
     if is_runtime_versions_changed "$plugin"; then
-        if [ "$plugin" = nodejs ]; then log "Import release team keyring for Node.JS"
-            bash -c '${ASDF_DATA_DIR:=$HOME/.asdf}/plugins/nodejs/bin/import-release-team-keyring'
-        fi
+#        if [ "$plugin" = nodejs ]; then log "Import release team keyring for Node.JS"
+#            bash -c '${ASDF_DATA_DIR:=$HOME/.asdf}/plugins/nodejs/bin/import-release-team-keyring'
+#        fi
 
         log "Install runtime: $plugin"
         asdf install "$plugin"
