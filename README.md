@@ -35,8 +35,6 @@ haven't figure out ways to automate
 - show battery percentage
 - install
   - [Karabiner Elements](https://karabiner-elements.pqrs.org/)
-  - [Vulkan SDK](https://vulkan.lunarg.com/)
-  - [Postlab](https://hedge.video/postlab)
 - add [Vimari](https://apps.apple.com/us/app/vimari/id1480933944?mt=12) Safari extension
 
 ## Installed Apps
@@ -46,3 +44,7 @@ Check [Brewfile](./Brewfile) for the latest bundle.
 ## Tutorial
 
 If you like to learn how to create dotfiles, check out my [tutorial ](https://github.com/JunichiSugiura/tutorials/tree/master/dotfiles).
+
+## Note
+
+If the macOS language is not English, yabai's rule does not apply.
