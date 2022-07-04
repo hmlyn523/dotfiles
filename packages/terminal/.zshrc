@@ -45,9 +45,19 @@ alias top="ytop"
 alias vi="nvim"
 alias du="dust"
 
-
-if [ -d "/opt/homebrew/opt/ruby/bin" ]; then
-    export PATH=/opt/homebrew/opt/ruby/bin:/opt/homebrew/lib/ruby/gems/3.0.0/bin:$PATH
+arch_name="$(uname -m)"
+if [ "${arch_name}" = "x86_64" ]; then
+    if [ -f "/usr/local/bin/brew"  ]; then
+        if [ -d "/Users/tatsuya/.asdf/shims" ]; then
+            export PATH=/Users/tatsuya/.asdf/shims:/Users/tatsuya/.asdf/installs/ruby/3.1.2/lib/ruby/gems/3.1.0:$PATH
+        fi
+    fi
+elif [ "${arch_name}" = "arm64" ]; then
+    if [ -f "/opt/homebrew/bin/brew"  ]; then
+        if [ -d "/opt/homebrew/opt/ruby/bin" ]; then
+            export PATH=/opt/homebrew/opt/ruby/bin:/opt/homebrew/lib/ruby/gems/3.0.0/bin:$PATH
+        fi
+    fi
 fi
 
 eval "$(starship init zsh)"

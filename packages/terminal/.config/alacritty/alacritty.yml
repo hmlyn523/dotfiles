@@ -1,5 +1,8 @@
 shell:
-  program: /opt/homebrew/bin/tmux
+  # x86_64
+  program: /usr/local/bin/tmux
+  # arm64
+#  program: /opt/homebrew/bin/tmux
   args:
     - new-session
     - -D

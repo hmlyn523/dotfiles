@@ -3,3 +3,5 @@ yarn 1.22.19
 golang 1.18.3
 rust 1.62.0
 python 3.10.5
+ruby 3.1.2
+deno 1.23.2
