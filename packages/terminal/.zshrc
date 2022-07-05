@@ -81,6 +81,8 @@ export FZF_DEFAULT_OPTS="-m --height 100% --border --preview 'cat {}'"
 # source '/usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/completion.zsh.inc'
 bindkey '^e' autosuggest-accept
 
+export PATH=$PATH:$GIT_CLONE_PATH/dotfiles/packages/cli/scripts
+
 export LF_ICONS="\
 tw=:\
 st=:\

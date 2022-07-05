@@ -35,3 +35,5 @@ yabai -m rule --add app="^Electron$"           manage=off
 
 echo "yabai configuration loaded..."
 
+killall limelight &> /dev/null
+limelight -c ~/.config/limelight/limelightrc &> /dev/null &

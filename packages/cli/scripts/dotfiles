@@ -1,5 +1,6 @@
 #!/bin/sh 
  
+ # Exit on error
 set -e 
 
 GITHUB_PATH=~/projects/github.com
@@ -202,6 +203,20 @@ fi
 #        chmod +x prysm.sh
 #    )
 #fi
+
+###########################################################
+# Limelight
+###########################################################
+limelight_path=/usr/local/bin/limelight
+if ! is_file "$limelight_path"; then
+    git clone https://github.com/koekeishiya/limelight
+    cd limelight
+    make
+    mv ./bin/limelight /usr/local/bin/limelight
+    cd ../
+    rm -rf limelight
+    chmod +x ~/.config/limelight/limelightrc
+fi
 
 ###########################################################
 # Alacritty
