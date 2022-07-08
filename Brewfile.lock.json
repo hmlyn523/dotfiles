@@ -17,7 +17,7 @@
         "revision": "209f59cda890de69b74c224982591642c21323d3"
       },
       "homebrew/cask": {
-        "revision": "a907e2fb1a0daefe44f6fa59bb5767d48ff9e969"
+        "revision": "310084353af3d36d19b1d78026fa00058ecf0740"
       },
       "homebrew/cask-fonts": {
         "revision": "057549c676d52464fe639681eb000c72cdff8f27"
@@ -2414,7 +2414,7 @@
       "monterey": {
         "HOMEBREW_VERSION": "3.5.4",
         "HOMEBREW_PREFIX": "/usr/local",
-        "Homebrew/homebrew-core": "2f07844b3762c1cd94797f3de226bed8dec7eb07",
+        "Homebrew/homebrew-core": "77750ed565cd6079ed27a90f837a4ef36b0b98ec",
         "CLT": "13.0.0.0.1.1627064638",
         "Xcode": "13.4.1",
         "macOS": "12.3.1"
