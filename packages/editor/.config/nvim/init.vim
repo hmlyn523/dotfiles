@@ -7,6 +7,7 @@ set wrap
 set nobackup noswapfile noundofile
 set autoread
 set mouse=a
+set clipboard+=unnamedplus
 
 let g:rainbow_active = 1
 
