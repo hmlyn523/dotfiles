@@ -183,6 +183,8 @@ if ! is_file "$system_node_path"; then
     ln -s ~/.asdf/shims/node "$system_node_path"
 fi
 
+. $(brew --prefix asdf)/libexec/asdf.sh
+
 ###########################################################
 # Yarn global
 ###########################################################
