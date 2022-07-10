@@ -70,7 +70,7 @@ brew "librsvg"
 
 #cask "1password"
 cask "alacritty"
-cask "adoptopenjdk/openjdk/adoptopenjdk8"
+#cask "adoptopenjdk/openjdk/adoptopenjdk8"
 cask "android-file-transfer"
 cask "android-studio"
 #cask "blender"

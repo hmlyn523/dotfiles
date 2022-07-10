@@ -2405,7 +2405,7 @@
       },
       "Xcode": {
         "id": "497799835",
-        "version": "13.4.1"
+        "version": "13.2.1"
       }
     }
   },
@@ -2418,6 +2418,14 @@
         "CLT": "13.0.0.0.1.1627064638",
         "Xcode": "13.4.1",
         "macOS": "12.3.1"
+      },
+      "big_sur": {
+        "HOMEBREW_VERSION": "3.5.4",
+        "HOMEBREW_PREFIX": "/usr/local",
+        "Homebrew/homebrew-core": "90ac25acbfc384850f140f1a395ea1c36d02da1e",
+        "CLT": "13.2.0.0.1.1638488800",
+        "Xcode": "13.2.1",
+        "macOS": "11.6.7"
       }
     }
   }
