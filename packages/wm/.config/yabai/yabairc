@@ -31,6 +31,7 @@ yabai -m config focus_follows_mouse          autoraise
 yabai -m config debug_output on
 
 # Rules
+# yabai -m query --windows | jq ".[] | { App: .app, Title: .title }"
 yabai -m rule --add app="^Calendar$"           manage=off
 yabai -m rule --add app="^Dictionary$"         manage=off
 yabai -m rule --add app="^Disk Utility$"       manage=off
@@ -38,5 +39,6 @@ yabai -m rule --add app="^Postlab$"            manage=off
 yabai -m rule --add app="^Simulator$"          manage=off
 yabai -m rule --add app="^System Preferences$" manage=off
 yabai -m rule --add app="^Electron$"           manage=off
+yabai -m rule --add app="^Safari$" title="^Extensions$" manage=off
 
 echo "yabai configuration loaded..."
