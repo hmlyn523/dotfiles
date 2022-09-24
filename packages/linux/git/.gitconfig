@@ -1,7 +1,7 @@
 [user]
 	name       = TatsuyaSagara
 	email      = tatsuya.sagara@gmail.com
-	signingkey = 282E65470FEC9557
+	signingkey = B51B8CD3CCA4AC2C
 [alias]
 	s   = status -sb
 	d   = diff
@@ -25,7 +25,7 @@
 [commit]
 	gpgsign = true
 [gpg]
-	program = /usr/local/MacGPG2/bin/gpg
+	program = /usr/bin/gpg
 [pull]
 	rebase = false
 [filter "lfs"]
