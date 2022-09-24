@@ -1,0 +1,34 @@
+#!/usr/bin/env sh
+
+# Layout config
+yabai -m config window_gap                   10
+yabai -m config window_placement             second_child
+yabai -m config layout                       bsp
+
+yabai -m config window_border on
+yabai -m config window_border_width 6
+yabai -m config active_window_border_color 0XFF50FA7B
+#yabai -m config normal_window_border_color 0XFFBD93F9
+
+# Mouse
+yabai -m config mouse_modifier               ctrl
+yabai -m config mouse_follows_focus          on
+yabai -m config focus_follows_mouse          autoraise
+
+# Debug
+yabai -m config debug_output on
+
+# Rules
+# yabai -m query --windows | jq ".[] | { App: .app, Title: .title }"
+yabai -m rule --add app="^Activity Monitor$"          manage=off
+yabai -m rule --add app="^App Store$"          manage=off
+yabai -m rule --add app="^Calendar$"           manage=off
+yabai -m rule --add app="^Dictionary$"         manage=off
+yabai -m rule --add app="^Disk Utility$"       manage=off
+yabai -m rule --add app="^Finder$"             manage=off
+yabai -m rule --add app="^Safari$" title="^Extensions$" manage=off
+yabai -m rule --add app="^Simulator$"          manage=off
+yabai -m rule --add app="^System Preferences$" manage=off
+yabai -m rule --add app="^System Information$" manage=off
+
+echo "yabai configuration loaded..."

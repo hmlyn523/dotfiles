@@ -1,0 +1,22 @@
+tap "homebrew/cask"
+cask_args appdir: "/Applications"
+
+brew "applesimutils"
+brew "ios-deploy"
+brew "mas"
+brew "skhd"
+brew "yabai"
+brew "zsh"
+brew "zsh-autosuggestions"
+
+cask "android-studio"
+cask "font-hack-nerd-font"
+cask "gimp"
+cask "google-japanese-ime"
+cask "gpg-suite"
+cask "utm"
+cask "visual-studio-code"
+
+# mas "Bitwarden", id: 1137397744 # this didn't work. manually installed instead.
+mas "Vimari", id: 1480933944
+mas "Xcode", id: 497799835

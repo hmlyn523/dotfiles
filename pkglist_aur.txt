@@ -1,0 +1,7 @@
+android-studio
+microsoft-edge-stable-bin
+noto-fonts-cjk
+nerd-fonts-hack
+noto-fonts-emoji
+zsh
+zsh-autosuggestions

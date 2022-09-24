@@ -1,0 +1,321 @@
+#!/bin/sh 
+ 
+# Exit on error
+set -e 
+
+GITHUB_PATH=~/projects/github.com
+#GIT_CLONE_PATH="$GITHUB_PATH"
+#STOW_PACKAGES_PATH="$GIT_CLONE_PATH"/dotfiles/packages
+STOW_PACKAGES_PATH="$GITHUB_PATH"/dotfiles/packages
+
+os_type="$(uname)"
+arch_name="$(uname -m)"
+
+###########################################################
+# Options
+###########################################################
+unlink_packages=
+verbose=
+for i in "$@"; do
+    case "$i" in
+        -s|--skip-apps)
+            skip_apps=1
+            shift ;;
+        -v|--verbose)
+            verbose=1
+            shift ;;
+        -g|--skip-git-setting)
+            skip_git=1
+            shift ;;
+        -u=*|--unlink=*)
+            unlink_packages="${i#*=}"
+            shift ;;
+        *) ;;
+    esac
+done
+
+###########################################################
+# Utils
+###########################################################
+log() {
+    message=$1
+    echo 📌 "$message"
+}
+
+log_warning() {
+    message=$1
+    echo "$message"
+}
+
+is_file() {
+    path="$1"
+    [ -f "$path" ]
+}
+
+is_dir() {
+    path="$1"
+    [ -d "$path" ]
+}
+
+ensure_dir() {
+    path="$1"
+    if ! is_dir "$path"; then
+        mkdir -p "$path"
+    fi
+}
+
+log "Start dotfiles => ${os_type}/${arch_name}"
+
+###########################################################
+# Check operating system or distribution
+###########################################################
+if [ "${os_type}" != "Darwin" ]; then
+    if [ "${os_type}" != "Linux" ] || ! is_file /etc/arch-release; then
+        log "Supported is macOS or Arch Linux only..."
+        exit 1
+    fi
+fi
+log 'Check for supported OS ...OK'
+
+###########################################################
+# Stow unlink
+###########################################################
+if [ -n "$unlink_packages" ]; then
+    log 'Unlinking dotfiles...'
+    stow -vD -d "$STOW_PACKAGES_PATH" -t ~ "$unlink_packages"
+    exit
+fi
+
+###########################################################
+# Install Homebrew
+###########################################################
+if [ "${os_type}" = "Darwin" ]; then
+    # macOS
+    if [ "${arch_name}" = "x86_64" ]; then
+        # Intel
+        if ! is_file /usr/local/bin/brew; then
+            log 'Setup Homebrew'
+            /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+        fi
+    elif [ "${arch_name}" = "arm64" ]; then
+        # ARM
+        if ! is_file /opt/homebrew/bin/brew; then
+            log 'Setup Homebrew'
+            /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+            eval "$(/opt/homebrew/bin/brew shellenv)"
+            log 'Install Rosetta 2'
+            sudo softwareupdate --install-rosetta
+        fi
+    fi
+elif [ "${os_type}" = "Linux" ]; then
+    # Linux
+    if ! is_file /home/linuxbrew/.linuxbrew/bin/brew; then
+        log 'Setup Homebrew'
+        if ! is_file /usr/bin/git; then
+            log 'Start install git.'
+            sudo pacman -S --noconfirm git
+        fi
+        /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+	echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"' >> "$HOME"/.bash_profile
+	eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+    fi
+fi
+
+###########################################################
+# Install AUR Helper
+###########################################################
+if [ "${os_type}" = "Linux" ]; then
+    if ! is_file /usr/bin/paru; then
+        log 'Install AUR Helper.'
+        if ! is_file /usr/bin/git; then
+            # Start install git.
+            sudo pacman -S --noconfirm git
+        fi
+        # Start paru clone.
+        sudo rm -rf paru
+        git clone https://aur.archlinux.org/paru.git
+        cd paru
+        # Start makepkg.
+        makepkg -si --noconfirm
+        cd ..
+        sudo rm -rf paru
+        #echo y | sudo pacman -Rs rust
+        # Add SkipReview to paru.conf.
+        if is_file /usr/paru.conf; then
+            sudo sed -i -e 's/#SkipReview/SkipReview/g' /etc/paru.conf
+        fi
+    fi
+fi
+
+###########################################################
+# Clone dotfiles
+###########################################################
+#ensure_dir "$GIT_CLONE_PATH"
+ensure_dir "$GITHUB_PATH"
+
+#if ! is_dir "$GIT_CLONE_PATH"/dotfiles; then
+if ! is_dir "$GITHUB_PATH"/dotfiles; then
+    log 'Clone dotfiles'
+    #cd "$GIT_CLONE_PATH"
+    cd "$GITHUB_PATH"
+#    git clone https://github.com/TatsuyaSagara/dotfiles.git
+    git clone git@github.com:TatsuyaSagara/dotfiles.git
+fi
+
+###########################################################
+# Install Apps and CLIs
+###########################################################
+if [ ! "$skip_apps" ]; then
+    log 'Install Apps and CLIs'
+    /home/linuxbrew/.linuxbrew/bin/brew bundle --file "$GITHUB_PATH"/dotfiles/Brewfile $([ -n "$verbose" ] && echo -v)
+    if [ "${os_type}" = "Darwin" ]; then
+        # macOS
+        /home/linuxbrew/.linuxbrew/bin/brew bundle --file "$GITHUB_PATH"/dotfiles/Brewfile_mac $([ -n "$verbose" ] && echo -v)
+    elif [ "${os_type}" = "Linux" ]; then
+        # Linux
+        sudo pacman -Syyu 
+        sudo pacman -S --needed --noconfirm - < "$GITHUB_PATH"/dotfiles/pkglist.txt
+        paru -S --needed --noconfirm - < "$GITHUB_PATH"/dotfiles/pkglist_aur.txt
+        fc-cache -fv
+    fi
+fi
+
+###########################################################
+# Stow link
+###########################################################
+ensure_dir ~/.config/alacritty
+ensure_dir ~/.config/starship
+ensure_dir ~/.config/yarn/global
+
+# shellcheck disable=SC2046
+stow -vd "$STOW_PACKAGES_PATH"/common -t ~ $(ls $STOW_PACKAGES_PATH/common)
+if [ "${os_type}" = "Darwin" ]; then
+    log 'Linking for macOS'
+    stow -vd "$STOW_PACKAGES_PATH"/mac -t ~ $(ls $STOW_PACKAGES_PATH/mac)
+elif [ "${os_type}" = "Linux" ]; then
+    log 'Linking for Linux'
+    stow -vd "$STOW_PACKAGES_PATH"/linux -t ~ $(ls $STOW_PACKAGES_PATH/linux)
+fi
+
+###########################################################
+# Neovim
+###########################################################
+plug_path=~/.local/share/nvim/site/autoload/plug.vim
+if ! is_file "$plug_path"; then
+    log 'Setup vim-plug"'
+    sh -c "curl -fLo $plug_path --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim"
+fi
+
+plugged_path=~/.local/share/nvim/autoload/plugged
+if ! is_dir "$plugged_path"; then
+    log 'Install Neovim Plugins'
+    nvim +PlugInstall +qall
+fi
+
+###########################################################
+# Git
+###########################################################
+if [ ! "$skip_git" ]; then
+    # Setup Git
+    if ! is_dir ~/.gnupg || [ -z "$(gpg --list-secret-keys --keyid-format LONG)" ]; then
+        log 'Install gpg signing with git'
+        gpg --default-new-key-algo rsa4096 --gen-key
+        key_id=$(gpg --list-secret-keys --keyid-format LONG | grep -oP "rsa4096\/[0-9a-fA-F]{16}" | cut -d"/"  -f2)
+        log 'Copy and pates the GPG key below to GitHub'
+        gpg --armor --export "$key_id"
+        git config --global user.signingkey "$key_id"
+    fi
+
+    if ! is_file ~/.ssh/id_rsa.pub; then
+        log 'Setup gpg signing for git'
+        ssh-keygen -t rsa -b 4096 -C "tatsuya.sagara@gmail.com"
+        log 'Copy and pates the SSH key below to GitHub'
+        cat ~/.ssh/id_rsa.pub
+   fi
+fi
+
+###########################################################
+# asdf
+###########################################################
+for plugin in $(awk '{print $1}' ~/.tool-versions); do
+    if ! is_dir ~/.asdf/plugins/"$plugin"; then
+        log '(asdf) Add runtime plugin: ${plugin}'
+        asdf plugin add "$plugin"
+    fi
+done
+
+is_runtime_versions_changed () {
+    plugin="$1"
+    specified=$(grep "$plugin" ~/.tool-versions | awk '{$1=""; print $0}')
+    installed=$(asdf list "$plugin" 2>&1)
+
+    is_changed=
+    for version in $specified; do
+        match=$(echo "$installed" | grep "$version")
+        [ -z "$match" ] && is_changed=1
+    done
+
+    [ "$is_changed" ]
+}
+
+for plugin in $(asdf plugin list); do
+    if is_runtime_versions_changed "$plugin"; then
+        log "(asdf) Install runtime: $plugin"
+        asdf install "$plugin"
+    fi
+done
+
+. $(brew --prefix asdf)/libexec/asdf.sh
+
+###########################################################
+# Yarn global
+###########################################################
+if ! is_dir ~/.config/yarn/global/node_modules; then
+    log 'Setup Yarn global'
+    yarn global add
+fi
+
+###########################################################
+# Alacritty
+###########################################################
+#ALACRITTY_ORG_PATH="$GIT_CLONE_PATH/alacritty"
+ALACRITTY_ORG_PATH="$GITHUB_PATH/alacritty"
+ensure_dir "$ALACRITTY_ORG_PATH"
+if ! is_dir /Applications/Alacritty.app && ! is_file /usr/bin/alacritty; then
+    log 'Install Alacritty'
+    #{
+        #if [ "${os_type}" = "Linux" ]; then
+            ## sudo pacman -S --noconfirm cmake freetype2 fontconfig pkg-config make libxcb libxkbcommon python
+            #sudo pacman -S --noconfirm freetype2 fontconfig pkg-config make libxcb libxkbcommon
+        #fi
+    #}
+    (
+        cd "$ALACRITTY_ORG_PATH"
+        gh repo clone alacritty/alacritty
+    )
+    # Build alacritty
+    (
+        cd "$ALACRITTY_ORG_PATH/alacritty"
+
+        if [ "${os_type}" = "Darwin" ]; then
+            # macOS
+            rustup target add x86_64-apple-darwin aarch64-apple-darwin
+            make app-universal
+            cp -r target/release/osx/Alacritty.app /Applications/
+        elif [ "${os_type}" = "Linux" ]; then
+            # Linux
+            cargo build --release
+            sudo cp -p target/release/alacritty /usr/bin
+        fi
+    )
+fi
+
+###########################################################
+# Change shell
+###########################################################
+if [ "${os_type}" = "Linux" ]; then
+    log "Change shell to zsh."
+    sudo chsh -s $(which zsh)
+fi
+
+log "Install success please reboot..."

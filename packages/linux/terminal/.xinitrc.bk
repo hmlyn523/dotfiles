@@ -1,0 +1,12 @@
+export XDG_CONFIG_HOME="$HOME/.config"
+
+# fcitx
+export GTK_IM_MODULE="fcitx"
+export QT_IM_MODULE="fcitx"
+export XMODIFIERS='@im=fcitx'
+# (fcitx-autostart > /dev/null 2>&1 &)
+# xset -r 49  > /dev/null 2>&1
+
+# Alacritty
+export LIBGL_ALWAYS_SOFTWARE=1
+
