@@ -39,7 +39,7 @@ done
 ###########################################################
 log() {
     message=$1
-    echo 📌 "$message"
+    echo "$message"
 }
 
 log_warning() {
