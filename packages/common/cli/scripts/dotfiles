@@ -141,10 +141,9 @@ if [ "${os_type}" = "Linux" ]; then
         (
             git clone https://aur.archlinux.org/paru.git
             cd paru
-            makepkg -si
+            makepkg -si --noconfirm
         )
     fi
-    rm -rf yay
 fi
 
 log '==================== Inatall AUR Hleper END'
