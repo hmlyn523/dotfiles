@@ -239,7 +239,7 @@ fi
 ###########################################################
 for plugin in $(awk '{print $1}' ~/.tool-versions); do
     if ! is_dir ~/.asdf/plugins/"$plugin"; then
-        log '(asdf) Add runtime plugin: ${plugin}'
+        eval log '(asdf) Add runtime plugin: $plugin'
         asdf plugin add "$plugin"
     fi
 done
@@ -260,7 +260,7 @@ is_runtime_versions_changed () {
 
 for plugin in $(asdf plugin list); do
     if is_runtime_versions_changed "$plugin"; then
-        log "(asdf) Install runtime: $plugin"
+        eval log "(asdf) Install runtime: $plugin"
         asdf install "$plugin"
     fi
 done
