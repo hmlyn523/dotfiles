@@ -139,7 +139,7 @@ if [ "${os_type}" = "Linux" ]; then
         cd paru
         sudo pacman -Syyu 
         # Start makepkg.
-        makepkg -si --noconfirm
+        makepkg -si --noconfirm --needed
     fi
 fi
 
