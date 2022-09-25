@@ -134,12 +134,12 @@ if [ "${os_type}" = "Linux" ]; then
             # Start install git.
             sudo pacman -S --noconfirm git
         fi
+        sudo pacman -Syyu 
         # Start paru clone.
         git clone https://aur.archlinux.org/paru.git
         cd paru
-        sudo pacman -Syyu 
         # Start makepkg.
-        makepkg -si --noconfirm --needed
+        makepkg -si
     fi
 fi
 
