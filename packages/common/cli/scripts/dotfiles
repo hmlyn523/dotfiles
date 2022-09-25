@@ -167,10 +167,10 @@ fi
 ###########################################################
 if [ ! "$skip_apps" ]; then
     log 'Install Apps and CLIs'
-    bundle --file "$GITHUB_PATH"/dotfiles/Brewfile $([ -n "$verbose" ] && echo -v)
+    brew bundle --file "$GITHUB_PATH"/dotfiles/Brewfile $([ -n "$verbose" ] && echo -v)
     if [ "${os_type}" = "Darwin" ]; then
         # macOS
-        bundle --file "$GITHUB_PATH"/dotfiles/Brewfile_mac $([ -n "$verbose" ] && echo -v)
+        brew bundle --file "$GITHUB_PATH"/dotfiles/Brewfile_mac $([ -n "$verbose" ] && echo -v)
     elif [ "${os_type}" = "Linux" ]; then
         # Linux
         sudo pacman -Syyu 
