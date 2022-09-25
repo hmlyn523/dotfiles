@@ -145,9 +145,9 @@ if [ "${os_type}" = "Linux" ]; then
         sudo rm -rf paru
         #echo y | sudo pacman -Rs rust
         # Add SkipReview to paru.conf.
-        if is_file /usr/paru.conf; then
-            sudo sed -i -e 's/#SkipReview/SkipReview/g' /etc/paru.conf
-        fi
+        #if is_file /usr/paru.conf; then
+        #    sudo sed -i -e 's/#SkipReview/SkipReview/g' /etc/paru.conf
+        #fi
     fi
 fi
 
