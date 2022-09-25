@@ -128,19 +128,29 @@ log '==================== Inatall Homebrew END'
 ###########################################################
 log '==================== Inatall AUR Hleper START'
 if [ "${os_type}" = "Linux" ]; then
+    if ! is_file /usr/bin/git; then
+        # Start install git.
+        sudo pacman -S --noconfirm git
+    fi
+    sudo pacman -Syyu 
+    if ! is_file /usr/bin/yay; then
+        log 'Install Yay Helper'
+        git clone https://aur.archlinux.org/yay.git
+        cd yay
+        makepkg -si --noconfirm
+        cd ..
+    fi
     if ! is_file /usr/bin/paru; then
         log 'Install AUR Helper.'
-        if ! is_file /usr/bin/git; then
-            # Start install git.
-            sudo pacman -S --noconfirm git
-        fi
-        sudo pacman -Syyu 
+        yay -S paru --noconfirm
         # Start paru clone.
-        git clone https://aur.archlinux.org/paru.git
-        cd paru
+        #git clone https://aur.archlinux.org/paru.git
+        #cd paru
         # Start makepkg.
-        makepkg -si
+        #makepkg -si
     fi
+    rm -rf yay
+    
 fi
 
 log '==================== Inatall AUR Hleper END'
