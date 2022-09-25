@@ -116,8 +116,8 @@ elif [ "${os_type}" = "Linux" ]; then
             sudo pacman -S --noconfirm git
         fi
         /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-	echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"' >> "$HOME"/.bash_profile
-	eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+        echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"' >> "$HOME"/.bash_profile
+        eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
     fi
 fi
 
@@ -167,10 +167,10 @@ fi
 ###########################################################
 if [ ! "$skip_apps" ]; then
     log 'Install Apps and CLIs'
-    /home/linuxbrew/.linuxbrew/bin/brew bundle --file "$GITHUB_PATH"/dotfiles/Brewfile $([ -n "$verbose" ] && echo -v)
+    bundle --file "$GITHUB_PATH"/dotfiles/Brewfile $([ -n "$verbose" ] && echo -v)
     if [ "${os_type}" = "Darwin" ]; then
         # macOS
-        /home/linuxbrew/.linuxbrew/bin/brew bundle --file "$GITHUB_PATH"/dotfiles/Brewfile_mac $([ -n "$verbose" ] && echo -v)
+        bundle --file "$GITHUB_PATH"/dotfiles/Brewfile_mac $([ -n "$verbose" ] && echo -v)
     elif [ "${os_type}" = "Linux" ]; then
         # Linux
         sudo pacman -Syyu 
