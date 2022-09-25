@@ -135,7 +135,6 @@ if [ "${os_type}" = "Linux" ]; then
             sudo pacman -S --noconfirm git
         fi
         # Start paru clone.
-        cd "$GITHUB_PATH"
         git clone https://aur.archlinux.org/paru.git
         cd paru
         sudo pacman -Syyu 
