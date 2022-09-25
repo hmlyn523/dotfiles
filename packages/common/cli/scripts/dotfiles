@@ -136,6 +136,7 @@ if [ "${os_type}" = "Linux" ]; then
         git clone https://aur.archlinux.org/paru.git
         cd paru
         # Start makepkg.
+        sudo pacman -Syyu 
         makepkg -si --noconfirm
         cd ..
         sudo rm -rf paru
@@ -173,7 +174,6 @@ if [ ! "$skip_apps" ]; then
         brew bundle --file "$GITHUB_PATH"/dotfiles/Brewfile_mac $([ -n "$verbose" ] && echo -v)
     elif [ "${os_type}" = "Linux" ]; then
         # Linux
-        sudo pacman -Syyu 
         sudo pacman -S --needed --noconfirm - < "$GITHUB_PATH"/dotfiles/pkglist.txt
         paru -S --needed --noconfirm - < "$GITHUB_PATH"/dotfiles/pkglist_aur.txt
         fc-cache -fv
