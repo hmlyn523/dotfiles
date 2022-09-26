@@ -137,7 +137,7 @@ if [ "${os_type}" = "Linux" ]; then
         )
         (sudo pacman --noconfirm -Syu)
         git clone https://aur.archlinux.org/paru.git ~/.srcs/paru
-        (cd ~/.srcs/paru && makepkg -si )
+        (cd ~/.srcs/paru && makepkg -si --noconfirm )
     fi
 fi
 
