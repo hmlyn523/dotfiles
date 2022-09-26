@@ -71,7 +71,7 @@ log "Start dotfiles => ${os_type}/${arch_name}"
 ###########################################################
 if [ "${os_type}" != "Darwin" ]; then
     if [ "${os_type}" != "Linux" ] || ! is_file /etc/arch-release; then
-        log "Supported is macOS or Arch Linux only..."
+        log 'Supported is macOS or Arch Linux only...'
         exit 1
     fi
 fi
@@ -89,7 +89,6 @@ fi
 ###########################################################
 # Install Homebrew
 ###########################################################
-log '==================== Inatall Homebrew START'
 if [ "${os_type}" = "Darwin" ]; then
     # macOS
     if [ "${arch_name}" = "x86_64" ]; then
@@ -121,12 +120,10 @@ elif [ "${os_type}" = "Linux" ]; then
     fi
     eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
 fi
-log '==================== Inatall Homebrew END'
 
 ###########################################################
 # Install AUR Helper
 ###########################################################
-log '==================== Inatall AUR Hleper START'
 if [ "${os_type}" = "Linux" ]; then
     if ! is_file /usr/bin/paru; then
         log 'Install AUR Helper.'
@@ -141,15 +138,11 @@ if [ "${os_type}" = "Linux" ]; then
     fi
 fi
 
-log '==================== Inatall AUR Hleper END'
-
 ###########################################################
 # Clone dotfiles
 ###########################################################
 #ensure_dir "$GIT_CLONE_PATH"
 ensure_dir "$GITHUB_PATH"
-
-log '==================== Clone dotfiles START'
 
 #if ! is_dir "$GIT_CLONE_PATH"/dotfiles; then
 if ! is_dir "$GITHUB_PATH"/dotfiles; then
@@ -160,12 +153,9 @@ if ! is_dir "$GITHUB_PATH"/dotfiles; then
 #    git clone git@github.com:TatsuyaSagara/dotfiles.git
 fi
 
-log '==================== Clone dotfiles END'
-
 ###########################################################
 # Install Apps and CLIs
 ###########################################################
-log '==================== Install Apps and CLIs START'
 if [ ! "$skip_apps" ]; then
     log 'Install Apps and CLIs'
     brew bundle --file "$GITHUB_PATH"/dotfiles/Brewfile $([ -n "$verbose" ] && echo -v)
@@ -179,7 +169,6 @@ if [ ! "$skip_apps" ]; then
         fc-cache -fv
     fi
 fi
-log '==================== Install Apps and CLIs END'
 
 ###########################################################
 # Stow link
@@ -187,8 +176,6 @@ log '==================== Install Apps and CLIs END'
 ensure_dir ~/.config/alacritty
 ensure_dir ~/.config/starship
 ensure_dir ~/.config/yarn/global
-
-log '==================== Stow link START'
 
 # shellcheck disable=SC2046
 stow -vd "$STOW_PACKAGES_PATH"/common -t ~ $(ls $STOW_PACKAGES_PATH/common)
@@ -199,12 +186,10 @@ elif [ "${os_type}" = "Linux" ]; then
     log 'Linking for Linux'
     stow -vd "$STOW_PACKAGES_PATH"/linux -t ~ $(ls $STOW_PACKAGES_PATH/linux)
 fi
-log '==================== Stow link END'
 
 ###########################################################
 # Neovim
 ###########################################################
-log '==================== Neovim START'
 plug_path=~/.local/share/nvim/site/autoload/plug.vim
 if ! is_file "$plug_path"; then
     log 'Setup vim-plug'
@@ -216,12 +201,10 @@ if ! is_dir "$plugged_path"; then
     log 'Install Neovim Plugins'
     nvim +PlugInstall +qall
 fi
-log '==================== Neovim END'
 
 ###########################################################
 # Git
 ###########################################################
-log '==================== Git START'
 if [ ! "$skip_git" ]; then
     # Setup Git
     if ! is_dir ~/.gnupg || [ -z "$(gpg --list-secret-keys --keyid-format LONG)" ]; then
@@ -240,12 +223,10 @@ if [ ! "$skip_git" ]; then
         cat ~/.ssh/id_rsa.pub
    fi
 fi
-log '==================== Git END'
 
 ###########################################################
 # asdf
 ###########################################################
-log '==================== asdf START'
 for plugin in $(awk '{print $1}' ~/.tool-versions); do
     if ! is_dir ~/.asdf/plugins/"$plugin"; then
         eval log '(asdf) Add runtime plugin: $plugin'
@@ -275,22 +256,18 @@ for plugin in $(asdf plugin list); do
 done
 
 . $(brew --prefix asdf)/libexec/asdf.sh
-log '==================== asdf END'
 
 ###########################################################
 # Yarn global
 ###########################################################
-log '==================== Yarn global START'
 if ! is_dir ~/.config/yarn/global/node_modules; then
     log 'Setup Yarn global'
     yarn global add
 fi
-log '==================== Yarn global END'
 
 ###########################################################
 # Alacritty
 ###########################################################
-log '==================== Alacritty START'
 #ALACRITTY_ORG_PATH="$GIT_CLONE_PATH/alacritty"
 ALACRITTY_ORG_PATH="$GITHUB_PATH/alacritty"
 ensure_dir "$ALACRITTY_ORG_PATH"
@@ -322,16 +299,13 @@ if ! is_dir /Applications/Alacritty.app && ! is_file /usr/bin/alacritty; then
         fi
     )
 fi
-log '==================== Alacritty END'
 
 ###########################################################
 # Change shell
 ###########################################################
-log '==================== Change shell START'
 if [ "${os_type}" = "Linux" ]; then
-    log "Change shell to zsh."
+    log 'Change shell to zsh.'
     sudo chsh -s $(which zsh)
 fi
-log '==================== Change shell END'
 
-log "Install success please reboot..."
+log 'Install success please reboot...'
