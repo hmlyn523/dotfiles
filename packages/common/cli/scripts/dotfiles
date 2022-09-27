@@ -188,21 +188,6 @@ elif [ "${os_type}" = "Linux" ]; then
 fi
 
 ###########################################################
-# Neovim
-###########################################################
-plug_path=~/.local/share/nvim/site/autoload/plug.vim
-if ! is_file "$plug_path"; then
-    log 'Setup vim-plug'
-    sh -c "curl -fLo $plug_path --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim"
-fi
-
-plugged_path=~/.local/share/nvim/autoload/plugged
-if ! is_dir "$plugged_path"; then
-    log 'Install Neovim Plugins'
-    nvim +PlugInstall +qall
-fi
-
-###########################################################
 # Git
 ###########################################################
 if [ ! "$skip_git" ]; then
@@ -308,4 +293,17 @@ if [ "${os_type}" = "Linux" ]; then
     sudo chsh -s $(which zsh)
 fi
 
-log 'Install success please reboot...'
+###########################################################
+# Neovim
+###########################################################
+plug_path=~/.local/share/nvim/site/autoload/plug.vim
+if ! is_file "$plug_path"; then
+    log 'Setup vim-plug'
+    sh -c "curl -fLo $plug_path --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim"
+fi
+
+plugged_path=~/.local/share/nvim/autoload/plugged
+if ! is_dir "$plugged_path"; then
+    log 'Install Neovim Plugins'
+    nvim +PlugInstall +qall
+fi
