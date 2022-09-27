@@ -199,7 +199,7 @@ fi
 plugged_path=~/.local/share/nvim/autoload/plugged
 if ! is_dir "$plugged_path"; then
     log 'Install Neovim Plugins'
-    sh -c 'nvim +PlugInstall +qall'
+    (nvim +PlugInstall +qall )
 fi
 
 ###########################################################
@@ -209,7 +209,6 @@ if [ ! "$skip_git" ]; then
     # Setup Git
     if ! is_dir ~/.gnupg || [ -z "$(gpg --list-secret-keys --keyid-format LONG)" ]; then
         log 'Install gpg signing with git'
-        GPG_TYPE=$(tty)
         gpg --default-new-key-algo rsa4096 --gen-key
         key_id=$(gpg --list-secret-keys --keyid-format LONG | grep -oP "rsa4096\/[0-9a-fA-F]{16}" | cut -d"/"  -f2)
         log 'Copy and pates the GPG key below to GitHub'
