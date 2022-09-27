@@ -199,7 +199,7 @@ fi
 plugged_path=~/.local/share/nvim/autoload/plugged
 if ! is_dir "$plugged_path"; then
     log 'Install Neovim Plugins'
-    (unset GIT_DIR && nvim +PlugInstall +qall!)
+    nvim +PlugInstall +qall
 fi
 
 ###########################################################
