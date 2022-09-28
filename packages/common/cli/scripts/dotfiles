@@ -303,8 +303,8 @@ fi
 ###########################################################
 # Change shell
 ###########################################################
-if [ "${os_type}" = "Linux" ]; then
-    log 'Change shell to zsh.'
-    chsh -s $(which zsh)
-fi
+#if [ "${os_type}" = "Linux" ]; then
+#    log 'Change shell to zsh.'
+#    chsh -s $(which zsh)
+#fi
 
