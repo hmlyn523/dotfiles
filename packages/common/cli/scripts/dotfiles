@@ -268,7 +268,7 @@ ALACRITTY_ORG_PATH="$GITHUB_PATH/alacritty"
 ensure_dir "$ALACRITTY_ORG_PATH"
 if ! is_dir /Applications/Alacritty.app && ! is_file /usr/bin/alacritty; then
     (
-        cd "$GITHUB_ORG_PATH"
+        cd "$GITHUB_PATH"
 #        gh repo clone alacritty/alacritty
         git clone https://github.com/alacritty/alacritty.git
     )
