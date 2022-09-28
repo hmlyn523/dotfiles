@@ -206,6 +206,7 @@ fi
 # Git
 ###########################################################
 if [ ! "$skip_git" ]; then
+    sudo systemctl start haveged.service
     # Setup Git
     if ! is_dir ~/.gnupg || [ -z "$(gpg --list-secret-keys --keyid-format LONG)" ]; then
         log 'Install gpg signing with git'
@@ -221,7 +222,8 @@ if [ ! "$skip_git" ]; then
         ssh-keygen -t rsa -b 4096 -C "tatsuya.sagara@gmail.com"
         log 'Copy and pates the SSH key below to GitHub'
         cat ~/.ssh/id_rsa.pub
-   fi
+    fi
+    sudo systemctl stop haveged.service
 fi
 
 ###########################################################
