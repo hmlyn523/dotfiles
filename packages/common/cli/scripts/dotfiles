@@ -251,7 +251,6 @@ is_runtime_versions_changed () {
 
 for plugin in $(asdf plugin list); do
     if is_runtime_versions_changed "$plugin"; then
-        eval log "(asdf) Install runtime: $plugin"
         asdf install "$plugin"
     fi
 done
