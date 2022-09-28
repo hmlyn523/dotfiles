@@ -231,7 +231,6 @@ fi
 ###########################################################
 for plugin in $(awk '{print $1}' ~/.tool-versions); do
     if ! is_dir ~/.asdf/plugins/"$plugin"; then
-        eval log '(asdf) Add runtime plugin: $plugin'
         asdf plugin add "$plugin"
     fi
 done
