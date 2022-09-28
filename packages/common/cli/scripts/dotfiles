@@ -94,31 +94,30 @@ if [ "${os_type}" = "Darwin" ]; then
     if [ "${arch_name}" = "x86_64" ]; then
         # Intel
         if ! is_file /usr/local/bin/brew; then
-            log 'Setup Homebrew'
             /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+            log '=====> Install Homebrew SUCCESS'
         fi
     elif [ "${arch_name}" = "arm64" ]; then
         # ARM
         if ! is_file /opt/homebrew/bin/brew; then
-            log 'Setup Homebrew'
             /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
             log 'Install Rosetta 2'
             sudo softwareupdate --install-rosetta
         fi
         eval "$(/opt/homebrew/bin/brew shellenv)"
+        log '=====> Install Homebrew SUCCESS'
     fi
 elif [ "${os_type}" = "Linux" ]; then
     # Linux
     if ! is_file /home/linuxbrew/.linuxbrew/bin/brew; then
-        log 'Setup Homebrew'
         if ! is_file /usr/bin/git; then
-            log 'Start install git.'
             sudo pacman -S --noconfirm git
         fi
         /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
         echo 'eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"' >> "$HOME"/.bash_profile
     fi
     eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+    log '=====> Install Homebrew SUCCESS'
 fi
 
 ###########################################################
@@ -126,7 +125,6 @@ fi
 ###########################################################
 if [ "${os_type}" = "Linux" ]; then
     if ! is_file /usr/bin/paru; then
-        log 'Install AUR Helper.'
         (
             if ! is_file /usr/bin/git; then
                 sudo pacman -S --noconfirm git
@@ -135,29 +133,26 @@ if [ "${os_type}" = "Linux" ]; then
         (sudo pacman --noconfirm -Syu)
         git clone https://aur.archlinux.org/paru.git ~/.srcs/paru
         (cd ~/.srcs/paru && makepkg -si --noconfirm )
+        log '=====> Install AUR Helper SUCCESS'
     fi
 fi
 
 ###########################################################
 # Clone dotfiles
 ###########################################################
-#ensure_dir "$GIT_CLONE_PATH"
 ensure_dir "$GITHUB_PATH"
 
-#if ! is_dir "$GIT_CLONE_PATH"/dotfiles; then
 if ! is_dir "$GITHUB_PATH"/dotfiles; then
-    log 'Clone dotfiles'
-    #cd "$GIT_CLONE_PATH"
     cd "$GITHUB_PATH"
     git clone https://github.com/TatsuyaSagara/dotfiles.git
 #    git clone git@github.com:TatsuyaSagara/dotfiles.git
+    log '=====> Clone dotfiles SUCCESS'
 fi
 
 ###########################################################
 # Install Apps and CLIs
 ###########################################################
 if [ ! "$skip_apps" ]; then
-    log 'Install Apps and CLIs'
     brew bundle --file "$GITHUB_PATH"/dotfiles/Brewfile $([ -n "$verbose" ] && echo -v)
     if [ "${os_type}" = "Darwin" ]; then
         # macOS
@@ -168,10 +163,11 @@ if [ ! "$skip_apps" ]; then
         paru -S --needed --noconfirm - < "$GITHUB_PATH"/dotfiles/pkglist_aur.txt
         fc-cache -fv
     fi
+    log '=====> Install Apps and CLIs SUCCESS'
 fi
 
 ###########################################################
-# Stow link
+# Setup Stow link
 ###########################################################
 ensure_dir ~/.config/alacritty
 ensure_dir ~/.config/starship
@@ -180,33 +176,31 @@ ensure_dir ~/.config/yarn/global
 # shellcheck disable=SC2046
 stow -vd "$STOW_PACKAGES_PATH"/common -t ~ $(ls $STOW_PACKAGES_PATH/common)
 if [ "${os_type}" = "Darwin" ]; then
-    log 'Linking for macOS'
     stow -vd "$STOW_PACKAGES_PATH"/mac -t ~ $(ls $STOW_PACKAGES_PATH/mac)
+    log '=====> Setup Stow link SUCCESS'
 elif [ "${os_type}" = "Linux" ]; then
-    log 'Linking for Linux'
     stow -vd "$STOW_PACKAGES_PATH"/linux -t ~ $(ls $STOW_PACKAGES_PATH/linux)
+    log '=====> Setup Stow link SUCCESS'
 fi
 
 ###########################################################
-# Neovim
+# Setup Neovim
 ###########################################################
 plug_path=~/.local/share/nvim/site/autoload/plug.vim
 if ! is_file "$plug_path"; then
-    log 'Setup vim-plug'
     sh -c "curl -fLo $plug_path --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim"
 fi
 
 plugged_path=~/.local/share/nvim/autoload/plugged
 if ! is_dir "$plugged_path"; then
-    log 'Install Neovim Plugins'
     nvim --headless +PlugInstall +qall
+    log '=====> Setup Neovim SUCCESS'
 fi
 
 ###########################################################
-# Git
+# Setup Git
 ###########################################################
 if [ ! "$skip_git" ]; then
-    sudo systemctl start haveged.service
     # Setup Git
     if ! is_dir ~/.gnupg || [ -z "$(gpg --list-secret-keys --keyid-format LONG)" ]; then
         log 'Install gpg signing with git'
@@ -223,7 +217,7 @@ if [ ! "$skip_git" ]; then
         log 'Copy and pates the SSH key below to GitHub'
         cat ~/.ssh/id_rsa.pub
     fi
-    sudo systemctl stop haveged.service
+    log '=====> Setup Git SUCCESS'
 fi
 
 ###########################################################
@@ -256,13 +250,14 @@ for plugin in $(asdf plugin list); do
 done
 
 . $(brew --prefix asdf)/libexec/asdf.sh
+log '=====> Setup asdf SUCCESS'
 
 ###########################################################
-# Yarn global
+# Setup Yarn global
 ###########################################################
 if ! is_dir ~/.config/yarn/global/node_modules; then
-    log 'Setup Yarn global'
     yarn global add
+    log '=====> Setup Yarn global SUCCESS'
 fi
 
 ###########################################################
@@ -272,13 +267,6 @@ fi
 ALACRITTY_ORG_PATH="$GITHUB_PATH/alacritty"
 ensure_dir "$ALACRITTY_ORG_PATH"
 if ! is_dir /Applications/Alacritty.app && ! is_file /usr/bin/alacritty; then
-    log 'Install Alacritty'
-    #{
-        #if [ "${os_type}" = "Linux" ]; then
-            ## sudo pacman -S --noconfirm cmake freetype2 fontconfig pkg-config make libxcb libxkbcommon python
-            #sudo pacman -S --noconfirm freetype2 fontconfig pkg-config make libxcb libxkbcommon
-        #fi
-    #}
     (
         cd "$ALACRITTY_ORG_PATH"
         gh repo clone alacritty/alacritty
@@ -298,6 +286,7 @@ if ! is_dir /Applications/Alacritty.app && ! is_file /usr/bin/alacritty; then
             sudo cp -p target/release/alacritty /usr/bin
         fi
     )
+    log '=====> Setup Alacritty SUCCESS'
 fi
 
 ###########################################################
