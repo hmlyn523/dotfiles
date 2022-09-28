@@ -7,7 +7,6 @@ sxhkd
 rofi
 polybar
 
-alacritty
 freetype2
 fontconfig
 pkg-config
