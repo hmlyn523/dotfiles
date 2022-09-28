@@ -268,12 +268,13 @@ ALACRITTY_ORG_PATH="$GITHUB_PATH/alacritty"
 ensure_dir "$ALACRITTY_ORG_PATH"
 if ! is_dir /Applications/Alacritty.app && ! is_file /usr/bin/alacritty; then
     (
-        cd "$ALACRITTY_ORG_PATH"
-        gh repo clone alacritty/alacritty
+        cd "$GITHUB_ORG_PATH"
+#        gh repo clone alacritty/alacritty
+        git clone https://github.com/alacritty/alacritty.git
     )
     # Build alacritty
     (
-        cd "$ALACRITTY_ORG_PATH/alacritty"
+        cd "$ALACRITTY_ORG_PATH"
 
         if [ "${os_type}" = "Darwin" ]; then
             # macOS
