@@ -2487,7 +2487,7 @@
       "Unknown": {
         "HOMEBREW_VERSION": "3.6.3",
         "HOMEBREW_PREFIX": "/home/linuxbrew/.linuxbrew",
-        "Homebrew/linuxbrew-core": "88e038cdd879063f2aeccaa6ae75a52c79edec5a",
+        "Homebrew/linuxbrew-core": "c9b7366c9a715e805b5b78c50d27480c0b0a0a64",
         "GCC": "12.2.0"
       }
     }
