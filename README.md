@@ -15,7 +15,7 @@ This repository is a forked and modified version of [@JunichiSugiura](https://gi
 2. Run install
 
 ```sh
-curl -o - https://raw.githubusercontent.com/TatsuyaSagara/dotfiles/main/packages/cli/scripts/dotfiles | sh
+curl -o - https://raw.githubusercontent.com/TatsuyaSagara/dotfiles/main/packages/common/cli/scripts/dotfiles | sh
 ```
 
 3. Start Yabai and skhd
@@ -48,3 +48,4 @@ If you like to learn how to create dotfiles, check out my [tutorial ](https://gi
 ## Note
 
 If the macOS language is not English, yabai's rule does not apply.
+If Super+Ctrl+Up(Down) does not change the backlight brightness, changing the PREFIX in dotfiles/packages/linux/cli/scripts/brightness.sh may change it.
