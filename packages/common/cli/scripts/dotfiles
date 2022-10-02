@@ -173,7 +173,7 @@ ensure_dir ~/.config/alacritty
 ensure_dir ~/.config/starship
 ensure_dir ~/.config/yarn/global
 
-# shellcheck disable=SC2046
+mkdir $HOME/scripts
 stow -vd "$STOW_PACKAGES_PATH"/common -t ~ $(ls $STOW_PACKAGES_PATH/common)
 if [ "${os_type}" = "Darwin" ]; then
     stow -vd "$STOW_PACKAGES_PATH"/mac -t ~ $(ls $STOW_PACKAGES_PATH/mac)

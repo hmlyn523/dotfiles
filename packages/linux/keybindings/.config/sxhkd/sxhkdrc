@@ -41,7 +41,7 @@ super + g
 	bspc node -s biggest.window
 
 #
-# volume
+# Volume
 #
 super + shift + Up
 	pamixer -i 1
@@ -49,6 +49,14 @@ super + shift + Up
 super + shift + Down
 	pamixer -d 1
 
+#
+# Brightness
+#
+super + ctrl + Up
+    brightness.sh 1
+
+super + ctrl + Down
+    brightness.sh -1
 
 #
 # state/flags

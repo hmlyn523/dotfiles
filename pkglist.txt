@@ -1,3 +1,4 @@
+bc
 bspwm
 code
 fcitx5-im
