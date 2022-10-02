@@ -20,7 +20,7 @@
         "revision": "e3afae0c732772217f020cfa2449498a9c802774"
       },
       "homebrew/cask-fonts": {
-        "revision": "406e3bdf4b4542b46a7673cca419655a9558dd58"
+        "revision": "99c1c1b3a22253ef633cdac2c0fa83dd29cd3440"
       },
       "homebrew/services": {
         "revision": "954801711b1562739176e83bc0ce0a265abdea98"
@@ -2487,7 +2487,7 @@
       "Unknown": {
         "HOMEBREW_VERSION": "3.6.3",
         "HOMEBREW_PREFIX": "/home/linuxbrew/.linuxbrew",
-        "Homebrew/linuxbrew-core": "faf85486f283856c21735e9865bb9383c8571f74",
+        "Homebrew/linuxbrew-core": "adac72554bcfae235866193063edc523c46f1aaf",
         "GCC": "12.2.0"
       }
     }
