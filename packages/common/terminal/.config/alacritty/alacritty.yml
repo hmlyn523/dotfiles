@@ -114,6 +114,6 @@ font:
     #family: SF Mono
     style: Regular
     style: Bold
-  size: 7
+  size: 8
   offset:
     y: 3
