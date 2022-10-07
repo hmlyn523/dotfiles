@@ -53,10 +53,10 @@ super + shift + Down
 # Brightness
 #
 super + ctrl + Up
-    brightness.sh 1
+    brightness.sh up
 
 super + ctrl + Down
-    brightness.sh -1
+    brightness.sh down
 
 #
 # state/flags

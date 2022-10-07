@@ -1,11 +1,19 @@
-# PREFIX="/sys/class/backlight/intel_backlight"
-PREFIX="/sys/class/backlight/acpi_video0"
+PREFIX="/sys/class/backlight/intel_backlight"
+# PREFIX="/sys/class/backlight/acpi_video0"
 
 MAX=$(cat ${PREFIX}/max_brightness)
 CURRENT=$(cat ${PREFIX}/brightness)
 
-ARG=$(echo ${1:?} | awk '{print $1*1}')
-VALUE=$(echo "${CURRENT} + ${ARG}" | bc)
+PER=$((MAX/100))
+case "$1" in
+    up)
+        VALUE=$(echo "${CURRENT} + ${PER}" | bc) ;;
+    down)
+        VALUE=$(echo "${CURRENT} - ${PER}" | bc) ;;
+    *)
+        echo "Invalid argument."
+        exit 1 ;;
+esac
 
 [ ${VALUE} -gt ${MAX} ] && VALUE=${MAX}
 [ ${VALUE} -lt  1 ] && VALUE=1
