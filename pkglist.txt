@@ -12,7 +12,10 @@ libreoffice-still
 libreoffice-still-ja
 libsoup
 libxkbcommon
+lshw
 make
+mesa
+mesa-utils
 openssh
 pamixer
 pkg-config

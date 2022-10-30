@@ -1,5 +1,9 @@
 android-studio
+basemark
+fabric-installer
 microsoft-edge-stable-bin
+minecraft-launcher
+multimc-bin
 noto-fonts-cjk
 nerd-fonts-hack
 noto-fonts-emoji

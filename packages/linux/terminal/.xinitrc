@@ -43,7 +43,7 @@ export GTK_IM_MODUEL="fcitx5"
 export QT_IM_MODULE="fcitx5"
 export XMODIFIERS='@im=fcitx5'
 
-export LIBGL_ALWAYS_SOFTWARE=1
+export MESA_LOADER_DRIVER_OVERRIDE=iris
 
 sxhkd &
 exec bspwm
