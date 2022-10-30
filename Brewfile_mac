@@ -14,6 +14,7 @@ cask "font-hack-nerd-font"
 cask "gimp"
 cask "google-japanese-ime"
 cask "gpg-suite"
+cask "multimc"
 cask "utm"
 cask "visual-studio-code"
 
