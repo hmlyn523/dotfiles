@@ -124,13 +124,13 @@ fi
 # Install AUR Helper
 ###########################################################
 if [ "${os_type}" = "Linux" ]; then
+    (sudo pacman --noconfirm -Syu)
     if ! is_file /usr/bin/paru; then
         (
             if ! is_file /usr/bin/git; then
                 sudo pacman -S --noconfirm git
             fi
         )
-        (sudo pacman --noconfirm -Syu)
         git clone https://aur.archlinux.org/paru.git ~/.srcs/paru
         (cd ~/.srcs/paru && makepkg -si --noconfirm )
         log '=====> Install AUR Helper SUCCESS'

@@ -23,5 +23,6 @@ polybar
 remmina
 rofi
 sxhkd
+ttf-hack-nerd
 xorg
 xorg-xinit
