@@ -184,6 +184,14 @@ elif [ "${os_type}" = "Linux" ]; then
 fi
 
 ###########################################################
+# Configure macOS setting
+###########################################################
+
+if [ "${os_type}" = "Darwin" ]; then
+    ~/scripts/macos-defaults
+fi
+
+###########################################################
 # Setup Neovim
 ###########################################################
 plug_path=~/.local/share/nvim/site/autoload/plug.vim
