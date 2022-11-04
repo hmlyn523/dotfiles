@@ -1,0 +1,299 @@
+{
+  "entries": {
+    "tap": {
+      "homebrew/cask": {
+        "revision": "ae4a3dad507a33215f98c44effa6f226f2ec9e70"
+      }
+    },
+    "brew": {
+      "applesimutils": {
+        "version": "0.9.8",
+        "bottle": {
+          "rebuild": 0,
+          "root_url": "https://github.com/wix/AppleSimulatorUtils/releases/download/0.9.8",
+          "files": {
+            "arm64_big_sur": {
+              "cellar": "/opt/homebrew/Cellar",
+              "url": "https://github.com/wix/AppleSimulatorUtils/releases/download/0.9.8/applesimutils-0.9.8.arm64_big_sur.bottle.tar.gz",
+              "sha256": "7ecf43c5a6849a1c78c085c2ef59be1d2d872ab5a97b0327d882843a3c5ea9b4"
+            },
+            "catalina": {
+              "cellar": "/usr/local/Cellar",
+              "url": "https://github.com/wix/AppleSimulatorUtils/releases/download/0.9.8/applesimutils-0.9.8.catalina.bottle.tar.gz",
+              "sha256": "7ecf43c5a6849a1c78c085c2ef59be1d2d872ab5a97b0327d882843a3c5ea9b4"
+            },
+            "mojave": {
+              "cellar": "/usr/local/Cellar",
+              "url": "https://github.com/wix/AppleSimulatorUtils/releases/download/0.9.8/applesimutils-0.9.8.mojave.bottle.tar.gz",
+              "sha256": "7ecf43c5a6849a1c78c085c2ef59be1d2d872ab5a97b0327d882843a3c5ea9b4"
+            },
+            "high_sierra": {
+              "cellar": "/usr/local/Cellar",
+              "url": "https://github.com/wix/AppleSimulatorUtils/releases/download/0.9.8/applesimutils-0.9.8.high_sierra.bottle.tar.gz",
+              "sha256": "7ecf43c5a6849a1c78c085c2ef59be1d2d872ab5a97b0327d882843a3c5ea9b4"
+            },
+            "sierra": {
+              "cellar": "/usr/local/Cellar",
+              "url": "https://github.com/wix/AppleSimulatorUtils/releases/download/0.9.8/applesimutils-0.9.8.sierra.bottle.tar.gz",
+              "sha256": "7ecf43c5a6849a1c78c085c2ef59be1d2d872ab5a97b0327d882843a3c5ea9b4"
+            },
+            "big_sur": {
+              "cellar": "/usr/local/Cellar",
+              "url": "https://github.com/wix/AppleSimulatorUtils/releases/download/0.9.8/applesimutils-0.9.8.big_sur.bottle.tar.gz",
+              "sha256": "7ecf43c5a6849a1c78c085c2ef59be1d2d872ab5a97b0327d882843a3c5ea9b4"
+            }
+          }
+        }
+      },
+      "ios-deploy": {
+        "version": "1.12.0",
+        "bottle": {
+          "rebuild": 0,
+          "root_url": "https://ghcr.io/v2/homebrew/core",
+          "files": {
+            "arm64_ventura": {
+              "cellar": ":any_skip_relocation",
+              "url": "https://ghcr.io/v2/homebrew/core/ios-deploy/blobs/sha256:96bca7e7f751379de2241853b9cf2e0fe1f518493e9365c31116fb3a309c21ff",
+              "sha256": "96bca7e7f751379de2241853b9cf2e0fe1f518493e9365c31116fb3a309c21ff"
+            },
+            "arm64_monterey": {
+              "cellar": ":any_skip_relocation",
+              "url": "https://ghcr.io/v2/homebrew/core/ios-deploy/blobs/sha256:a9afe8fd08f085f05104499bee9dd6e79110cf9f63fd7be57fc5c28628af9a09",
+              "sha256": "a9afe8fd08f085f05104499bee9dd6e79110cf9f63fd7be57fc5c28628af9a09"
+            },
+            "arm64_big_sur": {
+              "cellar": ":any_skip_relocation",
+              "url": "https://ghcr.io/v2/homebrew/core/ios-deploy/blobs/sha256:9d472b334895a1863262cfdceaf777ab9a6c675c265e4d83265ae3c2d9b25793",
+              "sha256": "9d472b334895a1863262cfdceaf777ab9a6c675c265e4d83265ae3c2d9b25793"
+            },
+            "monterey": {
+              "cellar": ":any_skip_relocation",
+              "url": "https://ghcr.io/v2/homebrew/core/ios-deploy/blobs/sha256:eb4951c90cae9df4a16a5c20cd24393647899eebef8fb4f313f9eb999a28230e",
+              "sha256": "eb4951c90cae9df4a16a5c20cd24393647899eebef8fb4f313f9eb999a28230e"
+            },
+            "big_sur": {
+              "cellar": ":any_skip_relocation",
+              "url": "https://ghcr.io/v2/homebrew/core/ios-deploy/blobs/sha256:4920f28ef96b15c91cbc7e0d84232f4756dd4ecb50bc5fc4b47cb6e5137ab36a",
+              "sha256": "4920f28ef96b15c91cbc7e0d84232f4756dd4ecb50bc5fc4b47cb6e5137ab36a"
+            },
+            "catalina": {
+              "cellar": ":any_skip_relocation",
+              "url": "https://ghcr.io/v2/homebrew/core/ios-deploy/blobs/sha256:6f6b852da9e2caf687adec64fbf683d2be92e1c04c00e5fb93db6faca92ed22c",
+              "sha256": "6f6b852da9e2caf687adec64fbf683d2be92e1c04c00e5fb93db6faca92ed22c"
+            }
+          }
+        }
+      },
+      "mas": {
+        "version": "1.8.6",
+        "bottle": {
+          "rebuild": 0,
+          "root_url": "https://ghcr.io/v2/homebrew/core",
+          "files": {
+            "arm64_ventura": {
+              "cellar": ":any_skip_relocation",
+              "url": "https://ghcr.io/v2/homebrew/core/mas/blobs/sha256:e49511dd1283813c4420aec9fc3b3167d18f9fdbb51d82b1e479b628d5312342",
+              "sha256": "e49511dd1283813c4420aec9fc3b3167d18f9fdbb51d82b1e479b628d5312342"
+            },
+            "arm64_monterey": {
+              "cellar": ":any_skip_relocation",
+              "url": "https://ghcr.io/v2/homebrew/core/mas/blobs/sha256:379d46e2657be295321f1603dc1df28130ea0b5b264ceb192a9ba488d77c7a98",
+              "sha256": "379d46e2657be295321f1603dc1df28130ea0b5b264ceb192a9ba488d77c7a98"
+            },
+            "arm64_big_sur": {
+              "cellar": ":any_skip_relocation",
+              "url": "https://ghcr.io/v2/homebrew/core/mas/blobs/sha256:918a1484de106940f7bebc936e1ded87d7b65652054b09204887ad0651937ec4",
+              "sha256": "918a1484de106940f7bebc936e1ded87d7b65652054b09204887ad0651937ec4"
+            },
+            "monterey": {
+              "cellar": ":any_skip_relocation",
+              "url": "https://ghcr.io/v2/homebrew/core/mas/blobs/sha256:6b313f2f66d028cb7782c108d6e502ce73ccb9c08fac3bece0b057fcce5c4689",
+              "sha256": "6b313f2f66d028cb7782c108d6e502ce73ccb9c08fac3bece0b057fcce5c4689"
+            },
+            "big_sur": {
+              "cellar": ":any_skip_relocation",
+              "url": "https://ghcr.io/v2/homebrew/core/mas/blobs/sha256:50b50f51219143fcb69c730b52b74011a76104f66348ea727d0200f7b375ae25",
+              "sha256": "50b50f51219143fcb69c730b52b74011a76104f66348ea727d0200f7b375ae25"
+            },
+            "catalina": {
+              "cellar": ":any_skip_relocation",
+              "url": "https://ghcr.io/v2/homebrew/core/mas/blobs/sha256:d241d3b9156b033f3d2c31684a44de726297e07fd9bd5e3ccc4c36e4f1c3baf3",
+              "sha256": "d241d3b9156b033f3d2c31684a44de726297e07fd9bd5e3ccc4c36e4f1c3baf3"
+            }
+          }
+        }
+      },
+      "skhd": {
+        "version": "0.3.5",
+        "bottle": false
+      },
+      "yabai": {
+        "version": "5.0.1",
+        "bottle": false
+      },
+      "zsh": {
+        "version": "5.9",
+        "bottle": {
+          "rebuild": 0,
+          "root_url": "https://ghcr.io/v2/homebrew/core",
+          "files": {
+            "arm64_ventura": {
+              "cellar": "/opt/homebrew/Cellar",
+              "url": "https://ghcr.io/v2/homebrew/core/zsh/blobs/sha256:03171d3b9ea605b88cfa73682a6f06f8e6c3e5e44fb96dbc9eedb3ab70a69c28",
+              "sha256": "03171d3b9ea605b88cfa73682a6f06f8e6c3e5e44fb96dbc9eedb3ab70a69c28"
+            },
+            "arm64_monterey": {
+              "cellar": "/opt/homebrew/Cellar",
+              "url": "https://ghcr.io/v2/homebrew/core/zsh/blobs/sha256:1c6d208a7aa0601b25d04c5d41a393424b1094cf188e5b0c80fafc6e1e2755ef",
+              "sha256": "1c6d208a7aa0601b25d04c5d41a393424b1094cf188e5b0c80fafc6e1e2755ef"
+            },
+            "arm64_big_sur": {
+              "cellar": "/opt/homebrew/Cellar",
+              "url": "https://ghcr.io/v2/homebrew/core/zsh/blobs/sha256:0a93821dee76829dac49770d4b32d08d0678272c43937e3858d7f901bab86cd6",
+              "sha256": "0a93821dee76829dac49770d4b32d08d0678272c43937e3858d7f901bab86cd6"
+            },
+            "monterey": {
+              "cellar": "/usr/local/Cellar",
+              "url": "https://ghcr.io/v2/homebrew/core/zsh/blobs/sha256:b9a38fa0344b187333771a5585ad2d01c27e69a7e5362ba3fc8d7389aa3279f3",
+              "sha256": "b9a38fa0344b187333771a5585ad2d01c27e69a7e5362ba3fc8d7389aa3279f3"
+            },
+            "big_sur": {
+              "cellar": "/usr/local/Cellar",
+              "url": "https://ghcr.io/v2/homebrew/core/zsh/blobs/sha256:722236bd8c9a094e1eca09263f5e83a94d4c97c2ca797804eef4f9564ef729ec",
+              "sha256": "722236bd8c9a094e1eca09263f5e83a94d4c97c2ca797804eef4f9564ef729ec"
+            },
+            "catalina": {
+              "cellar": "/usr/local/Cellar",
+              "url": "https://ghcr.io/v2/homebrew/core/zsh/blobs/sha256:64c8757cc6db0247fb9f604ff84f61726fb5d91318c566157fa2957782040403",
+              "sha256": "64c8757cc6db0247fb9f604ff84f61726fb5d91318c566157fa2957782040403"
+            },
+            "x86_64_linux": {
+              "cellar": "/home/linuxbrew/.linuxbrew/Cellar",
+              "url": "https://ghcr.io/v2/homebrew/core/zsh/blobs/sha256:fb0b59e7b1407323ea06b7c757de4d75bbcfb0836ce05857b0b2cf7816a231e0",
+              "sha256": "fb0b59e7b1407323ea06b7c757de4d75bbcfb0836ce05857b0b2cf7816a231e0"
+            }
+          }
+        }
+      },
+      "zsh-autosuggestions": {
+        "version": "0.7.0",
+        "bottle": {
+          "rebuild": 1,
+          "root_url": "https://ghcr.io/v2/homebrew/core",
+          "files": {
+            "all": {
+              "cellar": ":any_skip_relocation",
+              "url": "https://ghcr.io/v2/homebrew/core/zsh-autosuggestions/blobs/sha256:4537653cbf3540a0785481966b36291255839f1be4012a22409ef97c46a1860b",
+              "sha256": "4537653cbf3540a0785481966b36291255839f1be4012a22409ef97c46a1860b"
+            }
+          }
+        }
+      }
+    },
+    "cask": {
+      "android-studio": {
+        "version": "2021.3.1.17",
+        "options": {
+          "full_name": "android-studio",
+          "args": {
+            "appdir": "/Applications"
+          }
+        }
+      },
+      "font-hack-nerd-font": {
+        "version": "2.2.2",
+        "options": {
+          "full_name": "font-hack-nerd-font",
+          "args": {
+            "appdir": "/Applications"
+          }
+        }
+      },
+      "gimp": {
+        "version": "2.10.32",
+        "options": {
+          "full_name": "gimp",
+          "args": {
+            "appdir": "/Applications"
+          }
+        }
+      },
+      "google-japanese-ime": {
+        "version": "latest",
+        "options": {
+          "full_name": "google-japanese-ime",
+          "args": {
+            "appdir": "/Applications"
+          }
+        }
+      },
+      "gpg-suite": {
+        "version": "2022.2",
+        "options": {
+          "full_name": "gpg-suite",
+          "args": {
+            "appdir": "/Applications"
+          }
+        }
+      },
+      "multimc": {
+        "version": "0.6.16",
+        "options": {
+          "full_name": "multimc",
+          "args": {
+            "appdir": "/Applications"
+          }
+        }
+      },
+      "utm": {
+        "version": "4.0.9",
+        "options": {
+          "full_name": "utm",
+          "args": {
+            "appdir": "/Applications"
+          }
+        }
+      },
+      "visual-studio-code": {
+        "version": "1.73.0",
+        "options": {
+          "full_name": "visual-studio-code",
+          "args": {
+            "appdir": "/Applications"
+          }
+        }
+      },
+      "alacritty": {
+        "version": "0.11.0",
+        "options": {
+          "full_name": "Alacritty",
+          "args": {
+            "appdir": "/Applications"
+          }
+        }
+      }
+    },
+    "mas": {
+      "Vimari": {
+        "id": "1480933944",
+        "version": "2.1.1"
+      },
+      "Xcode": {
+        "id": "497799835",
+        "version": "14.1"
+      }
+    }
+  },
+  "system": {
+    "macos": {
+      "ventura": {
+        "HOMEBREW_VERSION": "3.6.8",
+        "HOMEBREW_PREFIX": "/usr/local",
+        "Homebrew/homebrew-core": "c7ddc180ef83298e06cde71881c1cf603ac9beb0",
+        "CLT": "14.1.0.0.1.1666437224",
+        "Xcode": "14.1",
+        "macOS": "13.0"
+      }
+    }
+  }
+}

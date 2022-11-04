@@ -9,6 +9,7 @@ brew "yabai"
 brew "zsh"
 brew "zsh-autosuggestions"
 
+cask "Alacritty"
 cask "android-studio"
 cask "font-hack-nerd-font"
 cask "gimp"

@@ -193,7 +193,11 @@ fi
 
 plugged_path=~/.local/share/nvim/autoload/plugged
 if ! is_dir "$plugged_path"; then
-    nvim --headless +PlugInstall +qall
+    if [ "${os_type}" = "Darwin" ]; then
+        nvim +PlugInstall +qall
+    elif [ "${os_type}" = "Linux" ]; then
+        nvim --headless +PlugInstall +qall
+    fi
     log '=====> Setup Neovim SUCCESS'
 fi
 
@@ -205,7 +209,11 @@ if [ ! "$skip_git" ]; then
     if ! is_dir ~/.gnupg || [ -z "$(gpg --list-secret-keys --keyid-format LONG)" ]; then
         log 'Install gpg signing with git'
         gpg --default-new-key-algo rsa4096 --gen-key
-        key_id=$(gpg --list-secret-keys --keyid-format LONG | grep -oP "rsa4096\/[0-9a-fA-F]{16}" | cut -d"/"  -f2)
+        if [ "${os_type}" = "Darwin" ]; then
+            key_id=$(gpg --list-secret-keys --keyid-format LONG | ggrep -oP "rsa4096\/[0-9a-fA-F]{16}" | cut -d"/"  -f2)
+        elif [ "${os_type}" = "Linux" ]; then
+            key_id=$(gpg --list-secret-keys --keyid-format LONG | grep -oP "rsa4096\/[0-9a-fA-F]{16}" | cut -d"/"  -f2)
+        fi
         log 'Copy and pates the GPG key below to GitHub'
         gpg --armor --export "$key_id"
         git config --global user.signingkey "$key_id"
@@ -263,31 +271,22 @@ fi
 ###########################################################
 # Alacritty
 ###########################################################
-#ALACRITTY_ORG_PATH="$GIT_CLONE_PATH/alacritty"
-ALACRITTY_ORG_PATH="$GITHUB_PATH/alacritty"
-ensure_dir "$ALACRITTY_ORG_PATH"
-if ! is_dir /Applications/Alacritty.app && ! is_file /usr/bin/alacritty; then
-    (
-        cd "$GITHUB_PATH"
-#        gh repo clone alacritty/alacritty
-        git clone https://github.com/alacritty/alacritty.git
-    )
-    # Build alacritty
-    (
-        cd "$ALACRITTY_ORG_PATH"
-
-        if [ "${os_type}" = "Darwin" ]; then
-            # macOS
-            rustup target add x86_64-apple-darwin aarch64-apple-darwin
-            make app-universal
-            cp -r target/release/osx/Alacritty.app /Applications/
-        elif [ "${os_type}" = "Linux" ]; then
-            # Linux
+if [ "${os_type}" = "Linux" ]; then
+    if ! is_file /usr/bin/alacritty; then
+        ensure_dir "$GITHUB_PATH/alacritty"
+        # Clone
+        (
+            cd "$GITHUB_PATH"
+            git clone https://github.com/alacritty/alacritty.git
+        )
+        # Build
+        (
+            cd "$ALACRITTY_ORG_PATH"
             cargo build --release
             sudo cp -p target/release/alacritty /usr/bin
-        fi
-    )
-    log '=====> Setup Alacritty SUCCESS'
+        )
+        log '=====> Setup Alacritty SUCCESS'
+    fi
 fi
 
 ###########################################################
@@ -297,4 +296,3 @@ fi
 #    log 'Change shell to zsh.'
 #    chsh -s $(which zsh)
 #fi
-
