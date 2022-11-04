@@ -28,6 +28,10 @@ brew services start --all
 ```
 Then allow accessibility permissions on `Security & Privacy` inside `System Preferences.app`
 
+4. Setting Alacritty
+
+Reconfigure the location of tmux depending on the execution environment.
+
 ## Manual operations
 haven't figure out ways to automate
 - add google-japanese-ime to input sources
