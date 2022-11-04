@@ -6,6 +6,11 @@
 #ctrl + cmd - 1  : yabai -m window --display 1; yabai -m display --focus 1
 #ctrl + cmd - 2  : yabai -m window --display 2; yabai -m display --focus 2
 
+# yabai layout switching
+alt + cmd - b : yabai -m config layout bsp
+alt + cmd - f : yabai -m config layout float
+
+# Alacritty 起動
 alt - return : open -n /Applications/Alacritty.app
 
 # ウィンドウを選択する
