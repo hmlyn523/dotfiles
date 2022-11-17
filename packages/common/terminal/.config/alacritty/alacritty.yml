@@ -1,9 +1,9 @@
 shell:
   # macOS
-  #program: /usr/local/bin/tmux # x86_64
+  program: /usr/local/bin/tmux # x86_64
   #program: /opt/homebrew/bin/tmux # arm64
   # Linux
-  program: /home/linuxbrew/.linuxbrew/bin/tmux
+  #program: /home/linuxbrew/.linuxbrew/bin/tmux
   args:
     - new-session
     - -D
@@ -114,6 +114,6 @@ font:
     #family: SF Mono
     style: Regular
     style: Bold
-  size: 6
+  size: 11
   offset:
     y: 3
