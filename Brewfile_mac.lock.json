@@ -2,7 +2,7 @@
   "entries": {
     "tap": {
       "homebrew/cask": {
-        "revision": "ae4a3dad507a33215f98c44effa6f226f2ec9e70"
+        "revision": "ad786f1638cae4bdf67f05557f47c724a5bcc0f2"
       }
     },
     "brew": {
@@ -152,6 +152,11 @@
               "url": "https://ghcr.io/v2/homebrew/core/zsh/blobs/sha256:0a93821dee76829dac49770d4b32d08d0678272c43937e3858d7f901bab86cd6",
               "sha256": "0a93821dee76829dac49770d4b32d08d0678272c43937e3858d7f901bab86cd6"
             },
+            "ventura": {
+              "cellar": "/usr/local/Cellar",
+              "url": "https://ghcr.io/v2/homebrew/core/zsh/blobs/sha256:1175aa3d19707da832bcb82e6a5ef49f513d98a840bcc252f96379eec4d5c18e",
+              "sha256": "1175aa3d19707da832bcb82e6a5ef49f513d98a840bcc252f96379eec4d5c18e"
+            },
             "monterey": {
               "cellar": "/usr/local/Cellar",
               "url": "https://ghcr.io/v2/homebrew/core/zsh/blobs/sha256:b9a38fa0344b187333771a5585ad2d01c27e69a7e5362ba3fc8d7389aa3279f3",
@@ -255,7 +260,7 @@
         }
       },
       "visual-studio-code": {
-        "version": "1.73.0",
+        "version": "1.73.1",
         "options": {
           "full_name": "visual-studio-code",
           "args": {
@@ -287,12 +292,12 @@
   "system": {
     "macos": {
       "ventura": {
-        "HOMEBREW_VERSION": "3.6.8",
+        "HOMEBREW_VERSION": "3.6.11",
         "HOMEBREW_PREFIX": "/usr/local",
-        "Homebrew/homebrew-core": "c7ddc180ef83298e06cde71881c1cf603ac9beb0",
+        "Homebrew/homebrew-core": "cf6d6eed016387db80009fe54960d05a1f864a4f",
         "CLT": "14.1.0.0.1.1666437224",
         "Xcode": "14.1",
-        "macOS": "13.0"
+        "macOS": "13.0.1"
       }
     }
   }
