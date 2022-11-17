@@ -7,8 +7,8 @@
 #ctrl + cmd - 2  : yabai -m window --display 2; yabai -m display --focus 2
 
 # yabai layout switching
-alt + cmd - b : yabai -m config layout bsp
-alt + cmd - f : yabai -m config layout float
+alt + cmd - b : yabai -m config layout bsp; yabai -m config mouse_follows_focus on; yabai -m config focus_follows_mouse autoraise
+alt + cmd - f : yabai -m config layout float; yabai -m config mouse_follows_focus off; yabai -m config focus_follows_mouse off
 
 # Alacritty 起動
 alt - return : open -n /Applications/Alacritty.app
