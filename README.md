@@ -12,13 +12,20 @@ This repository is a forked and modified version of [@JunichiSugiura](https://gi
 ## Installation
 
 1. Sign in to App store manually (Temporary solution. See more: <https://github.com/mas-cli/mas/issues/164>)
+
 2. Run install
 
 ```sh
 curl -o - https://raw.githubusercontent.com/TatsuyaSagara/dotfiles/main/packages/common/cli/scripts/dotfiles | sh
 ```
 
-3. Start Yabai and skhd
+Add the -g option if you want to skip the GitHub configuration.
+
+```sh
+curl -o - https://raw.githubusercontent.com/TatsuyaSagara/dotfiles/main/packages/common/cli/scripts/dotfiles | sh -s -- -g
+```
+
+3. [macOS] Start Yabai and skhd
 
 ```sh
 brew services start yabai
@@ -31,6 +38,14 @@ Then allow accessibility permissions on `Security & Privacy` inside `System Pref
 4. Setting Alacritty
 
 Reconfigure the location of tmux depending on the execution environment.
+```
+$HOME/.tmux.conf
+$HOME/.config/alacritty/alacritty.yaml
+```
+
+5. [macOS] Change OS language to English.
+
+Because yabai's bsp excluded window cannot be set in Japanese settings.
 
 ## Manual operations
 haven't figure out ways to automate
@@ -47,7 +62,7 @@ Check [Brewfile](./Brewfile) for the latest bundle.
 
 ## Tutorial
 
-If you like to learn how to create dotfiles, check out my [tutorial ](https://github.com/JunichiSugiura/tutorials/tree/master/dotfiles).
+If you like to learn how to create dotfiles, check out [@JunichiSugiura](https://github.com/JunichiSugiura/dotfiles) [tutorial ](https://github.com/JunichiSugiura/tutorials/tree/master/dotfiles).
 
 ## Note
 
