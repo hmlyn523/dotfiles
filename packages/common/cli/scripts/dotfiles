@@ -229,7 +229,7 @@ if [ ! "$skip_git" ]; then
 
     if ! is_file ~/.ssh/id_rsa.pub; then
         log 'Setup gpg signing for git'
-        ssh-keygen -t rsa -b 4096 -C "tatsuya.sagara@gmail.com"
+        ssh-keygen -t rsa -b 4096 -C "tatsuya.sagara@icloud.com"
         log 'Copy and pates the SSH key below to GitHub'
         cat ~/.ssh/id_rsa.pub
     fi
