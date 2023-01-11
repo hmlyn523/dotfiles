@@ -2,7 +2,7 @@
   "entries": {
     "tap": {
       "homebrew/cask": {
-        "revision": "13fa34cf5747b5ffea979a441edd436dedcef8c2"
+        "revision": "6a3ce6df5c122b91574a48066cee00b8e0563809"
       }
     },
     "brew": {
@@ -133,7 +133,7 @@
         "bottle": false
       },
       "yabai": {
-        "version": "5.0.1",
+        "version": "5.0.2",
         "bottle": false
       },
       "zsh": {
@@ -256,7 +256,7 @@
         }
       },
       "utm": {
-        "version": "4.0.9",
+        "version": "4.1.5",
         "options": {
           "full_name": "utm",
           "args": {
@@ -265,7 +265,7 @@
         }
       },
       "visual-studio-code": {
-        "version": "1.74.0",
+        "version": "1.74.3",
         "options": {
           "full_name": "visual-studio-code",
           "args": {
@@ -299,19 +299,19 @@
       },
       "Xcode": {
         "id": "497799835",
-        "version": "14.1"
+        "version": "14.2"
       }
     }
   },
   "system": {
     "macos": {
       "ventura": {
-        "HOMEBREW_VERSION": "3.6.15",
+        "HOMEBREW_VERSION": "3.6.18",
         "HOMEBREW_PREFIX": "/usr/local",
-        "Homebrew/homebrew-core": "d803469febc58d7c6b2006ff7ca70947f9569e24",
-        "CLT": "14.1.0.0.1.1666437224",
-        "Xcode": "14.1",
-        "macOS": "13.0.1"
+        "Homebrew/homebrew-core": "514552c095dd7d313771f26c80787f539fe29cce",
+        "CLT": "14.2.0.0.1.1668646533",
+        "Xcode": "14.2",
+        "macOS": "13.1"
       }
     }
   }
