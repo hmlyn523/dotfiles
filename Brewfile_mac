@@ -11,6 +11,7 @@ brew "zsh-autosuggestions"
 
 cask "Alacritty"
 cask "android-studio"
+cask "blender"
 cask "font-hack-nerd-font"
 cask "gimp"
 cask "gpg-suite"
