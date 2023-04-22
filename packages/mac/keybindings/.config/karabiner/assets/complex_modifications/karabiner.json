@@ -1,0 +1,39 @@
+{
+  "title": "ユーザ定義の日本語環境向け設定",
+  "rules": [
+    {
+      "description": "Control+Spaceを押したときに、Option+`を送信する（RDC、Parallel Clientがフロントの場合）",
+      "manipulators": [
+        {
+          "type": "basic",
+          "from": {
+            "key_code": "spacebar",
+            "modifiers": {
+              "mandatory": [
+                "left_control"
+              ]
+            }
+          },
+          "to": [
+            {
+              "key_code": "grave_accent_and_tilde",
+              "modifiers": [
+                "left_option"
+              ]
+            }
+          ],
+          "conditions": [
+            {
+              "type": "frontmost_application_if",
+              "bundle_identifiers": [
+                "^com\\.microsoft\\.rdc\\.osx$",
+                "^com\\.microsoft\\.rdc\\.macos$",
+                "^com\\.2X\\.Client\\.Mac$"
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
