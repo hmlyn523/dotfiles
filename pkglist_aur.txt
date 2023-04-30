@@ -3,7 +3,6 @@ basemark
 fabric-installer
 microsoft-edge-stable-bin
 minecraft-launcher
-multimc-bin
 noto-fonts-cjk
 noto-fonts-emoji
 zsh
