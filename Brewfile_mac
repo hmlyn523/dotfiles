@@ -2,6 +2,7 @@ tap "homebrew/cask"
 cask_args appdir: "/Applications"
 
 brew "applesimutils"
+brew "cocoapods"
 brew "ios-deploy"
 brew "mas"
 brew "zsh"
