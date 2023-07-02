@@ -233,11 +233,21 @@
                     "simple_modifications": [
                         {
                             "from": {
-                                "key_code": "caps_lock"
+                                "key_code": "non_us_pound"
                             },
                             "to": [
                                 {
-                                    "key_code": "left_control"
+                                    "key_code": "return_or_enter"
+                                }
+                            ]
+                        },
+                        {
+                            "from": {
+                                "key_code": "return_or_enter"
+                            },
+                            "to": [
+                                {
+                                    "key_code": "non_us_pound"
                                 }
                             ]
                         },
@@ -253,21 +263,31 @@
                         },
                         {
                             "from": {
-                                "key_code": "international3"
-                            },
-                            "to": [
-                                {
-                                    "key_code": "delete_or_backspace"
-                                }
-                            ]
-                        },
-                        {
-                            "from": {
                                 "key_code": "left_control"
                             },
                             "to": [
                                 {
                                     "key_code": "caps_lock"
+                                }
+                            ]
+                        },
+                        {
+                            "from": {
+                                "key_code": "caps_lock"
+                            },
+                            "to": [
+                                {
+                                    "key_code": "left_control"
+                                }
+                            ]
+                        },
+                        {
+                            "from": {
+                                "key_code": "international3"
+                            },
+                            "to": [
+                                {
+                                    "key_code": "delete_or_backspace"
                                 }
                             ]
                         }
