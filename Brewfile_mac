@@ -21,9 +21,10 @@ cask "logi-options-plus"
 cask "multimc"
 cask "utm"
 cask "visual-studio-code"
+cask "xcodes"
 
 # mas "Bitwarden", id: 1137397744 # this didn't work. manually installed instead.
-mas "Vimari", id: 1480933944
-mas "Xcode", id: 497799835
-mas "Microsoft Excel", id: 462058435
-mas "Microsoft Word", id: 462054704
+#mas "Vimari", id: 1480933944
+#mas "Xcode", id: 497799835
+#mas "Microsoft Excel", id: 462058435
+#mas "Microsoft Word", id: 462054704
