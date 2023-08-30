@@ -4,6 +4,7 @@ cask_args appdir: "/Applications"
 brew "applesimutils"
 brew "ios-deploy"
 brew "mas"
+brew "yabai"
 brew "zsh"
 brew "zsh-autosuggestions"
 
