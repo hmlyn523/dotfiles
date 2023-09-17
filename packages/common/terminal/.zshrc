@@ -15,12 +15,16 @@ if [ "${os_type}" = "Darwin" ]; then
         if [ -f "/usr/local/bin/brew"  ]; then
             eval "$(/usr/local/bin/brew shellenv)"
             . $(brew --prefix asdf)/libexec/asdf.sh
+            export ASDF_CONFIG_FILE=~/.asdfrc
+            export JAVA_HOME=$(/usr/libexec/java_home)
         fi
     elif [ "${arch_name}" = "arm64" ]; then
         # ARM
         if [ -f "/opt/homebrew/bin/brew"  ]; then
             eval "$(/opt/homebrew/bin/brew shellenv)"
             . $(brew --prefix asdf)/libexec/asdf.sh
+            export ASDF_CONFIG_FILE=~/.asdfrc
+            export JAVA_HOME=$(/usr/libexec/java_home)
         fi
     fi
 elif [ "${os_type}" = "Linux" ]; then
