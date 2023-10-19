@@ -10,9 +10,9 @@ yabai -m config layout                       float #bsp
 
 yabai -m config window_border on
 yabai -m config window_border_width 3
-yabai -m config active_window_border_color 0XFFEE7800
+#yabai -m config active_window_border_color 0XFFEE7800
 #yabai -m config active_window_border_color 0XFFFF4500
-#yabai -m config active_window_border_color 0XFF50FA7B
+yabai -m config active_window_border_color 0XFF50FA7B
 #yabai -m config normal_window_border_color 0XFFBD93F9
 
 # Mouse
