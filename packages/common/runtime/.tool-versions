@@ -6,4 +6,4 @@ python 3.11.5
 deno 1.36.3
 java adoptopenjdk-17.0.8+101
 dotnet 7.0.400
-flutter 3.10.4
+flutter 3.13.6-stable
