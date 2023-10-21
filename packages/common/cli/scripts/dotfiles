@@ -27,6 +27,9 @@ for i in "$@"; do
         -g|--skip-git-setting)
             skip_git=1
             shift ;;
+        -p|--skip-rtx-prune)
+            skip_prune=1
+            shift ;;
         -u=*|--unlink=*)
             unlink_packages="${i#*=}"
             shift ;;
@@ -237,36 +240,14 @@ if [ ! "$skip_git" ]; then
 fi
 
 ###########################################################
-# asdf
+# rtx
 ###########################################################
-for plugin in $(awk '{print $1}' ~/.tool-versions); do
-    if ! is_dir ~/.asdf/plugins/"$plugin"; then
-        asdf plugin add "$plugin"
-    fi
-done
-
-is_runtime_versions_changed () {
-    plugin="$1"
-    specified=$(grep "$plugin" ~/.tool-versions | awk '{$1=""; print $0}')
-    installed=$(asdf list "$plugin" 2>&1)
-
-    is_changed=
-    for version in $specified; do
-        match=$(echo "$installed" | grep "$version")
-        [ -z "$match" ] && is_changed=1
-    done
-
-    [ "$is_changed" ]
-}
-
-for plugin in $(asdf plugin list); do
-    if is_runtime_versions_changed "$plugin"; then
-        asdf install "$plugin"
-    fi
-done
-
-. $(brew --prefix asdf)/libexec/asdf.sh
-log '=====> Setup asdf SUCCESS'
+rtx install &> /dev/null
+if [ ! "$skip_prune" ]; then
+    rtx prune -y
+fi
+rtx list
+log '=====> Setup rtx SUCCESS'
 
 ###########################################################
 # Setup Yarn global

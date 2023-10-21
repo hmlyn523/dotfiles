@@ -7,23 +7,19 @@ os_type="$(uname)"
 arch_name="$(uname -m)"
 echo ">>> ${os_type}/${arch_name} <<<"
 
-# Homebrew, asdf-vm
+# Homebrew
 if [ "${os_type}" = "Darwin" ]; then
     # macOS
     if [ "${arch_name}" = "x86_64" ]; then
         # Intel 
         if [ -f "/usr/local/bin/brew"  ]; then
             eval "$(/usr/local/bin/brew shellenv)"
-            . $(brew --prefix asdf)/libexec/asdf.sh
-            export ASDF_CONFIG_FILE=~/.asdfrc
             export JAVA_HOME=$(/usr/libexec/java_home)
         fi
     elif [ "${arch_name}" = "arm64" ]; then
         # ARM
         if [ -f "/opt/homebrew/bin/brew"  ]; then
             eval "$(/opt/homebrew/bin/brew shellenv)"
-            . $(brew --prefix asdf)/libexec/asdf.sh
-            export ASDF_CONFIG_FILE=~/.asdfrc
             export JAVA_HOME=$(/usr/libexec/java_home)
         fi
     fi
@@ -31,9 +27,15 @@ elif [ "${os_type}" = "Linux" ]; then
     # Linux
     if [ -f "/home/linuxbrew/.linuxbrew/bin/brew"  ]; then
         eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
-        . $(brew --prefix asdf)/libexec/asdf.sh
         #. /opt/asdf-vm/asdf.sh
     fi
+fi
+
+# rtx
+if (which rtx > /dev/null); then
+  eval "$(rtx activate zsh)"
+  export RTX_DATA_DIR=$HOME/.rtx
+  export RTX_CACHE_DIR=$RTX_DATA_DIR/cache
 fi
 
 if [ "${os_type}" = "Darwin" ]; then
@@ -77,7 +79,7 @@ export PATH=$PATH:$ANDROID_HOME/tools/bin
 export PATH=$PATH:$ANDROID_HOME/platform-tools
 export PATH=$PATH:$ANDROID_HOME/cmdline-tools/latest/bin
 
-export PATH=$PATH:$(yarn global bin)
+#export PATH=$PATH:$(yarn global bin)
 export FZF_DEFAULT_COMMAND="rg --files --hidden -l -g '!.git/*' -g '!node_modules/*'"
 export FZF_DEFAULT_OPTS="-m --height 100% --border --preview 'cat {}'"
 
