@@ -1,7 +1,5 @@
 #!/bin/sh 
 
-echo 📌 Configuring macOS default settings
-
 # Close any open System Preferences panes, to prevent them from overriding
 # settings we’re about to change
 osascript -e 'tell application "System Preferences" to quit'
@@ -118,3 +116,8 @@ defaults write com.apple.screencapture location -string "${HOME}/screenshots"
 # Dictionary
 ###########################################################
 defaults write NSGlobalDomain NSAutomaticCapitalizationEnabled -bool false
+
+###########################################################
+# Do not create DS_Store file
+###########################################################
+defaults write com.apple.desktopservices DSDontWriteNetworkStores True

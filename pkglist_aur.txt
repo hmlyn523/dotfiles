@@ -1,9 +1,0 @@
-android-studio
-basemark
-fabric-installer
-microsoft-edge-stable-bin
-minecraft-launcher
-noto-fonts-cjk
-noto-fonts-emoji
-zsh
-zsh-autosuggestions
