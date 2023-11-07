@@ -131,7 +131,7 @@ fi
 ###########################################################
 if [ ! "$skip_apps" ]; then
     log 'Install Apps and CLIs'
-    brew bundle -v --file "$GITHUB_PATH"/dotfiles/Brewfile $([ -n "$verbose" ] && echo -v)
+    brew bundle --file "$GITHUB_PATH"/dotfiles/Brewfile $([ -n "$verbose" ] && echo -v)
 fi
 
 ###########################################################
