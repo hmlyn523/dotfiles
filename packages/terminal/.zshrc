@@ -89,6 +89,7 @@ export FZF_DEFAULT_OPTS="-m --height 100% --border --preview 'cat {}'"
 bindkey '^e' autosuggest-accept
 
 export PATH=$PATH:$GITHUB_PATH/dotfiles/packages/common/cli/scripts
+export PATH="$PATH":"$HOME/.pub-cache/bin"
 
 export LF_ICONS="\
 tw=:\
