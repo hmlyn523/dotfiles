@@ -25,9 +25,20 @@ yabai -m config mouse_modifier               ctrl
 yabai -m config debug_output on
 
 # Rules
-yabai -m rule --add app="^Alacritty" manage=on
-yabai -m rule --add app="^Code" manage=on
-yabai -m rule --add app="^Safari" manage=on
-yabai -m rule --add title="^iCloud" manage=on
+yabai -m rule --add app="^Calendar$"           manage=off
+yabai -m rule --add app="^Dictionary$"         manage=off
+yabai -m rule --add app="^Disk Utility$"       manage=off
+yabai -m rule --add app="^Postlab$"            manage=off
+yabai -m rule --add app="^Simulator$"          manage=off
+yabai -m rule --add app="^System Preferences$" manage=off
+yabai -m rule --add app="^Electron$"           manage=off
+
+yabai -m rule --add app="^System Settings$"    manage=off
+yabai -m rule --add app="^Calculator$"         manage=off
+#yabai -m rule --add app="Alacritty" manage=off
+#yabai -m rule --add app="^Code" manage=off
+#yabai -m rule --add app="^Safari" manage=off
+#yabai -m rule --add title="^iCloud" manage=off
+#yabai -m rule --add app="^System Settings" manage=off
 
 echo "yabai configuration loaded..."
