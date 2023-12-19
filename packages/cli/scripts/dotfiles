@@ -195,7 +195,8 @@ fi
 # rtx
 ###########################################################
 log 'rtx'
-rtx install &> /dev/null
+#rtx install &> /dev/null
+rtx install
 if [ ! "$skip_prune" ]; then
     rtx prune -y
 fi
