@@ -7,7 +7,6 @@ tap "homebrew/cask-fonts"
 tap "homebrew/services"
 tap "koekeishiya/formulae"
 tap "wix/brew"
-tap "homebrew/cask"
 
 cask_args appdir: "/Applications"
 
