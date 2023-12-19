@@ -36,7 +36,7 @@ brew "procs" # ps clone
 brew "pv" # 進捗ツール
 brew "ripgrep"
 brew "rtx"
-#brew "rust-analyzer" # rustの入力補完や型チェック
+brew "rust-analyzer" # rustの入力補完や型チェック
 brew "sd" # sed clone
 brew "sk" # find clone
 # brew "skhd"
