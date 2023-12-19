@@ -12,15 +12,15 @@ tap "homebrew/cask"
 cask_args appdir: "/Applications"
 
 brew "applesimutils"
-brew "bat"
+brew "bat" # cat clone
 brew "cmake"
 brew "coreutils"
 brew "curl"
-brew "dust"
-brew "exa"
-brew "fd"
-brew "fzf"
-brew "gh"
+brew "dust" # du clone
+brew "exa" # ls clone
+brew "fd" # find clone
+brew "fzf" # あいまい検索
+brew "gh" # GitHub CLI
 brew "git"
 brew "git-cliff"
 brew "git-delta"
@@ -28,29 +28,29 @@ brew "grep"
 brew "htop"
 brew "ios-deploy"
 brew "jq"
-brew "mas"
-brew "ncdu"
+#brew "mas"
+brew "ncdu" # ディスク容量確認
 brew "nvim"
 brew "p7zip"
-brew "pnpm"
-brew "procs"
-brew "pv"
+brew "pnpm" # npm代替パッケージツール
+brew "procs" # ps clone
+brew "pv" # 進捗ツール
 brew "ripgrep"
 brew "rtx"
-brew "rust-analyzer"
-brew "sd"
-brew "sk"
+#brew "rust-analyzer" # rustの入力補完や型チェック
+brew "sd" # sed clone
+brew "sk" # find clone
 # brew "skhd"
 brew "starship"
 brew "stow"
-brew "tealdeer"
+brew "tealdeer" # tldr / man clone
 brew "tmux"
 brew "watchman"
 brew "wget"
 # brew "yabai"
 brew "ytop"
-brew "zola"
-brew "zoxide"
+brew "zola" # SSG
+brew "zoxide" # z , zi
 brew "zsh"
 brew "zsh-autosuggestions"
 
@@ -75,8 +75,8 @@ cask "gpg-suite"
 cask "karabiner-elements"
 cask "logi-options-plus"
 cask "microsoft-remote-desktop"
-cask "multimc"
-cask "openemu"
+cask "multimc" # minecraft
+cask "openemu" # game emulator
 cask "utm"
 cask "visual-studio-code"
 cask "xcodes"
