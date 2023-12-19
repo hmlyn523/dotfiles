@@ -63,6 +63,7 @@ brew "giflib"
 brew "librsvg"
 
 cask "Alacritty"
+cask "alt-tab"
 cask "android-studio"
 cask "balenaetcher"
 cask "blender"
