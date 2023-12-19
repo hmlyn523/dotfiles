@@ -1,15 +1,13 @@
 source ~/.config/nvim/vim-plug/plugins.vim
 syntax enable
 filetype plugin indent on
-"set number relativenumber
-set number
+set number relativenumber
 set ts=4 sts=4 sw=4 expandtab
 set wrap
 set nobackup noswapfile noundofile
 set autoread
 set mouse=a
 set clipboard+=unnamedplus
-
 let g:rainbow_active = 1
 
 " Colors
@@ -90,9 +88,53 @@ au BufNewFile,BufRead Fastfile set ft=ruby
 
 " LSP
 lua << EOF
-    require("nvim-lsp-installer").setup {}
-    require'lspconfig'.flow.setup{on_attach=require'completion'.on_attach}
-    require'lspconfig'.gopls.setup{on_attach=require'completion'.on_attach}
+    require("mason").setup()
+    require("mason-lspconfig").setup({
+        ensure_installed = {
+            "rust_analyzer",
+            "solang",
+            "eslint",
+            "tsserver",
+        },
+        automatic_installation = true,
+    })
+
+    require("lspconfig").rust_analyzer.setup{}
+
+    local lsp_formatting = function(bufnr)
+        vim.lsp.buf.format({
+            filter = function(client)
+                -- apply whatever logic you want (in this example, we'll only use null-ls)
+                return client.name == "null-ls"
+            end,
+            bufnr = bufnr,
+        })
+    end
+
+    local augroup = vim.api.nvim_create_augroup("LspFormatting", {})
+
+    local on_attach = function(client, bufnr)
+        if client.supports_method("textDocument/formatting") then
+            vim.api.nvim_clear_autocmds({ group = augroup, buffer = bufnr })
+            vim.api.nvim_create_autocmd("BufWritePre", {
+                group = augroup,
+                buffer = bufnr,
+                callback = function()
+                    lsp_formatting(bufnr)
+                end,
+            })
+        end
+    end
+
+    require("null-ls").setup({
+        sources = {
+            require("null-ls").builtins.formatting.rustfmt,
+            require("null-ls").builtins.diagnostics.solhint,
+            require("null-ls").builtins.code_actions.eslint,
+            require("null-ls").builtins.code_actions.shellcheck,
+        },
+        on_attach = on_attach,
+    })
 EOF
 
 " Key Bindings
@@ -121,13 +163,6 @@ let loaded_netrwPlugin   = 1
 " let g:netrw_liststyle    = 3
 " let g:netrw_sort_options = 'i'
 " let g:netrw_browse_split = 0
-
-" ALE
-let g:ale_linters_explicit = 1
-let g:ale_sign_column_always = 1
-let g:ale_fix_on_save = 1
-let g:ale_sign_error = 'E'
-let g:ale_sign_warning = 'W'
 
 " FZF
 let g:fzf_buffers_jump = 1
