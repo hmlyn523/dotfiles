@@ -8,26 +8,17 @@ arch_name="$(uname -m)"
 echo ">>> ${os_type}/${arch_name} <<<"
 
 # Homebrew
-if [ "${os_type}" = "Darwin" ]; then
-    # macOS
-    if [ "${arch_name}" = "x86_64" ]; then
-        # Intel 
-        if [ -f "/usr/local/bin/brew"  ]; then
-            eval "$(/usr/local/bin/brew shellenv)"
-            export JAVA_HOME=$(/usr/libexec/java_home)
-        fi
-    elif [ "${arch_name}" = "arm64" ]; then
-        # ARM
-        if [ -f "/opt/homebrew/bin/brew"  ]; then
-            eval "$(/opt/homebrew/bin/brew shellenv)"
-            export JAVA_HOME=$(/usr/libexec/java_home)
-        fi
+if [ "${arch_name}" = "x86_64" ]; then
+    # Intel 
+    if [ -f "/usr/local/bin/brew"  ]; then
+        eval "$(/usr/local/bin/brew shellenv)"
+        export JAVA_HOME=$(/usr/libexec/java_home)
     fi
-elif [ "${os_type}" = "Linux" ]; then
-    # Linux
-    if [ -f "/home/linuxbrew/.linuxbrew/bin/brew"  ]; then
-        eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
-        #. /opt/asdf-vm/asdf.sh
+elif [ "${arch_name}" = "arm64" ]; then
+    # ARM
+    if [ -f "/opt/homebrew/bin/brew"  ]; then
+        eval "$(/opt/homebrew/bin/brew shellenv)"
+        export JAVA_HOME=$(/usr/libexec/java_home)
     fi
 fi
 
@@ -38,17 +29,16 @@ if (which rtx > /dev/null); then
   export RTX_CACHE_DIR=$RTX_DATA_DIR/cache
 fi
 
-if [ "${os_type}" = "Darwin" ]; then
-    alias code="open -a 'Visual Studio Code'"
-    alias lldlib="open ~/Library/Application\ Support/Electron"
-    alias sim="open /Applications/Xcode.app/Contents/Developer/Applications/Simulator.app/"
-    alias keycodes="cat /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/Frameworks/Carbon.framework/Versions/A/Frameworks/HIToolbox.framework/Versions/A/Headers/Events.h"
-    alias syncsh=". syncsh"
-    alias cdrepo=". cdrepo"
-    alias lscmd="ls ~/scripts"
-    alias pr="gh pr view --web"
-    alias prysm="~/prysm/prysm.sh"
-fi
+alias code="open -a 'Visual Studio Code'"
+alias syncsh=". syncsh"
+alias cdrepo=". cdrepo"
+alias lscmd="ls ~/scripts"
+#alias pr="gh pr view --web"
+#alias prysm="~/prysm/prysm.sh"
+#alias lldlib="open ~/Library/Application\ Support/Electron"
+sim_path="$(ls -dr /Applications/Xcode-* | head -n1)"
+alias sim="open ${sim_path}/Contents/Developer/Applications/Simulator.app/"
+alias keycodes="cat /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/Frameworks/Carbon.framework/Versions/A/Frameworks/HIToolbox.framework/Versions/A/Headers/Events.h"
 
 # Override
 if [ -n "$(which z)" ]; then
@@ -67,6 +57,10 @@ alias top="ytop"
 alias vi="nvim"
 alias du="dust"
 
+#if [ -d "/opt/homebrew/opt/ruby/bin" ]; then
+#    export PATH=/opt/homebrew/opt/ruby/bin:/opt/homebrew/lib/ruby/gems/3.0.0/bin:$PATH
+#fi
+
 eval "$(starship init zsh)"
 eval "$(zoxide init zsh)"
 
@@ -79,11 +73,14 @@ export PATH=$PATH:$ANDROID_HOME/tools/bin
 export PATH=$PATH:$ANDROID_HOME/platform-tools
 export PATH=$PATH:$ANDROID_HOME/cmdline-tools/latest/bin
 
-#export PATH=$PATH:$(yarn global bin)
+export PATH=$PATH:$(yarn global bin)
 export FZF_DEFAULT_COMMAND="rg --files --hidden -l -g '!.git/*' -g '!node_modules/*'"
 export FZF_DEFAULT_OPTS="-m --height 100% --border --preview 'cat {}'"
 
-#. $(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh
+export PNPM_HOME="/Users/js/Library/pnpm"
+export PATH="$PNPM_HOME:$PATH"
+
+. $(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh
 # source '/usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/path.zsh.inc'
 # source '/usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/completion.zsh.inc'
 bindkey '^e' autosuggest-accept
