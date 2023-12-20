@@ -2,3 +2,4 @@
 .vscode
 Brewfile.lock.json
 Brewfile_mac.lock.json
+packages/keybindings/.config/karabiner/automatic_backups/
