@@ -12,13 +12,13 @@ if [ "${arch_name}" = "x86_64" ]; then
     # Intel 
     if [ -f "/usr/local/bin/brew"  ]; then
         eval "$(/usr/local/bin/brew shellenv)"
-        export JAVA_HOME=$(/usr/libexec/java_home)
+        # export JAVA_HOME=$(/usr/libexec/java_home)
     fi
 elif [ "${arch_name}" = "arm64" ]; then
     # ARM
     if [ -f "/opt/homebrew/bin/brew"  ]; then
         eval "$(/opt/homebrew/bin/brew shellenv)"
-        export JAVA_HOME=$(/usr/libexec/java_home)
+        # export JAVA_HOME=$(/usr/libexec/java_home)
     fi
 fi
 
