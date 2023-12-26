@@ -207,7 +207,7 @@ rtx list
 ###########################################################
 # Setup Yarn global
 ###########################################################
-if ! is_dir ~/.config/yarn/global; then
+if ! command -v yarn >/dev/null 2>&1; then
   # https://qiita.com/iisaka51/items/845b39cdaa210cf6d31e#rtx-activateは何をするのでしょうか
   rtx x -- npm install -g yarn
   log '=====> Setup Yarn global SUCCESS'
