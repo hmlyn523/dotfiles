@@ -75,6 +75,7 @@ cask "gpg-suite"
 cask "karabiner-elements"
 cask "logi-options-plus"
 cask "microsoft-remote-desktop"
+cask "mist"
 cask "multimc" # minecraft
 cask "openemu" # game emulator
 cask "utm"
