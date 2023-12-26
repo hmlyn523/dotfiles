@@ -191,21 +191,24 @@ if [ ! "$skip_git" ]; then
     log '=====> Setup Git SUCCESS'
 fi
 
-###########################################################
+####################t######################################
 # rtx
 ###########################################################
 log 'rtx'
 #rtx install &> /dev/null
-rtx install
-if [ ! "$skip_prune" ]; then
+if [ ! "$skip_apps" ]; then
+  rtx install
+  if [ ! "$skip_prune" ]; then
     rtx prune -y
+  fi
 fi
 rtx list
 
 ###########################################################
 # Setup Yarn global
 ###########################################################
-if ! is_dir ~/.config/yarn/global/node_modules; then
-    yarn global add
-    log '=====> Setup Yarn global SUCCESS'
+if ! is_dir ~/.config/yarn/global; then
+  # https://qiita.com/iisaka51/items/845b39cdaa210cf6d31e#rtx-activateは何をするのでしょうか
+  rtx x -- npm install -g yarn
+  log '=====> Setup Yarn global SUCCESS'
 fi
