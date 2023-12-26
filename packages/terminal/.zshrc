@@ -39,6 +39,7 @@ alias lscmd="ls ~/scripts"
 sim_path="$(ls -dr /Applications/Xcode-* | head -n1)"
 alias sim="open ${sim_path}/Contents/Developer/Applications/Simulator.app/"
 alias keycodes="cat /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/Frameworks/Carbon.framework/Versions/A/Frameworks/HIToolbox.framework/Versions/A/Headers/Events.h"
+alias battery="ioreg -c AppleSmartBattery | grep -i Capacity"
 
 # Override
 if [ -n "$(which z)" ]; then
