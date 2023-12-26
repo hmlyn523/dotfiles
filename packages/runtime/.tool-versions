@@ -6,5 +6,5 @@ deno    1.39.0
 java    adoptopenjdk-17.0.8+101
 dotnet  8.0.100
 flutter 3.16.4-stable
-ruby    3.2.2
+#ruby    3.2.2
 rust    1.74.1
