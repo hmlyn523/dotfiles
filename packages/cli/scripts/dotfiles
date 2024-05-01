@@ -26,7 +26,7 @@ for i in "$@"; do
         -g|--skip-git-setting)
             skip_git=1
             shift ;;
-        -p|--skip-rtx-prune)
+        -p|--skip-mise-prune)
             skip_prune=1
             shift ;;
         -u=*|--unlink=*)
@@ -192,23 +192,23 @@ if [ ! "$skip_git" ]; then
 fi
 
 ####################t######################################
-# rtx
+# mise
 ###########################################################
-log 'rtx'
-#rtx install &> /dev/null
+log 'mise'
+#mise install &> /dev/null
 if [ ! "$skip_apps" ]; then
-  rtx install
+  mise install
   if [ ! "$skip_prune" ]; then
-    rtx prune -y
+    mise prune -y
   fi
 fi
-rtx list
+mise list
 
 ###########################################################
 # Setup Yarn global
 ###########################################################
 if ! command -v yarn >/dev/null 2>&1; then
   # https://qiita.com/iisaka51/items/845b39cdaa210cf6d31e#rtx-activateは何をするのでしょうか
-  rtx x -- npm install -g yarn
+  mise x -- npm install -g yarn
   log '=====> Setup Yarn global SUCCESS'
 fi

@@ -29,6 +29,7 @@ brew "ios-deploy"
 brew "jq"
 # brew "lf"
 # brew "mas"
+brew "mise"
 brew "ncdu" # ディスク容量確認
 brew "nvim"
 brew "p7zip"
@@ -36,7 +37,6 @@ brew "pnpm" # npm代替パッケージツール
 brew "procs" # ps clone
 brew "pv" # 進捗ツール
 brew "ripgrep"
-brew "rtx"
 brew "ruby"
 brew "rust-analyzer" # rustの入力補完や型チェック
 brew "sd" # sed clone

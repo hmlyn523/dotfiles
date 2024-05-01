@@ -22,11 +22,11 @@ elif [ "${arch_name}" = "arm64" ]; then
     fi
 fi
 
-# rtx
-if (which rtx > /dev/null); then
-  eval "$(rtx activate zsh)"
-  export RTX_DATA_DIR=$HOME/.rtx
-  export RTX_CACHE_DIR=$RTX_DATA_DIR/cache
+# mise
+if (which mise > /dev/null); then
+  eval "$(mise activate zsh)"
+  export MISE_DATA_DIR=$HOME/.mise
+  export MISE_CACHE_DIR=$MISE_DATA_DIR/cache
 fi
 
 alias code="open -a 'Visual Studio Code'"
