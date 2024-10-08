@@ -46,8 +46,8 @@ if [ -n "$(which z)" ]; then
     alias cd="z"
 fi
 
-if [ -n "$(which exa)" ]; then
-    alias ls="exa"
+if [ -n "$(which eza)" ]; then
+    alias ls="eza"
 fi
 
 alias cat="bat"

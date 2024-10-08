@@ -16,7 +16,7 @@ brew "cmake"
 brew "coreutils"
 brew "curl"
 brew "dust" # du clone
-brew "exa" # ls clone
+brew "eza" # ls clone
 brew "fd" # find clone
 brew "fzf" # あいまい検索
 brew "gh" # GitHub CLI
