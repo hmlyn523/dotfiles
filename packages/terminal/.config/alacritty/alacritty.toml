@@ -1,4 +1,4 @@
-live_config_reload = true
+general.live_config_reload = true
 
 [colors.bright]
 black = "0x997e9d"
@@ -54,7 +54,7 @@ action = "None"
 key = "W"
 mods = "Command"
 
-[shell]
+[terminal.shell]
 args = ["new-session", "-D", "-c", "#{pane_current_path}"]
 program = "/usr/local/bin/tmux"
 
