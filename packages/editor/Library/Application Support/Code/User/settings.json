@@ -28,5 +28,7 @@
         "statusBar.debuggingBackground": "#005f5f",
         "statusBar.foreground": "#fff",
         "statusBar.debuggingForeground": "#fff"
-    }
+    },
+    "vim.autoSwitchInputMethod.enable": true,
+    "vim.autoSwitchInputMethod.defaultIM": "-c"
 }
