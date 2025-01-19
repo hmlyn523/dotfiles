@@ -15,10 +15,10 @@ brew "bat" # cat clone
 brew "cmake"
 brew "coreutils"
 brew "curl"
-brew "dust" # du clone
+# brew "dust" # du clone ディスク使用量確認
 brew "eza" # ls clone
-brew "fd" # find clone
-brew "fzf" # あいまい検索
+# brew "fd" # find clone
+# brew "fzf" # あいまい検索
 brew "gh" # GitHub CLI
 brew "git"
 brew "git-cliff"
@@ -26,63 +26,64 @@ brew "git-delta"
 brew "grep"
 brew "htop"
 brew "ios-deploy"
-brew "jq"
+# brew "jq"
 # brew "lf"
 # brew "mas"
 brew "mise"
-brew "ncdu" # ディスク容量確認
+# brew "ncdu" # ディスク容量確認
 brew "nvim"
 brew "p7zip"
-brew "pnpm" # npm代替パッケージツール
-brew "procs" # ps clone
-brew "pv" # 進捗ツール
-brew "ripgrep"
-brew "ruby"
-brew "rust-analyzer" # rustの入力補完や型チェック
-brew "sd" # sed clone
-brew "sk" # find clone
+# brew "pnpm" # npm代替パッケージツール
+# brew "procs" # ps clone
+# brew "pv" # 進捗ツール
+# brew "ripgrep" # 検索ツール
+# brew "ruby"
+# brew "rust-analyzer" # rustの入力補完や型チェック
+# brew "sd" # sed clone
+# brew "sk" # find clone
 # brew "skhd"
 brew "starship"
 brew "stow"
 brew "tealdeer" # tldr / man clone
 brew "tmux"
-brew "watchman"
+# brew "watchman"
 brew "wget"
 # brew "yabai"
 brew "ytop"
-brew "zola" # SSG
+# brew "zola" # SSG
 brew "zoxide" # z , zi
 brew "zsh"
 brew "zsh-autosuggestions"
 
 # https://github.com/Automattic/node-canvas
-brew "pkg-config"
-brew "cairo"
-brew "pango"
-brew "libpng"
-brew "jpeg"
-brew "giflib"
-brew "librsvg"
+# brew "pkg-config"
+# brew "cairo"
+# brew "pango"
+# brew "libpng"
+# brew "jpeg"
+# brew "giflib"
+# brew "librsvg"
 
 cask "Alacritty"
 cask "alt-tab"
-cask "android-studio"
+# cask "android-studio"
 cask "balenaetcher"
 # cask "blender"
-cask "fontforge"
+# cask "battery" # arm64 only
+# cask "fontforge"
 cask "font-hack-nerd-font"
 cask "font-udev-gothic-nf"
-cask "gimp"
+# cask "gimp"
 cask "google-chrome"
-cask "google-japanese-ime"
+# cask "google-japanese-ime"
 cask "gpg-suite"
-cask "karabiner-elements"
-cask "logi-options-plus"
+# cask "karabiner-elements"
+# cask "logi-options-plus"
 cask "microsoft-remote-desktop"
 cask "mist"
-cask "multimc" # minecraft
-cask "openemu" # game emulator
-cask "utm"
+# cask "multimc" # minecraft
+# cask "openemu" # game emulator
+# cask "utm"
 cask "visual-studio-code"
 cask "xcodes"
 
