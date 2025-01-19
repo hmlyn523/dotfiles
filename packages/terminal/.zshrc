@@ -7,6 +7,13 @@ os_type="$(uname)"
 arch_name="$(uname -m)"
 echo ">>> ${os_type}/${arch_name} <<<"
 
+# tmux
+# セッションが既に存在していればそれにアタッチ
+# なければ新しいセッションを作成
+if [ -z "$TMUX" ]; then
+  tmux attach-session || tmux new-session
+fi
+
 # Homebrew
 if [ "${arch_name}" = "x86_64" ]; then
     # Intel 
@@ -88,6 +95,8 @@ bindkey '^e' autosuggest-accept
 
 export PATH=$PATH:$GITHUB_PATH/dotfiles/packages/common/cli/scripts
 export PATH="$PATH":"$HOME/.pub-cache/bin"
+
+export XDG_CONFIG_HOME=~/.config
 
 export LF_ICONS="\
 tw=:\
