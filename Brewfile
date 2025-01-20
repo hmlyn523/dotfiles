@@ -69,7 +69,7 @@ cask "alt-tab"
 # cask "android-studio"
 cask "balenaetcher"
 # cask "blender"
-cask "battery" # arm64 only
+# cask "battery" # arm64 only
 # cask "fontforge"
 cask "font-hack-nerd-font"
 cask "font-udev-gothic-nf"
