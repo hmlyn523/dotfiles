@@ -37,7 +37,7 @@ brew "p7zip"
 # brew "procs" # ps clone
 # brew "pv" # 進捗ツール
 # brew "ripgrep" # 検索ツール
-# brew "ruby"
+brew "ruby"
 # brew "rust-analyzer" # rustの入力補完や型チェック
 # brew "sd" # sed clone
 # brew "sk" # find clone
