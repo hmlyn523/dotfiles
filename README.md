@@ -16,13 +16,13 @@ This repository is a forked and modified version of [@JunichiSugiura](https://gi
 2. Run install
 
 ```sh
-curl -o - https://raw.githubusercontent.com/TatsuyaSagara/dotfiles/main/packages/common/cli/scripts/dotfiles | sh
+curl -o - https://raw.githubusercontent.com/hmlyn523/dotfiles/main/packages/cli/scripts/dotfiles | sh
 ```
 
 Add the -g option if you want to skip the GitHub configuration.
 
 ```sh
-curl -o - https://raw.githubusercontent.com/TatsuyaSagara/dotfiles/main/packages/common/cli/scripts/dotfiles | sh -s -- -g
+curl -o - https://raw.githubusercontent.com/hmlyn523/dotfiles/main/packages/cli/scripts/dotfiles | sh -s -- -g
 ```
 
 3. [macOS] Start Yabai and skhd
