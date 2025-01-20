@@ -57,13 +57,13 @@ if [ -n "$(which eza)" ]; then
     alias ls="eza"
 fi
 
-alias cat="bat"
+# alias cat="bat"
 alias ll="ls -lah --git"
 alias lt="ll -TL 3 --ignore-glob=.git"
-alias ps="procs"
+# alias ps="procs"
 alias top="ytop"
 alias vi="nvim"
-alias du="dust"
+# alias du="dust"
 
 #if [ -d "/opt/homebrew/opt/ruby/bin" ]; then
 #    export PATH=/opt/homebrew/opt/ruby/bin:/opt/homebrew/lib/ruby/gems/3.0.0/bin:$PATH

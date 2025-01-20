@@ -11,9 +11,9 @@ tap "wix/brew"
 cask_args appdir: "/Applications"
 
 brew "applesimutils"
-brew "bat" # cat clone
+# brew "bat" # cat clone
 brew "cmake"
-brew "coreutils"
+# brew "coreutils"
 brew "curl"
 # brew "dust" # du clone ディスク使用量確認
 brew "eza" # ls clone
@@ -69,7 +69,7 @@ cask "alt-tab"
 # cask "android-studio"
 cask "balenaetcher"
 # cask "blender"
-# cask "battery" # arm64 only
+cask "battery" # arm64 only
 # cask "fontforge"
 cask "font-hack-nerd-font"
 cask "font-udev-gothic-nf"
