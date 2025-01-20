@@ -1,7 +1,7 @@
-# node    20.12.2
+node    20.12.2
 # yarn    1.22.19
 # go      1.21.5
-# python  3.12.1
+python  3.12.1
 # deno    1.39.0
 # java    adoptopenjdk-17.0.8+101
 # dotnet  8.0.100
