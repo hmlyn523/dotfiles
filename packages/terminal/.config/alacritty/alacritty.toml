@@ -72,7 +72,8 @@ mods = "Command"
 
 [terminal.shell]
 args = ["new-session", "-D", "-c", "#{pane_current_path}"]
-program = "/usr/local/bin/tmux"
+# program = "/usr/local/bin/tmux"
+program = "/opt/homebrew/bin/tmux"
 
 [window]
 decorations = "full"

@@ -1,7 +1,7 @@
 [user]
 	name       = TatsuyaSagara
 	email      = tatsuya.sagara@icloud.com
-	signingkey = 02BE0FFFC54555F6
+	signingkey = FAEE5A26921FDF4D
 [alias]
 	s   = status -sb
 	d   = diff
