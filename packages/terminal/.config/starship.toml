@@ -1,11 +1,12 @@
 add_newline = false
-# command_timeout = 3000
+command_timeout = 1000
 
 [character]
 success_symbol = "🦄 " 
 error_symbol = "🥺 "
 
 [git_status]
+# disabled = true
 style = "bold white"
 conflicted = " 🏳"
 ahead = " 🏎💨 "
