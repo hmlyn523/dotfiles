@@ -18,6 +18,7 @@ brew "curl"
 # brew "dust" # du clone ディスク使用量確認
 brew "eza" # ls clone
 # brew "fd" # find clone
+brew "freetype" # asepriteのビルド用
 # brew "fzf" # あいまい検索
 brew "gh" # GitHub CLI
 brew "git"
@@ -31,8 +32,10 @@ brew "jq"
 # brew "mas"
 brew "mise"
 # brew "ncdu" # ディスク容量確認
+brew "ninja" # asepriteのビルド用
 brew "nvim"
 brew "p7zip"
+brew "pkg-config" # asepriteビルド用
 # brew "pnpm" # npm代替パッケージツール
 # brew "procs" # ps clone
 # brew "pv" # 進捗ツール
@@ -42,10 +45,12 @@ brew "ruby"
 # brew "sd" # sed clone
 # brew "sk" # find clone
 # brew "skhd"
+brew "sqlite"
 brew "starship"
 brew "stow"
 brew "tealdeer" # tldr / man clone
 brew "tmux"
+brew "tree"
 # brew "watchman"
 brew "wget"
 # brew "yabai"
@@ -69,14 +74,16 @@ cask "alt-tab"
 # cask "android-studio"
 cask "balenaetcher"
 # cask "blender"
-# cask "battery" # arm64 only
-# cask "fontforge"
+cask "battery" # arm64 only
+cask "brave-browser"
+cask "fontforge"
 cask "font-hack-nerd-font"
 cask "font-udev-gothic-nf"
-# cask "gimp"
+cask "gimp"
 cask "google-chrome"
 # cask "google-japanese-ime"
 cask "gpg-suite"
+cask "inkscape"
 # cask "karabiner-elements"
 # cask "logi-options-plus"
 cask "microsoft-remote-desktop"
