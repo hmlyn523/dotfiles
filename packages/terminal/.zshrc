@@ -74,6 +74,11 @@ eval "$(zoxide init zsh)"
 
 export GPG_TTY=$(tty)
 
+# dotnet
+export DOTNET_ROOT="$(mise which dotnet | xargs dirname)"
+export PATH="$DOTNET_ROOT:$PATH"
+
+# Android
 export ANDROID_HOME=$HOME/Library/Android/sdk
 export PATH=$PATH:$ANDROID_HOME/emulator
 export PATH=$PATH:$ANDROID_HOME/tools
