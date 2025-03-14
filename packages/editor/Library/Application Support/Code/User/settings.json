@@ -1,5 +1,5 @@
 {
-    "git.autofetch": true,
+      "git.autofetch": true,
     "workbench.iconTheme": "vscode-great-icons",
 
     // 検索にマッチした箇所をハイライト
@@ -30,5 +30,6 @@
         "statusBar.debuggingForeground": "#fff"
     },
     "vim.autoSwitchInputMethod.enable": true,
-    "vim.autoSwitchInputMethod.defaultIM": "-c"
+    "vim.autoSwitchInputMethod.defaultIM": "-c",
+    "git.ignoreRebaseWarning": true
 }
