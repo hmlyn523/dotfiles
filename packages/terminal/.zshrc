@@ -75,7 +75,7 @@ eval "$(zoxide init zsh)"
 export GPG_TTY=$(tty)
 
 # dotnet
-export DOTNET_ROOT="$(mise which dotnet | xargs dirname)"
+export DOTNET_ROOT=$HOME/.mise/installs/dotnet/latest
 export PATH="$DOTNET_ROOT:$PATH"
 
 # Android
@@ -102,6 +102,10 @@ export PATH=$PATH:$GITHUB_PATH/dotfiles/packages/common/cli/scripts
 export PATH="$PATH":"$HOME/.pub-cache/bin"
 
 export XDG_CONFIG_HOME=~/.config
+
+# SQLite3
+export DYLD_LIBRARY_PATH=$(brew --prefix sqlite)/lib:$DYLD_LIBRARY_PATH
+export PATH="/opt/homebrew/opt/sqlite/bin:$PATH"
 
 export LF_ICONS="\
 tw=:\
