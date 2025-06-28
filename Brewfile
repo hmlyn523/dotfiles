@@ -37,6 +37,7 @@ brew "nvim"
 brew "p7zip"
 brew "pkg-config" # asepriteビルド用
 # brew "pnpm" # npm代替パッケージツール
+brew "postgresql@17"
 # brew "procs" # ps clone
 # brew "pv" # 進捗ツール
 # brew "ripgrep" # 検索ツール
@@ -90,7 +91,8 @@ cask "microsoft-remote-desktop"
 cask "mist"
 # cask "multimc" # minecraft
 # cask "openemu" # game emulator
-# cask "utm"
+cask "utm"
+cask "virtualbox"
 cask "visual-studio-code"
 cask "xcodes"
 
