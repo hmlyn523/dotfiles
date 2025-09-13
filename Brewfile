@@ -33,6 +33,7 @@ brew "jq"
 brew "mise"
 # brew "ncdu" # ディスク容量確認
 brew "ninja" # asepriteのビルド用
+# brew "node"
 brew "nvim"
 brew "p7zip"
 brew "pkg-config" # asepriteビルド用
@@ -74,7 +75,7 @@ cask "Alacritty"
 cask "alt-tab"
 # cask "android-studio"
 cask "balenaetcher"
-# cask "blender"
+cask "blender"
 cask "battery" # arm64 only
 cask "brave-browser"
 cask "fontforge"
@@ -91,10 +92,11 @@ cask "microsoft-remote-desktop"
 cask "mist"
 # cask "multimc" # minecraft
 # cask "openemu" # game emulator
+cask "sourcetree"
 cask "utm"
 cask "virtualbox"
 cask "visual-studio-code"
-cask "xcodes"
+# cask "xcodes"
 
 # mas "Bitwarden", id: 1137397744 # this didn't work. manually installed instead.
 #mas "Vimari", id: 1480933944
