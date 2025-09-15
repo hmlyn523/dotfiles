@@ -34,5 +34,6 @@
   // インデントはスペース2つ
   "editor.tabSize": 2,
   // ファイル保存時にフォーマット
-  "editor.formatOnSave": true
+  "editor.formatOnSave": true,
+  "workbench.tree.indent": 16
 }
