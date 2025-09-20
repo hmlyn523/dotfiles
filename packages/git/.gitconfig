@@ -1,6 +1,6 @@
 [user]
-	name       = TatsuyaSagara
-	email      = tatsuya.sagara@icloud.com
+	name = Tatsuya Sagara
+	email = tatsuya.sagara@icloud.com
 	signingkey = FAEE5A26921FDF4D
 [alias]
 	s   = status -sb
@@ -18,7 +18,7 @@
 	f   = fetch
 	fup = fetch upstream
 [core]
-	excludesfile = ~/.gitignore
+	excludesfile = /Users/tatsuya/.gitignore_global
 	editor = nvim
 [init]
 	defaultBranch = main
@@ -45,3 +45,9 @@
     diffFilter = delta --color-only
 ; [url "git@github.com:"]
 ;   insteadOf = https://github.com/
+[difftool "sourcetree"]
+	cmd = opendiff \"$LOCAL\" \"$REMOTE\"
+	path = 
+[mergetool "sourcetree"]
+	cmd = /Applications/Sourcetree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
+	trustExitCode = true
