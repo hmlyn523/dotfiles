@@ -88,6 +88,7 @@ cask "gpg-suite"
 cask "inkscape"
 # cask "karabiner-elements"
 # cask "logi-options-plus"
+cask "meld"
 cask "microsoft-remote-desktop"
 cask "mist"
 # cask "multimc" # minecraft
@@ -97,6 +98,7 @@ cask "utm"
 cask "virtualbox"
 cask "visual-studio-code"
 # cask "xcodes"
+cask "xquartz"
 
 # mas "Bitwarden", id: 1137397744 # this didn't work. manually installed instead.
 #mas "Vimari", id: 1480933944
