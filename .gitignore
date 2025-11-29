@@ -1,5 +1,16 @@
+# macOS artifacts
 .DS_Store
-.vscode
+
+# VS Code workspace settings (不要な場合)
+# .vscode/
+
+# Homebrew lock files
 Brewfile.lock.json
 Brewfile_mac.lock.json
+
+# Karabiner automatic backups
 packages/keybindings/.config/karabiner/automatic_backups/
+
+# Ignore the whole .cargo directory except config.toml
+packages/runtime/.cargo/**
+!packages/runtime/.cargo/config.toml
