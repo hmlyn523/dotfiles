@@ -94,6 +94,7 @@ cask "mist"
 # cask "multimc" # minecraft
 # cask "openemu" # game emulator
 cask "sourcetree"
+cask "unity-hub"
 cask "utm"
 cask "virtualbox"
 cask "visual-studio-code"
