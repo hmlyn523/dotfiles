@@ -36,11 +36,13 @@ brew "ninja" # asepriteのビルド用
 # brew "node"
 brew "nvim"
 brew "p7zip"
+brew "pipx"
 brew "pkg-config" # asepriteビルド用
 # brew "pnpm" # npm代替パッケージツール
 brew "postgresql@17"
 # brew "procs" # ps clone
 # brew "pv" # 進捗ツール
+brew "python"
 # brew "ripgrep" # 検索ツール
 brew "ruby"
 # brew "rust-analyzer" # rustの入力補完や型チェック
