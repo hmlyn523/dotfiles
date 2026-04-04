@@ -80,6 +80,7 @@ cask "balenaetcher"
 cask "blender"
 cask "battery" # arm64 only
 cask "brave-browser"
+cask "chatgpt"
 cask "fontforge"
 cask "font-hack-nerd-font"
 cask "font-udev-gothic-nf"
