@@ -42,4 +42,26 @@
   "gitlens.ai.vscode.model": "copilot:gpt-4.1",
   "editor.wordWrap": "on",
   "chat.viewSessions.orientation": "stacked",
+  "chat.tools.terminal.autoApprove": {
+    "/^setopt errexit && for t in surface_stack_snapshot_reads_app_owned_stack_state_t_surface_031 pane_close_cleans_up_surface_attachment surface_stack_snapshot_projects_single_entry_current_model_t_surface_014 surface_stack_snapshot_projects_parent_and_child_layers_t_surface_017 surface_restore_resolver_prefers_parent_surface_before_editor_t_surface_017 ui_dismiss_active_closes_promoted_contiguous_suffix_in_three_layer_stack_t_surface_020 cancel_observation_aligns_current_future_actual_vocabulary_t_surface_026 dismiss_active_observation_aligns_current_future_actual_vocabulary_t_surface_026 restore_observation_exposes_future_candidates_while_actual_restore_adopts_selected_parent_candidate_t_surface_030 pane_attach_view_cleans_up_surface_stack_state_t_surface_032 pane_attach_resident_cleans_up_previous_surface_stack_state_t_surface_032 surface_dismiss_cleans_up_surface_stack_state_t_surface_032 surface_accept_without_close_preserves_surface_stack_state_t_surface_032; do echo TEST:\\$t; cargo test --lib \"\\$t\" -- --color never; done$/": {
+      "approve": true,
+      "matchCommandLine": true
+    },
+    "/^cargo test --lib 2>&1 \\| tail -6$/": {
+      "approve": true,
+      "matchCommandLine": true
+    },
+    "/^cargo test --lib 2>&1 \\| grep \"FAILED\" \\| head -20$/": {
+      "approve": true,
+      "matchCommandLine": true
+    },
+    "/^cargo test --lib -- multicursor_command_add_next_match_without_pane_t174 multicursor_command_skip_next_match_without_pane_t174 multicursor_command_remove_last_cursor_without_pane_t174 multicursor_command_reset_to_primary_without_pane_t174 2>&1 \\| tail -30$/": {
+      "approve": true,
+      "matchCommandLine": true
+    },
+    "/^cargo test --lib 2>&1 \\| grep -E \"t174\\|FAILED\\|passed\\|failed\" \\| head -20$/": {
+      "approve": true,
+      "matchCommandLine": true
+    }
+  }
 }
