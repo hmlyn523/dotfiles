@@ -79,6 +79,7 @@ program = "/opt/homebrew/bin/tmux"
 decorations = "full"
 dynamic_padding = true
 opacity = 0.95
+option_as_alt = "both"
 
 [window.padding]
 x = 2
