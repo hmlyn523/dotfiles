@@ -89,30 +89,19 @@ fi
 log 'Check for supported OS ...OK'
 
 ###########################################################
-# Stow unlink
-###########################################################
-if [ -n "$unlink_packages" ]; then
-    log 'Unlinking dotfiles...'
-    stow -vD -d "$STOW_PACKAGES_PATH" -t ~ "$unlink_packages"
-    exit
-fi
-
-###########################################################
 # Install Homebrew
 ###########################################################
-if [ "${arch_name}" = "x86_64" ]; then
-    if ! is_file /usr/local/bin/brew; then
-        /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-        log '=====> Install Homebrew SUCCESS'
+if ! command -v brew >/dev/null 2>&1; then
+    log 'Homebrew not found. Installing...'
+    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+    if [ "${arch_name}" = "arm64" ] && [ -f /opt/homebrew/bin/brew ]; then
+        eval "$(/opt/homebrew/bin/brew shellenv)"
+    elif [ -f /usr/local/bin/brew ]; then
+        eval "$(/usr/local/bin/brew shellenv)"
     fi
-elif [ "${arch_name}" = "arm64" ]; then
-    if ! is_file /opt/homebrew/bin/brew; then
-        /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-        log 'Install Rosetta 2'
-        sudo softwareupdate --install-rosetta
-    fi
-    eval "$(/opt/homebrew/bin/brew shellenv)"
     log '=====> Install Homebrew SUCCESS'
+else
+    log 'Homebrew already installed'
 fi
 
 ###########################################################
@@ -131,7 +120,11 @@ fi
 ###########################################################
 if [ ! "$skip_apps" ]; then
     log 'Install Apps and CLIs'
-    brew bundle --file "$GITHUB_PATH"/dotfiles/Brewfile $([ -n "$verbose" ] && echo -v)
+    if command -v brew >/dev/null 2>&1 && [ -f "$GITHUB_PATH"/dotfiles/Brewfile ]; then
+        brew bundle --file "$GITHUB_PATH"/dotfiles/Brewfile $([ -n "$verbose" ] && echo -v)
+    else
+        log 'Brewfile or Homebrew not found, skipping brew bundle'
+    fi
 fi
 
 ###########################################################
@@ -142,8 +135,12 @@ ensure_dir ~/.config/alacritty
 ensure_dir ~/.config/starship
 ensure_dir ~/.config/yarn/global
 
-mkdir -p $HOME/scripts
-stow -vd "$STOW_PACKAGES_PATH" -t ~ $(ls $STOW_PACKAGES_PATH)
+mkdir -p "$HOME/scripts"
+for pkg_path in "$STOW_PACKAGES_PATH"/*; do
+    if [ -d "$pkg_path" ]; then
+        stow -vd "$STOW_PACKAGES_PATH" -t ~ "$(basename "$pkg_path")"
+    fi
+done
 
 ###########################################################
 # Configure macOS setting
@@ -170,13 +167,21 @@ fi
 # Setup pynvim
 ###########################################################
 log 'Setup pynvim'
-pipx install pynvim
+if command -v pipx >/dev/null 2>&1; then
+    if ! pipx list 2>/dev/null | grep -qE '^[[:space:]]*pynvim'; then
+        pipx install pynvim
+    else
+        log 'pynvim already installed via pipx'
+    fi
+else
+    log 'pipx not installed; skipping pynvim setup'
+fi
 
 ###########################################################
 # Setup pipx PATH
 ###########################################################
 if command -v pipx >/dev/null 2>&1; then
-    pipx ensurepath
+    pipx ensurepath >/dev/null 2>&1 || true
 fi
 
 ###########################################################
@@ -209,14 +214,17 @@ fi
 # mise
 ###########################################################
 log 'mise'
-#mise install &> /dev/null
-if [ ! "$skip_apps" ]; then
-  mise install
-  if [ ! "$skip_prune" ]; then
-    mise prune -y
-  fi
+if command -v mise >/dev/null 2>&1; then
+    if [ ! "$skip_apps" ]; then
+        mise install
+        if [ ! "$skip_prune" ]; then
+            mise prune -y
+        fi
+    fi
+    mise list
+else
+    log 'mise not installed; skipping mise commands'
 fi
-mise list
 
 ###########################################################
 # Setup Yarn global
