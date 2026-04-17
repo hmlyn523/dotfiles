@@ -121,11 +121,11 @@ fi
 if [ ! "$skip_apps" ]; then
     log 'Install Apps and CLIs'
     if command -v brew >/dev/null 2>&1 && [ -f "$GITHUB_PATH"/dotfiles/Brewfile ]; then
-        # Record current installed formulas before bundle
-        before_list=$(brew list --formula 2>/dev/null | sort)
+        # Record current installed formulas and casks before bundle
+        before_list=$( (brew list --formula 2>/dev/null; brew list --cask 2>/dev/null) | sort)
         brew bundle --file "$GITHUB_PATH"/dotfiles/Brewfile --cleanup $([ -n "$verbose" ] && echo -v)
-        # Record installed formulas after bundle
-        after_list=$(brew list --formula 2>/dev/null | sort)
+        # Record installed formulas and casks after bundle
+        after_list=$( (brew list --formula 2>/dev/null; brew list --cask 2>/dev/null) | sort)
         # Determine installed and uninstalled using temporary files for POSIX compatibility
         echo "$before_list" > /tmp/dotfiles_before_list.txt
         echo "$after_list" > /tmp/dotfiles_after_list.txt
