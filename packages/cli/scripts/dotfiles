@@ -121,7 +121,23 @@ fi
 if [ ! "$skip_apps" ]; then
     log 'Install Apps and CLIs'
     if command -v brew >/dev/null 2>&1 && [ -f "$GITHUB_PATH"/dotfiles/Brewfile ]; then
-        brew bundle --file "$GITHUB_PATH"/dotfiles/Brewfile $([ -n "$verbose" ] && echo -v)
+        # Record current installed formulas before bundle
+        before_list=$(brew list --formula 2>/dev/null | sort)
+        brew bundle --file "$GITHUB_PATH"/dotfiles/Brewfile --cleanup $([ -n "$verbose" ] && echo -v)
+        # Record installed formulas after bundle
+        after_list=$(brew list --formula 2>/dev/null | sort)
+        # Determine installed and uninstalled
+        installed=$(comm -23 <(echo "$after_list") <(echo "$before_list"))
+        uninstalled=$(comm -13 <(echo "$after_list") <(echo "$before_list"))
+        # Log changes
+        log_file="$HOME/.dotfiles_brew_history.log"
+        timestamp=$(date '+%Y-%m-%d %H:%M:%S')
+        if [ -n "$installed" ]; then
+            echo "[$timestamp] INSTALLED: $installed" >> "$log_file"
+        fi
+        if [ -n "$uninstalled" ]; then
+            echo "[$timestamp] UNINSTALLED: $uninstalled" >> "$log_file"
+        fi
     else
         log 'Brewfile or Homebrew not found, skipping brew bundle'
     fi
