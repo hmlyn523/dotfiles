@@ -126,9 +126,12 @@ if [ ! "$skip_apps" ]; then
         brew bundle --file "$GITHUB_PATH"/dotfiles/Brewfile --cleanup $([ -n "$verbose" ] && echo -v)
         # Record installed formulas after bundle
         after_list=$(brew list --formula 2>/dev/null | sort)
-        # Determine installed and uninstalled
-        installed=$(comm -23 <(echo "$after_list") <(echo "$before_list"))
-        uninstalled=$(comm -13 <(echo "$after_list") <(echo "$before_list"))
+        # Determine installed and uninstalled using temporary files for POSIX compatibility
+        echo "$before_list" > /tmp/dotfiles_before_list.txt
+        echo "$after_list" > /tmp/dotfiles_after_list.txt
+        installed=$(comm -23 /tmp/dotfiles_after_list.txt /tmp/dotfiles_before_list.txt)
+        uninstalled=$(comm -13 /tmp/dotfiles_after_list.txt /tmp/dotfiles_before_list.txt)
+        rm /tmp/dotfiles_before_list.txt /tmp/dotfiles_after_list.txt
         # Log changes
         log_file="$HOME/.dotfiles_brew_history.log"
         timestamp=$(date '+%Y-%m-%d %H:%M:%S')
