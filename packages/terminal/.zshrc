@@ -7,13 +7,6 @@ os_type="$(uname)"
 arch_name="$(uname -m)"
 echo ">>> ${os_type}/${arch_name} <<<"
 
-# tmux
-# セッションが既に存在していればそれにアタッチ
-# なければ新しいセッションを作成
-if [ -z "$TMUX" ]; then
-  tmux attach-session || tmux new-session
-fi
-
 # Homebrew
 if [ "${arch_name}" = "x86_64" ]; then
     # Intel 
@@ -27,6 +20,13 @@ elif [ "${arch_name}" = "arm64" ]; then
         eval "$(/opt/homebrew/bin/brew shellenv)"
         # export JAVA_HOME=$(/usr/libexec/java_home)
     fi
+fi
+
+# tmux
+# セッションが既に存在していればそれにアタッチ
+# なければ新しいセッションを作成
+if [ -z "$TMUX" ]; then
+  tmux attach-session || tmux new-session
 fi
 
 # mise
