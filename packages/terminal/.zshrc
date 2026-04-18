@@ -1,16 +1,21 @@
+# ==========================================
+# 1. 基本パス・環境変数の設定
+# ==========================================
 export PATH="$HOME/scripts:$PATH"
 export GITHUB_PATH="$HOME/projects/github.com"
+export XDG_CONFIG_HOME="$HOME/.config"
+export GPG_TTY=$(tty)
 
 os_type="$(uname)"
 arch_name="$(uname -m)"
-# 注: rsyncやscpなどで非対話シェルとして呼ばれた際にエラーになるのを防ぐため、
-# 対話シェルでのみエコーするように変更
+
+# 対話シェルの時だけOS情報を表示
 if [[ $- == *i* ]]; then
     echo ">>> ${os_type}/${arch_name} <<<"
 fi
 
 # ==========================================
-# Homebrew のセットアップと高速化
+# 2. Homebrew のセットアップと高速化
 # ==========================================
 HOMEBREW_PREFIX_PATH=""
 if [ "${arch_name}" = "x86_64" ] && [ -f "/usr/local/bin/brew" ]; then
@@ -22,36 +27,64 @@ elif [ "${arch_name}" = "arm64" ] && [ -f "/opt/homebrew/bin/brew" ]; then
 fi
 
 # ==========================================
-# tmux 自動アタッチ (VS Code内では起動しないよう配慮)
+# 3. ツール類の初期化 (mise, starship, zoxide)
 # ==========================================
-if [ -z "$TMUX" ] && [ "$TERM_PROGRAM" != "vscode" ]; then
-    tmux attach-session || tmux new-session
-fi
-
-# ==========================================
-# ツール類の初期化 (mise, starship, zoxide)
-# ==========================================
+# mise (言語マネージャー)
 if command -v mise > /dev/null; then
     eval "$(mise activate zsh)"
     export MISE_DATA_DIR="$HOME/.mise"
     export MISE_CACHE_DIR="$MISE_DATA_DIR/cache"
 fi
 
+# starship (プロンプト)
 if command -v starship > /dev/null; then
     eval "$(starship init zsh)"
 fi
 
+# zoxide (ディレクトリジャンプ)
 if command -v zoxide > /dev/null; then
     eval "$(zoxide init zsh)"
-    # zoxide init が自動で 'z' を定義するため alias cd="z" は削除
+    alias zi="zi" # fzf連携モードで起動
 fi
 
 # ==========================================
-# 環境変数
+# 4. fzf (インクリメンタルサーチ) の統合設定
 # ==========================================
-export GPG_TTY=$(tty)
-export XDG_CONFIG_HOME="$HOME/.config"
+if command -v fzf > /dev/null; then
+    # 基本コマンド設定 (ripgrepを使用)
+    export FZF_DEFAULT_COMMAND="rg --files --hidden -l -g '!.git/*' -g '!node_modules/*'"
+    
+    # 全体的な表示設定とプレビューの統合 (ezaを使用)
+    export FZF_DEFAULT_OPTS="--height 100% --layout=reverse --border --multi --preview '
+        if [ -d {} ]; then
+            eza --icons --tree --level=2 {} | head -200
+        else
+            cat {}
+        fi'"
 
+    # Homebrew経由のキーバインド (Ctrl+R, Ctrl+T) を読み込む
+    if [ -n "$HOMEBREW_PREFIX_PATH" ]; then
+        [ -f "$HOMEBREW_PREFIX_PATH/opt/fzf/shell/key-bindings.zsh" ] && source "$HOMEBREW_PREFIX_PATH/opt/fzf/shell/key-bindings.zsh"
+        [ -f "$HOMEBREW_PREFIX_PATH/opt/fzf/shell/completion.zsh" ] && source "$HOMEBREW_PREFIX_PATH/opt/fzf/shell/completion.zsh"
+    fi
+fi
+
+# ==========================================
+# 5. Yazi (ファイルマネージャー) の設定
+# ==========================================
+# 'y' コマンドで起動し、終了時にそのディレクトリへ移動する
+function y() {
+    local tmp="$(mktemp -t "yazi-cwd.XXXXXX")"
+    yazi "$@" --cwd-file="$tmp"
+    if cwd="$(cat -- "$tmp")" && [ -n "$cwd" ] && [ "$cwd" != "$PWD" ]; then
+        builtin cd -- "$cwd"
+    fi
+    rm -f -- "$tmp"
+}
+
+# ==========================================
+# 6. 開発環境のパス設定 (dotnet, Android, pnpm, etc.)
+# ==========================================
 # dotnet
 export DOTNET_ROOT="$HOME/.mise/installs/dotnet/latest"
 export PATH="$DOTNET_ROOT:$PATH"
@@ -60,224 +93,48 @@ export PATH="$DOTNET_ROOT:$PATH"
 export ANDROID_HOME="$HOME/Library/Android/sdk"
 export PATH="$ANDROID_HOME/emulator:$ANDROID_HOME/tools/bin:$ANDROID_HOME/platform-tools:$ANDROID_HOME/cmdline-tools/latest/bin:$PATH"
 
-# pipx / pub-cache / github scripts
-export PATH="$HOME/.local/bin:$HOME/.pub-cache/bin:$GITHUB_PATH/dotfiles/packages/common/cli/scripts:$PATH"
-
-# pnpm ($HOMEを使用するように修正)
+# Node / Python / Flutter / scripts
 export PNPM_HOME="$HOME/Library/pnpm"
-export PATH="$PNPM_HOME:$PATH"
+export PATH="$HOME/.local/bin:$HOME/.pub-cache/bin:$GITHUB_PATH/dotfiles/packages/common/cli/scripts:$PNPM_HOME:$PATH"
 
-# SQLite3 (DYLD_LIBRARY_PATH は危険なため削除し、PATHのみ追加)
+# SQLite3 (Homebrew)
 if [ -n "$HOMEBREW_PREFIX_PATH" ]; then
     export PATH="$HOMEBREW_PREFIX_PATH/opt/sqlite/bin:$PATH"
 fi
 
-# Ruby (バージョンに依存しないGemパスも追加推奨)
-if [ -d "/opt/homebrew/opt/ruby/bin" ]; then
-    export PATH="/opt/homebrew/opt/ruby/bin:$PATH"
-    # mise を使っている場合は mise に管理させるのがベストです
-fi
-
-# fzf
-export FZF_DEFAULT_COMMAND="rg --files --hidden -l -g '!.git/*' -g '!node_modules/*'"
-export FZF_DEFAULT_OPTS="-m --height 100% --border --preview 'cat {}'"
-
 # ==========================================
-# エイリアス
+# 7. エイリアス
 # ==========================================
 alias code="open -a 'Visual Studio Code'"
 alias syncsh=". syncsh"
 alias cdrepo=". cdrepo"
 alias lscmd="ls ~/scripts"
-
-# sim エイリアスの修正 (動的に取得)
-alias sim='sim_path="$(ls -dr /Applications/Xcode-* | head -n1)" && open "${sim_path}/Contents/Developer/Applications/Simulator.app/"'
-
-alias keycodes="cat /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/Frameworks/Carbon.framework/Versions/A/Frameworks/HIToolbox.framework/Versions/A/Headers/Events.h"
+alias vi="nvim"
+alias top="ytop"
 alias battery="ioreg -c AppleSmartBattery | grep -i Capacity"
 
+# Xcode Simulator (動的パス取得)
+alias sim='sim_path="$(ls -dr /Applications/Xcode-* | head -n1)" && open "${sim_path}/Contents/Developer/Applications/Simulator.app/"'
+
+# eza (lsの代替)
 if command -v eza > /dev/null; then
-    alias ls="eza"
-    alias ll="eza -lah --git"
-    alias lt="eza -lah -T --level=3 --git-ignore"
+    alias ls="eza --icons"
+    alias ll="eza -lah --icons --git"
+    alias lt="eza -lah -T --level=3 --icons --git-ignore"
 else
     alias ll="ls -lah"
 fi
 
-alias top="ytop"
-alias vi="nvim"
+# ==========================================
+# 8. tmux & プラグイン & キーバインド
+# ==========================================
+# tmux 自動アタッチ (VS Code内では無効)
+if [ -z "$TMUX" ] && [ "$TERM_PROGRAM" != "vscode" ]; then
+    tmux attach-session || tmux new-session
+fi
 
-# ==========================================
-# プラグイン & キーバインド
-# ==========================================
-# brew コマンドを使わず、変数化して高速読み込み
-if [ -f "$HOMEBREW_PREFIX_PATH/share/zsh-autosuggestions/zsh-autosuggestions.zsh" ]; then
+# zsh-autosuggestions (爆速読み込み)
+if [ -n "$HOMEBREW_PREFIX_PATH" ] && [ -f "$HOMEBREW_PREFIX_PATH/share/zsh-autosuggestions/zsh-autosuggestions.zsh" ]; then
     source "$HOMEBREW_PREFIX_PATH/share/zsh-autosuggestions/zsh-autosuggestions.zsh"
     bindkey '^e' autosuggest-accept
 fi
-
-# ==========================================
-# LF Icons
-# ==========================================
-export LF_ICONS="\
-tw=:\
-st=:\
-ow=:\
-dt=:\
-di=:\
-fi=:\
-ln=:\
-or=:\
-ex=:\
-*.c=:\
-*.cc=:\
-*.clj=:\
-*.coffee=:\
-*.cpp=:\
-*.css=:\
-*.d=:\
-*.dart=:\
-*.erl=:\
-*.exs=:\
-*.fs=:\
-*.go=:\
-*.h=:\
-*.hh=:\
-*.hpp=:\
-*.hs=:\
-*.html=:\
-*.java=:\
-*.jl=:\
-*.js=:\
-*.json=:\
-*.lua=:\
-*.md=:\
-*.php=:\
-*.pl=:\
-*.pro=:\
-*.py=:\
-*.rb=:\
-*.rs=:\
-*.scala=:\
-*.ts=:\
-*.vim=:\
-*.cmd=:\
-*.ps1=:\
-*.sh=:\
-*.bash=:\
-*.zsh=:\
-*.fish=:\
-*.tar=:\
-*.tgz=:\
-*.arc=:\
-*.arj=:\
-*.taz=:\
-*.lha=:\
-*.lz4=:\
-*.lzh=:\
-*.lzma=:\
-*.tlz=:\
-*.txz=:\
-*.tzo=:\
-*.t7z=:\
-*.zip=:\
-*.z=:\
-*.dz=:\
-*.gz=:\
-*.lrz=:\
-*.lz=:\
-*.lzo=:\
-*.xz=:\
-*.zst=:\
-*.tzst=:\
-*.bz2=:\
-*.bz=:\
-*.tbz=:\
-*.tbz2=:\
-*.tz=:\
-*.deb=:\
-*.rpm=:\
-*.jar=:\
-*.war=:\
-*.ear=:\
-*.sar=:\
-*.rar=:\
-*.alz=:\
-*.ace=:\
-*.zoo=:\
-*.cpio=:\
-*.7z=:\
-*.rz=:\
-*.cab=:\
-*.wim=:\
-*.swm=:\
-*.dwm=:\
-*.esd=:\
-*.jpg=:\
-*.jpeg=:\
-*.mjpg=:\
-*.mjpeg=:\
-*.gif=:\
-*.bmp=:\
-*.pbm=:\
-*.pgm=:\
-*.ppm=:\
-*.tga=:\
-*.xbm=:\
-*.xpm=:\
-*.tif=:\
-*.tiff=:\
-*.png=:\
-*.svg=:\
-*.svgz=:\
-*.mng=:\
-*.pcx=:\
-*.mov=:\
-*.mpg=:\
-*.mpeg=:\
-*.m2v=:\
-*.mkv=:\
-*.webm=:\
-*.ogm=:\
-*.mp4=:\
-*.m4v=:\
-*.mp4v=:\
-*.vob=:\
-*.qt=:\
-*.nuv=:\
-*.wmv=:\
-*.asf=:\
-*.rm=:\
-*.rmvb=:\
-*.flc=:\
-*.avi=:\
-*.fli=:\
-*.flv=:\
-*.gl=:\
-*.dl=:\
-*.xcf=:\
-*.xwd=:\
-*.yuv=:\
-*.cgm=:\
-*.emf=:\
-*.ogv=:\
-*.ogx=:\
-*.aac=:\
-*.au=:\
-*.flac=:\
-*.m4a=:\
-*.mid=:\
-*.midi=:\
-*.mka=:\
-*.mp3=:\
-*.mpc=:\
-*.ogg=:\
-*.ra=:\
-*.wav=:\
-*.oga=:\
-*.opus=:\
-*.spx=:\
-*.xspf=:\
-*.pdf=:\
-*.nix=:\
-"
