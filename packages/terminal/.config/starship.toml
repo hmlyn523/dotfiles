@@ -2,22 +2,32 @@ add_newline = false
 command_timeout = 1000
 
 [character]
-success_symbol = "🦄 " 
+success_symbol = "🦄 "
 error_symbol = "🥺 "
 
+[directory]
+style = "bold cyan"
+truncation_length = 3
+fish_style_pwd_dir_length = 1
+read_only = " 🔒"
+
 [git_status]
-# disabled = true
 style = "bold white"
-conflicted = " 🏳"
-ahead = " 🏎💨 "
-behind =" 😰 "
-diverged = " 😵 "
-untracked = " 🤷‍ "
-stashed = " 📦 "
-modified = " 📝 "
+conflicted = " 🏳 ✘ "
+ahead = " 🏎💨 ⇡ "
+behind = " 😰 ⇣ "
+diverged = " 😵 ⑃ "
+untracked = " 🤷‍ ? "
+stashed = " 📦 ⚑ "
+modified = " 📝 ! "
 staged = '[++\($count\)](green)'
-renamed = " 👅 "
-deleted = " 🗑 "
+renamed = " 👅 » "
+deleted = " 🗑 ✘ "
+
+[cmd_duration]
+min_time = 500
+format = "took [$duration]($style) "
+style = "yellow italic"
 
 [gcloud]
 disabled = true
@@ -30,3 +40,9 @@ disabled = true
 
 [rust]
 disabled = true
+
+[memory_usage]
+symbol = " 🧠 "
+threshold = 75
+disabled = false
+style = "bold dimmed white"
