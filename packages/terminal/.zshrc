@@ -1,115 +1,124 @@
-
-export PATH=$PATH:$HOME/scripts
-#export GIT_CLONE_PATH="$HOME"/projects/github.com
-export GITHUB_PATH="$HOME"/projects/github.com
+export PATH="$HOME/scripts:$PATH"
+export GITHUB_PATH="$HOME/projects/github.com"
 
 os_type="$(uname)"
 arch_name="$(uname -m)"
-echo ">>> ${os_type}/${arch_name} <<<"
-
-# Homebrew
-if [ "${arch_name}" = "x86_64" ]; then
-    # Intel 
-    if [ -f "/usr/local/bin/brew"  ]; then
-        eval "$(/usr/local/bin/brew shellenv)"
-        # export JAVA_HOME=$(/usr/libexec/java_home)
-    fi
-elif [ "${arch_name}" = "arm64" ]; then
-    # ARM
-    if [ -f "/opt/homebrew/bin/brew"  ]; then
-        eval "$(/opt/homebrew/bin/brew shellenv)"
-        # export JAVA_HOME=$(/usr/libexec/java_home)
-    fi
+# 注: rsyncやscpなどで非対話シェルとして呼ばれた際にエラーになるのを防ぐため、
+# 対話シェルでのみエコーするように変更
+if [[ $- == *i* ]]; then
+    echo ">>> ${os_type}/${arch_name} <<<"
 fi
 
-# tmux
-# セッションが既に存在していればそれにアタッチ
-# なければ新しいセッションを作成
-if [ -z "$TMUX" ]; then
-  tmux attach-session || tmux new-session
+# ==========================================
+# Homebrew のセットアップと高速化
+# ==========================================
+HOMEBREW_PREFIX_PATH=""
+if [ "${arch_name}" = "x86_64" ] && [ -f "/usr/local/bin/brew" ]; then
+    eval "$(/usr/local/bin/brew shellenv)"
+    HOMEBREW_PREFIX_PATH="/usr/local"
+elif [ "${arch_name}" = "arm64" ] && [ -f "/opt/homebrew/bin/brew" ]; then
+    eval "$(/opt/homebrew/bin/brew shellenv)"
+    HOMEBREW_PREFIX_PATH="/opt/homebrew"
 fi
 
-# mise
-if (which mise > /dev/null); then
-  eval "$(mise activate zsh)"
-  export MISE_DATA_DIR=$HOME/.mise
-  export MISE_CACHE_DIR=$MISE_DATA_DIR/cache
+# ==========================================
+# tmux 自動アタッチ (VS Code内では起動しないよう配慮)
+# ==========================================
+if [ -z "$TMUX" ] && [ "$TERM_PROGRAM" != "vscode" ]; then
+    tmux attach-session || tmux new-session
 fi
 
+# ==========================================
+# ツール類の初期化 (mise, starship, zoxide)
+# ==========================================
+if command -v mise > /dev/null; then
+    eval "$(mise activate zsh)"
+    export MISE_DATA_DIR="$HOME/.mise"
+    export MISE_CACHE_DIR="$MISE_DATA_DIR/cache"
+fi
+
+if command -v starship > /dev/null; then
+    eval "$(starship init zsh)"
+fi
+
+if command -v zoxide > /dev/null; then
+    eval "$(zoxide init zsh)"
+    # zoxide init が自動で 'z' を定義するため alias cd="z" は削除
+fi
+
+# ==========================================
+# 環境変数
+# ==========================================
+export GPG_TTY=$(tty)
+export XDG_CONFIG_HOME="$HOME/.config"
+
+# dotnet
+export DOTNET_ROOT="$HOME/.mise/installs/dotnet/latest"
+export PATH="$DOTNET_ROOT:$PATH"
+
+# Android
+export ANDROID_HOME="$HOME/Library/Android/sdk"
+export PATH="$ANDROID_HOME/emulator:$ANDROID_HOME/tools/bin:$ANDROID_HOME/platform-tools:$ANDROID_HOME/cmdline-tools/latest/bin:$PATH"
+
+# pipx / pub-cache / github scripts
+export PATH="$HOME/.local/bin:$HOME/.pub-cache/bin:$GITHUB_PATH/dotfiles/packages/common/cli/scripts:$PATH"
+
+# pnpm ($HOMEを使用するように修正)
+export PNPM_HOME="$HOME/Library/pnpm"
+export PATH="$PNPM_HOME:$PATH"
+
+# SQLite3 (DYLD_LIBRARY_PATH は危険なため削除し、PATHのみ追加)
+if [ -n "$HOMEBREW_PREFIX_PATH" ]; then
+    export PATH="$HOMEBREW_PREFIX_PATH/opt/sqlite/bin:$PATH"
+fi
+
+# Ruby (バージョンに依存しないGemパスも追加推奨)
+if [ -d "/opt/homebrew/opt/ruby/bin" ]; then
+    export PATH="/opt/homebrew/opt/ruby/bin:$PATH"
+    # mise を使っている場合は mise に管理させるのがベストです
+fi
+
+# fzf
+export FZF_DEFAULT_COMMAND="rg --files --hidden -l -g '!.git/*' -g '!node_modules/*'"
+export FZF_DEFAULT_OPTS="-m --height 100% --border --preview 'cat {}'"
+
+# ==========================================
+# エイリアス
+# ==========================================
 alias code="open -a 'Visual Studio Code'"
 alias syncsh=". syncsh"
 alias cdrepo=". cdrepo"
 alias lscmd="ls ~/scripts"
-#alias pr="gh pr view --web"
-#alias prysm="~/prysm/prysm.sh"
-#alias lldlib="open ~/Library/Application\ Support/Electron"
-#sim_path="$(ls -dr /Applications/Xcode-* | head -n1)"
-alias sim="open ${sim_path}/Contents/Developer/Applications/Simulator.app/"
+
+# sim エイリアスの修正 (動的に取得)
+alias sim='sim_path="$(ls -dr /Applications/Xcode-* | head -n1)" && open "${sim_path}/Contents/Developer/Applications/Simulator.app/"'
+
 alias keycodes="cat /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/Frameworks/Carbon.framework/Versions/A/Frameworks/HIToolbox.framework/Versions/A/Headers/Events.h"
 alias battery="ioreg -c AppleSmartBattery | grep -i Capacity"
 
-# Override
-if [ -n "$(which z)" ]; then
-    alias cd="z"
-fi
-
-if [ -n "$(which eza)" ]; then
+if command -v eza > /dev/null; then
     alias ls="eza"
+    alias ll="eza -lah --git"
+    alias lt="eza -lah -T --level=3 --git-ignore"
+else
+    alias ll="ls -lah"
 fi
 
-# alias cat="bat"
-alias ll="ls -lah --git"
-alias lt="ll -TL 3 --ignore-glob=.git"
-# alias ps="procs"
 alias top="ytop"
 alias vi="nvim"
-# alias du="dust"
 
-if [ -d "/opt/homebrew/opt/ruby/bin" ]; then
-    export PATH=/opt/homebrew/opt/ruby/bin:/opt/homebrew/lib/ruby/gems/3.4.0/bin:$PATH
+# ==========================================
+# プラグイン & キーバインド
+# ==========================================
+# brew コマンドを使わず、変数化して高速読み込み
+if [ -f "$HOMEBREW_PREFIX_PATH/share/zsh-autosuggestions/zsh-autosuggestions.zsh" ]; then
+    source "$HOMEBREW_PREFIX_PATH/share/zsh-autosuggestions/zsh-autosuggestions.zsh"
+    bindkey '^e' autosuggest-accept
 fi
 
-eval "$(starship init zsh)"
-eval "$(zoxide init zsh)"
-
-export GPG_TTY=$(tty)
-
-# dotnet
-export DOTNET_ROOT=$HOME/.mise/installs/dotnet/latest
-export PATH="$DOTNET_ROOT:$PATH"
-
-# Android
-export ANDROID_HOME=$HOME/Library/Android/sdk
-export PATH=$PATH:$ANDROID_HOME/emulator
-export PATH=$PATH:$ANDROID_HOME/tools
-export PATH=$PATH:$ANDROID_HOME/tools/bin
-export PATH=$PATH:$ANDROID_HOME/platform-tools
-export PATH=$PATH:$ANDROID_HOME/cmdline-tools/latest/bin
-
-# pipx
-export PATH="$HOME/.local/bin:$PATH"
-
-# export PATH=$PATH:$(yarn global bin)
-export FZF_DEFAULT_COMMAND="rg --files --hidden -l -g '!.git/*' -g '!node_modules/*'"
-export FZF_DEFAULT_OPTS="-m --height 100% --border --preview 'cat {}'"
-
-export PNPM_HOME="/Users/js/Library/pnpm"
-export PATH="$PNPM_HOME:$PATH"
-
-. $(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh
-# source '/usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/path.zsh.inc'
-# source '/usr/local/Caskroom/google-cloud-sdk/latest/google-cloud-sdk/completion.zsh.inc'
-bindkey '^e' autosuggest-accept
-
-export PATH=$PATH:$GITHUB_PATH/dotfiles/packages/common/cli/scripts
-export PATH="$PATH":"$HOME/.pub-cache/bin"
-
-export XDG_CONFIG_HOME=~/.config
-
-# SQLite3
-export DYLD_LIBRARY_PATH=$(brew --prefix sqlite)/lib:$DYLD_LIBRARY_PATH
-export PATH="/opt/homebrew/opt/sqlite/bin:$PATH"
-
+# ==========================================
+# LF Icons
+# ==========================================
 export LF_ICONS="\
 tw=:\
 st=:\
