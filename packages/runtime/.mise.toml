@@ -1,0 +1,6 @@
+[tools]
+nodejs = "22.19.0"
+java = "adoptopenjdk-23.0.2+7"
+dotnet = "9.0.201"
+flutter = "3.27.3-stable"
+rust = "1.91.1"
