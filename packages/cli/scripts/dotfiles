@@ -42,22 +42,17 @@ log_error() {
 # ASCII Art Header
 show_header() {
     # カラーコード定義（関数外にある場合は不要）
-    local BLUE='\033[0;34m'
     local CYAN='\033[0;36m'
+    local MAGENTA='\033[0;35m'
     local BOLD='\033[1m'
-    local NC='\033[0m' # No Color
+    local NC='\033[0m'
 
-    echo "${CYAN}${BOLD}"
-    echo "  ██████╗  ██████╗ ████████╗███████╗██╗██╗     ███████╗███████╗"
-    echo "  ██╔══██╗██╔═══██╗╚══██╔══╝██╔════╝██║██║     ██╔════╝██╔════╝"
-    echo "  ██║  ██║██║   ██║   ██║   █████╗  ██║██║     █████╗  ███████╗"
-    echo "  ██║  ██║██║   ██║   ██║   ██╔══╝  ██║██║     ██╔══╝  ╚════██║"
-    echo "  ██████╔╝╚██████╔╝   ██║   ██║     ██║███████╗███████╗███████║"
-    echo "  ╚═════╝  ╚═════╝    ╚═╝   ╚═╝     ╚═╝╚══════╝╚══════╝╚══════╝"
-    echo "  ─────────────────────────────────────────────────────────────"
-    echo "       🛠️  hmlyn523's Dotfiles Environment Setup"
-    echo "  ─────────────────────────────────────────────────────────────"
-    echo "${NC}"
+    echo ""
+    echo "${MAGENTA}${BOLD}   ◆ Dotfiles${NC} :: ${CYAN}${BOLD}Setup Wizard${NC}"
+    echo "   ──────────────────────────────────────────"
+    echo "   👤 User   : ${BOLD}html523${NC}"
+    echo "   🔧 Status : ${CYAN}Initializing...${NC}"
+    echo ""
 }
 
 show_spinner() {
