@@ -1,53 +1,81 @@
 [user]
-	name = Tatsuya Sagara
-	email = tatsuya.sagara@icloud.com
-	signingkey = FAEE5A26921FDF4D
+  name = Tatsuya Sagara
+  email = tatsuya.sagara@icloud.com
+  signingkey = FAEE5A26921FDF4D
+
 [alias]
-	s   = status -sb
-	d   = diff
-	a   = add
-	aa  = add -A
-	b   = branch
-	co  = checkout
-	cob = checkout -b
-	c   = commit
-	cm  = commit -m
-	pso = push origin
-	pl  = pull
-	plo = pull origin
-	f   = fetch
-	fup = fetch upstream
+  # Basic commands
+  s   = status -sb
+  d   = diff
+  a   = add
+  aa  = add -A
+  b   = branch
+  co  = checkout
+  cob = checkout -b
+  c   = commit
+  cm  = commit -m
+  pso = push origin
+  pl  = pull
+  plo = pull origin
+  f   = fetch
+  fup = fetch upstream
+
+  # Enhanced log and utility (追加案)
+  # グラフ表示で履歴を美しく確認
+  lg = log --graph --pretty=format:'%C(yellow)%h%Creset -%C(auto)%d%Creset %s %Cgreen(%cr) %C(bold blue)<%an>%Creset' --abbrev-commit
+  # 直前のコミットを修正（ファイル追加忘れなどに）
+  amend = commit --amend --no-edit
+  # 未プッシュのコミットを確認
+  unpushed = log @{u}..
+
 [core]
-	excludesfile = /Users/tatsuya/.gitignore_global
-	editor = nvim
+  # 絶対パスを ~ に置き換えて汎用性を向上
+  excludesfile = ~/.gitignore_global
+  editor = nvim
+
 [init]
-	defaultBranch = main
+  defaultBranch = main
+
 [commit]
-	gpgsign = true
+  gpgsign = true
+
 [gpg]
-    program = /usr/local/MacGPG2/bin/gpg
+  # 環境に応じてパスを確認してください (which gpg)
+  program = /usr/local/MacGPG2/bin/gpg
+
 [pull]
-	rebase = false
+  # マージをデフォルトに設定（現在の設定を維持）
+  rebase = false
+
 [filter "lfs"]
-	smudge = git-lfs smudge -- %f
-	process = git-lfs filter-process
-	required = true
-	clean = git-lfs clean -- %f
+  smudge = git-lfs smudge -- %f
+  process = git-lfs filter-process
+  required = true
+  clean = git-lfs clean -- %f
+
 [pager]
-    diff = delta
-    log = delta
-    reflog = delta
-    show = delta
+  # git-delta を使用した高機能な差分表示
+  diff = delta
+  log = delta
+  reflog = delta
+  show = delta
+
 [delta]
-    line-numbers = true
-    side-by-side = true
+  line-numbers = true
+  side-by-side = true
+  # シンタックスハイライトのテーマ（お好みに合わせて）
+  syntax-theme = Monokai Extended
+
 [interactive]
-    diffFilter = delta --color-only
-; [url "git@github.com:"]
-;   insteadOf = https://github.com/
+  diffFilter = delta --color-only
+
 [difftool "sourcetree"]
-	cmd = opendiff \"$LOCAL\" \"$REMOTE\"
-	path = 
+  cmd = opendiff \"$LOCAL\" \"$REMOTE\"
+  path = 
+
 [mergetool "sourcetree"]
-	cmd = /Applications/Sourcetree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
-	trustExitCode = true
+  cmd = /Applications/Sourcetree.app/Contents/Resources/opendiff-w.sh \"$LOCAL\" \"$REMOTE\" -ancestor \"$BASE\" -merge \"$MERGED\"
+  trustExitCode = true
+
+# [url "git@github.com:"]
+#   insteadOf = https://github.com/
