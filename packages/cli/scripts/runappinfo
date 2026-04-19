@@ -1,3 +1,0 @@
-#!/bin/sh
-
-yabai -m query --windows | jq ".[] | { App: .app, Title: .title }"
