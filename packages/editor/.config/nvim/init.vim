@@ -94,7 +94,7 @@ lua << EOF
             "rust_analyzer",
             "solang",
             "eslint",
-            "tsserver",
+            "ts_ls",
         },
         automatic_installation = true,
     })
