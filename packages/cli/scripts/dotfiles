@@ -278,4 +278,17 @@ else
     log_warning "mise not installed."
 fi
 
+###########################################################
+# Rust Toolchain Setup
+###########################################################
+log_title "Rust Toolchain"
+if command -v rustup >/dev/null 2>&1; then
+    log_info "Ensuring rustfmt is installed..."
+    # すでにインストールされている場合はスキップされるので安全です
+    rustup component add rustfmt
+    log_success "rustfmt is ready."
+else
+    log_warning "rustup not found. Skipping rustfmt installation."
+fi
+
 echo "\n${BOLD}${GREEN}✨ ALL DONE! Enjoy your new environment! ✨${NC}\n"
