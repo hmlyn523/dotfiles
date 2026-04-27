@@ -12,7 +12,8 @@ call plug#begin('~/.local/share/nvim/autoload/plugged')
     Plug 'williamboman/mason.nvim'
     Plug 'williamboman/mason-lspconfig.nvim'
     Plug 'neovim/nvim-lspconfig'
-    Plug 'jose-elias-alvarez/null-ls.nvim' " depends on 'nvim-lua/plenary.nvim'
+    Plug 'nvim-lua/plenary.nvim' " 依存関係
+    Plug 'nvimtools/none-ls.nvim'
 
     " Lua
     Plug 'nvim-lua/plenary.nvim'
@@ -42,6 +43,6 @@ call plug#begin('~/.local/share/nvim/autoload/plugged')
       endif
     endfunction
 
-    Plug 'euclio/vim-markdown-composer', { 'do': function('BuildComposer') }
+    Plug 'euclio/vim-markdown-composer', { 'do': 'cargo build --release' }
 
 call plug#end()
