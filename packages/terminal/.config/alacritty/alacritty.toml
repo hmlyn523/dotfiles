@@ -53,7 +53,6 @@ program = "/opt/homebrew/bin/tmux"
 [window]
 decorations = "full"
 dynamic_padding = true
-opacity = 0.9
 blur = true
 option_as_alt = "both"
 
