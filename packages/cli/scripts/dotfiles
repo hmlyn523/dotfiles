@@ -146,7 +146,7 @@ ensure_dir "$GIT_CLONE_PATH"
 if ! is_dir "$GIT_CLONE_PATH"/dotfiles; then
     log_info "Cloning from GitHub..."
     cd "$GITHUB_PATH"
-    git clone https://github.com/TatsuyaSagara/dotfiles.git
+    git clone https://github.com/hmlyn523/dotfiles.git
     log_success "Cloning complete."
 else
     log_info "Repository already exists at $GIT_CLONE_PATH/dotfiles"
