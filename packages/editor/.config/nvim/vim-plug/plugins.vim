@@ -43,6 +43,4 @@ call plug#begin('~/.local/share/nvim/autoload/plugged')
       endif
     endfunction
 
-    Plug 'euclio/vim-markdown-composer', { 'do': 'cargo build --release' }
-
 call plug#end()
