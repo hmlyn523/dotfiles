@@ -86,8 +86,9 @@ let g:completion_matching_strategy_list = ['exact', 'substring', 'fuzzy']
 " File Detection
 au BufNewFile,BufRead Fastfile set ft=ruby
 
-" LSP
+" LSP Settings
 lua << EOF
+    -- Mason Setup
     require("mason").setup()
     require("mason-lspconfig").setup({
         ensure_installed = {
@@ -99,42 +100,42 @@ lua << EOF
         automatic_installation = true,
     })
 
-    require("lspconfig").rust_analyzer.setup{}
-
-    local lsp_formatting = function(bufnr)
-        vim.lsp.buf.format({
-            filter = function(client)
-                -- apply whatever logic you want (in this example, we'll only use null-ls)
-                return client.name == "null-ls"
-            end,
-            bufnr = bufnr,
-        })
-    end
-
+    local lspconfig = require("lspconfig")
+    
+    -- フォーマット用グループ
     local augroup = vim.api.nvim_create_augroup("LspFormatting", {})
 
-    local on_attach = function(client, bufnr)
+    -- On Attach: 各LSPが読み込まれた時に実行する共通設定
+    local custom_on_attach = function(client, bufnr)
+        -- 保存時に自動フォーマットを実行（LSPが対応している場合）
         if client.supports_method("textDocument/formatting") then
             vim.api.nvim_clear_autocmds({ group = augroup, buffer = bufnr })
             vim.api.nvim_create_autocmd("BufWritePre", {
                 group = augroup,
                 buffer = bufnr,
                 callback = function()
-                    lsp_formatting(bufnr)
+                    vim.lsp.buf.format({ bufnr = bufnr })
                 end,
             })
         end
     end
 
-    require("null-ls").setup({
-        sources = {
-            require("null-ls").builtins.formatting.rustfmt,
-            require("null-ls").builtins.diagnostics.solhint,
-            require("null-ls").builtins.code_actions.eslint,
-            require("null-ls").builtins.code_actions.shellcheck,
-        },
-        on_attach = on_attach,
+    -- 各サーバーの起動設定
+    lspconfig.rust_analyzer.setup({
+        on_attach = custom_on_attach,
     })
+    lspconfig.eslint.setup({
+        on_attach = custom_on_attach,
+    })
+    lspconfig.ts_ls.setup({
+        on_attach = custom_on_attach,
+    })
+    lspconfig.solang.setup({
+        on_attach = custom_on_attach,
+    })
+
+    -- ※ null-ls は不安定なため削除しました。
+    -- Rustのフォーマットは rust_analyzer が自動で行います。
 EOF
 
 " Key Bindings
@@ -157,12 +158,7 @@ nnoremap <c-f> :Rg<CR>
 nnoremap <c-g> :Commits<CR>
 
 " netrw
-let loaded_netrwPlugin   = 1
-" let g:netrw_banner       = 0
-" let g:netrw_keepdir      = 0
-" let g:netrw_liststyle    = 3
-" let g:netrw_sort_options = 'i'
-" let g:netrw_browse_split = 0
+let loaded_netrwPlugin = 1
 
 " FZF
 let g:fzf_buffers_jump = 1
