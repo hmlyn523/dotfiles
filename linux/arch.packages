@@ -1,0 +1,58 @@
+# Arch Linux package list for dotfiles setup
+# Installed via: sudo pacman -S --needed --noconfirm <packages>
+#
+# Tools NOT available here (installed separately in dotfiles script):
+#   - mise      → curl https://mise.run | sh
+#   - starship  → curl -sS https://starship.rs/install.sh | sh
+
+# Core system tools
+curl
+wget
+git
+stow
+tmux
+tree
+watch
+w3m
+
+# Modern CLI replacements
+eza
+fzf
+zoxide
+htop
+jq
+
+# Development tools
+cmake
+ninja
+gcc
+make
+pkgconf
+sqlite
+postgresql
+
+# Editor
+neovim
+
+# File tools
+p7zip
+
+# Language tools
+python
+python-pip
+python-pipx
+ruby
+
+# Shell & completions
+zsh
+zsh-autosuggestions
+
+# GitHub CLI
+github-cli
+
+# Git extras
+git-delta
+tealdeer
+
+# File manager
+yazi

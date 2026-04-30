@@ -1,18 +1,17 @@
 #!/bin/sh
- 
+
 set -e
 
 ###########################################################
 # Color Definitions (ANSI)
 ###########################################################
 BOLD='\033[1m'
-BLUE='\033[0;34m'
 CYAN='\033[0;36m'
 GREEN='\033[0;32m'
 YELLOW='\033[0;33m'
 RED='\033[0;31m'
 PURPLE='\033[0;35m'
-NC='\033[0m' # No Color
+NC='\033[0m'
 
 ###########################################################
 # Utils / Visual Enhancements
@@ -23,30 +22,16 @@ log_title() {
     echo "${BOLD}${PURPLE}==========================================================${NC}"
 }
 
-log_info() {
-    echo "${CYAN}  ❯${NC} $1"
-}
+log_info()    { echo "${CYAN}  ❯${NC} $1"; }
+log_success() { echo "${GREEN}  ✔${NC} ${BOLD}$1${NC}"; }
+log_warning() { echo "${YELLOW}  ⚠${NC} $1"; }
+log_error()   { echo "${RED}  ✖${NC} ${BOLD}$1${NC}"; }
 
-log_success() {
-    echo "${GREEN}  ✔${NC} ${BOLD}$1${NC}"
-}
-
-log_warning() {
-    echo "${YELLOW}  ⚠${NC} $1"
-}
-
-log_error() {
-    echo "${RED}  ✖${NC} ${BOLD}$1${NC}"
-}
-
-# ASCII Art Header
 show_header() {
-    # カラーコード定義（関数外にある場合は不要）
     local CYAN='\033[0;36m'
     local MAGENTA='\033[0;35m'
     local BOLD='\033[1m'
     local NC='\033[0m'
-
     echo ""
     echo "${MAGENTA}${BOLD}   ◆ Dotfiles${NC} :: ${CYAN}${BOLD}Setup Wizard${NC}"
     echo "   ──────────────────────────────────────────"
@@ -64,7 +49,7 @@ show_spinner() {
         spinstr=$temp${spinstr%"$temp"}
         sleep 0.1
     done
-    printf "\r\033[K" # 完了したら行をクリアして綺麗にする
+    printf "\r\033[K"
 }
 
 ###########################################################
@@ -72,30 +57,54 @@ show_spinner() {
 ###########################################################
 GITHUB_PATH=~/projects/github.com
 GIT_CLONE_PATH="$GITHUB_PATH"
-STOW_PACKAGES_PATH="$GIT_CLONE_PATH"/dotfiles/packages
+STOW_PACKAGES_PATH="$GIT_CLONE_PATH/dotfiles/packages"
 
 os_type="$(uname)"
 arch_name="$(uname -m)"
 
-show_header
-log_info "OS: ${os_type} / Arch: ${arch_name}"
+###########################################################
+# OS / Distro Detection
+###########################################################
+detect_distro() {
+    if [ "$os_type" = "Darwin" ]; then
+        DISTRO="macos"
+    elif [ "$os_type" = "Linux" ]; then
+        if [ -f /etc/os-release ]; then
+            DISTRO=$(. /etc/os-release && echo "${ID:-linux-unknown}" | tr '[:upper:]' '[:lower:]')
+        elif [ -f /etc/arch-release ]; then
+            DISTRO="arch"
+        else
+            DISTRO="linux-unknown"
+        fi
+    else
+        DISTRO="unknown"
+    fi
+}
 
-# Options parsing... (ロジックは変更なし)
+detect_distro
+
+show_header
+log_info "OS: ${os_type} / Arch: ${arch_name} / Distro: ${DISTRO}"
+
+# Options parsing
 unlink_packages=
 verbose=
+skip_apps=
+skip_git=
+skip_prune=
 for i in "$@"; do
     case "$i" in
-        -s|--skip-apps) skip_apps=1; shift ;;
-        -v|--verbose) verbose=1; shift ;;
-        -g|--skip-git-setting) skip_git=1; shift ;;
-        -p|--skip-mise-prune) skip_prune=1; shift ;;
-        -u=*|--unlink=*) unlink_packages="${i#*=}"; shift ;;
+        -s|--skip-apps)         skip_apps=1; shift ;;
+        -v|--verbose)           verbose=1; shift ;;
+        -g|--skip-git-setting)  skip_git=1; shift ;;
+        -p|--skip-mise-prune)   skip_prune=1; shift ;;
+        -u=*|--unlink=*)        unlink_packages="${i#*=}"; shift ;;
         *) ;;
     esac
 done
 
 is_file() { [ -f "$1" ]; }
-is_dir() { [ -d "$1" ]; }
+is_dir()  { [ -d "$1" ]; }
 ensure_dir() { if ! is_dir "$1"; then mkdir -p "$1"; fi; }
 
 ###########################################################
@@ -109,33 +118,99 @@ if [ -n "$unlink_packages" ]; then
 fi
 
 ###########################################################
-# Check OS
+# Check OS Compatibility
 ###########################################################
 log_title "System Compatibility Check"
-if [ "${os_type}" != "Darwin" ]; then
-    if [ "${os_type}" != "Linux" ] || ! is_file /etc/arch-release; then
-        log_error "Only macOS or Arch Linux is supported."
+case "$DISTRO" in
+    macos|fedora|arch|ubuntu|debian)
+        log_success "Supported distro: ${DISTRO}"
+        ;;
+    *)
+        log_error "Unsupported OS/distro: ${DISTRO}"
+        log_error "Supported: macOS, Fedora, Arch Linux, Ubuntu/Debian"
         exit 1
-    fi
-fi
-log_success "Environment supported."
+        ;;
+esac
 
 ###########################################################
-# Install Homebrew
+# Homebrew (macOS only)
 ###########################################################
-log_title "Homebrew Setup"
-if ! command -v brew >/dev/null 2>&1; then
-    log_info "Installing Homebrew..."
-    /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-    if [ "${arch_name}" = "arm64" ] && [ -f /opt/homebrew/bin/brew ]; then
-        eval "$(/opt/homebrew/bin/brew shellenv)"
-    elif [ -f /usr/local/bin/brew ]; then
-        eval "$(/usr/local/bin/brew shellenv)"
+setup_homebrew() {
+    log_title "Homebrew Setup"
+    if ! command -v brew >/dev/null 2>&1; then
+        log_info "Installing Homebrew..."
+        /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+        if [ "${arch_name}" = "arm64" ] && [ -f /opt/homebrew/bin/brew ]; then
+            eval "$(/opt/homebrew/bin/brew shellenv)"
+        elif [ -f /usr/local/bin/brew ]; then
+            eval "$(/usr/local/bin/brew shellenv)"
+        fi
+        log_success "Homebrew installed."
+    else
+        log_info "Homebrew already present."
     fi
-    log_success "Homebrew installed successfully!"
-else
-    log_info "Homebrew is already present."
-fi
+}
+
+###########################################################
+# Linux: Extra tools not in standard repos
+###########################################################
+install_linux_extra_tools() {
+    # mise (runtime manager) - not in standard Linux repos
+    if ! command -v mise >/dev/null 2>&1; then
+        log_info "Installing mise via official installer..."
+        curl https://mise.run | sh
+        export PATH="$HOME/.local/bin:$PATH"
+        log_success "mise installed."
+    else
+        log_info "mise already present."
+    fi
+
+    # starship (prompt) - not in standard Linux repos
+    if ! command -v starship >/dev/null 2>&1; then
+        log_info "Installing starship via official installer..."
+        curl -sS https://starship.rs/install.sh | sh -s -- --yes
+        log_success "starship installed."
+    else
+        log_info "starship already present."
+    fi
+}
+
+###########################################################
+# Linux: Native package installation
+###########################################################
+install_linux_packages() {
+    local pkg_file="$GITHUB_PATH/dotfiles/linux/${DISTRO}.packages"
+    if [ ! -f "$pkg_file" ]; then
+        log_warning "Package list not found: $pkg_file"
+        log_warning "Skipping native package installation."
+        install_linux_extra_tools
+        return
+    fi
+
+    # Strip comments and blank lines
+    packages=$(grep -v '^#' "$pkg_file" | grep -v '^[[:space:]]*$' | tr '\n' ' ')
+
+    case "$DISTRO" in
+        fedora)
+            log_info "Installing packages via dnf..."
+            # shellcheck disable=SC2086
+            sudo dnf install -y $packages
+            ;;
+        arch)
+            log_info "Installing packages via pacman..."
+            # shellcheck disable=SC2086
+            sudo pacman -S --needed --noconfirm $packages
+            ;;
+        ubuntu|debian)
+            log_info "Installing packages via apt..."
+            sudo apt-get update -y
+            # shellcheck disable=SC2086
+            sudo apt-get install -y $packages
+            ;;
+    esac
+
+    install_linux_extra_tools
+}
 
 ###########################################################
 # Clone dotfiles
@@ -143,7 +218,7 @@ fi
 log_title "Dotfiles Repository"
 ensure_dir "$GIT_CLONE_PATH"
 
-if ! is_dir "$GIT_CLONE_PATH"/dotfiles; then
+if ! is_dir "$GIT_CLONE_PATH/dotfiles"; then
     log_info "Cloning from GitHub..."
     cd "$GITHUB_PATH"
     git clone https://github.com/hmlyn523/dotfiles.git
@@ -156,54 +231,53 @@ fi
 # Install Apps and CLIs
 ###########################################################
 if [ ! "$skip_apps" ]; then
-    log_title "Brew Bundle (Apps & CLIs)"
-    if command -v brew >/dev/null 2>&1 && [ -f "$GITHUB_PATH"/dotfiles/Brewfile ]; then
-        before_list=$( (brew list --formula 2>/dev/null; brew list --cask 2>/dev/null) | sort)
-        
-        if [ -n "$verbose" ]; then
-            # -v フラグがある場合は従来通り全出力
-            log_info "Updating packages (Verbose mode)..."
-            brew bundle --file "$GITHUB_PATH"/dotfiles/Brewfile --cleanup -v
-        else
-            # 通常モード: バックグラウンドで実行し、スピナーを表示
-            brew bundle --file "$GITHUB_PATH"/dotfiles/Brewfile --cleanup > /tmp/dotfiles_brew.log 2>&1 &
-            brew_pid=$!
-            show_spinner $brew_pid
-            
-            # 終了コードを受け取る
-            wait $brew_pid
-            brew_status=$?
-            
-            if [ $brew_status -ne 0 ]; then
-                log_error "Brew bundle failed! Outputting log:"
-                cat /tmp/dotfiles_brew.log
-                exit 1
+    log_title "Package Installation"
+
+    if [ "$DISTRO" = "macos" ]; then
+        setup_homebrew
+        if command -v brew >/dev/null 2>&1 && is_file "$GITHUB_PATH/dotfiles/Brewfile"; then
+            before_list=$( (brew list --formula 2>/dev/null; brew list --cask 2>/dev/null) | sort)
+
+            if [ -n "$verbose" ]; then
+                log_info "Updating packages (Verbose mode)..."
+                brew bundle --file "$GITHUB_PATH/dotfiles/Brewfile" --cleanup -v
+            else
+                brew bundle --file "$GITHUB_PATH/dotfiles/Brewfile" --cleanup > /tmp/dotfiles_brew.log 2>&1 &
+                brew_pid=$!
+                show_spinner $brew_pid
+                wait $brew_pid
+                brew_status=$?
+                if [ $brew_status -ne 0 ]; then
+                    log_error "Brew bundle failed! Outputting log:"
+                    cat /tmp/dotfiles_brew.log
+                    exit 1
+                fi
+            fi
+
+            after_list=$( (brew list --formula 2>/dev/null; brew list --cask 2>/dev/null) | sort)
+            echo "$before_list" > /tmp/dotfiles_before_list.txt
+            echo "$after_list"  > /tmp/dotfiles_after_list.txt
+            installed=$(comm -23 /tmp/dotfiles_after_list.txt /tmp/dotfiles_before_list.txt)
+            uninstalled=$(comm -13 /tmp/dotfiles_after_list.txt /tmp/dotfiles_before_list.txt)
+            rm /tmp/dotfiles_before_list.txt /tmp/dotfiles_after_list.txt
+
+            log_file="$HOME/.dotfiles_brew_history.log"
+            timestamp=$(date '+%Y-%m-%d %H:%M:%S')
+
+            if [ -z "$installed" ] && [ -z "$uninstalled" ]; then
+                log_success "All packages are up to date."
+            fi
+            if [ -n "$installed" ]; then
+                echo "[$timestamp] INSTALLED: $installed" >> "$log_file"
+                log_success "Installed: $(echo "$installed" | tr '\n' ' ')"
+            fi
+            if [ -n "$uninstalled" ]; then
+                echo "[$timestamp] UNINSTALLED: $uninstalled" >> "$log_file"
+                log_warning "Removed: $(echo "$uninstalled" | tr '\n' ' ')"
             fi
         fi
-        
-        after_list=$( (brew list --formula 2>/dev/null; brew list --cask 2>/dev/null) | sort)
-        echo "$before_list" > /tmp/dotfiles_before_list.txt
-        echo "$after_list" > /tmp/dotfiles_after_list.txt
-        installed=$(comm -23 /tmp/dotfiles_after_list.txt /tmp/dotfiles_before_list.txt)
-        uninstalled=$(comm -13 /tmp/dotfiles_after_list.txt /tmp/dotfiles_before_list.txt)
-        rm /tmp/dotfiles_before_list.txt /tmp/dotfiles_after_list.txt
-        
-        log_file="$HOME/.dotfiles_brew_history.log"
-        timestamp=$(date '+%Y-%m-%d %H:%M:%S')
-        
-        # 差分がなければ「更新なし」とスマートに表示
-        if [ -z "$installed" ] && [ -z "$uninstalled" ]; then
-             log_success "All packages are up to date."
-        fi
-        
-        if [ -n "$installed" ]; then
-            echo "[$timestamp] INSTALLED: $installed" >> "$log_file"
-            log_success "Installed new packages: $(echo $installed | tr '\n' ' ')"
-        fi
-        if [ -n "$uninstalled" ]; then
-            echo "[$timestamp] UNINSTALLED: $uninstalled" >> "$log_file"
-            log_warning "Removed packages: $(echo $uninstalled | tr '\n' ' ')"
-        fi
+    else
+        install_linux_packages
     fi
 fi
 
@@ -216,24 +290,47 @@ ensure_dir ~/.config/starship
 ensure_dir ~/.config/yarn/global
 mkdir -p "$HOME/scripts"
 
+# Packages that only apply to macOS
+MACOS_ONLY_PACKAGES="keybindings"
+
 for pkg_path in "$STOW_PACKAGES_PATH"/*; do
     if [ -d "$pkg_path" ]; then
         pkg_name=$(basename "$pkg_path")
-        log_info "Linking $pkg_name..."
-        stow -vd "$STOW_PACKAGES_PATH" -t ~ "$pkg_name"
+
+        if [ "$DISTRO" != "macos" ]; then
+            # Skip macOS-only packages
+            skip=0
+            for macos_pkg in $MACOS_ONLY_PACKAGES; do
+                if [ "$pkg_name" = "$macos_pkg" ]; then
+                    log_info "Skipping $pkg_name (macOS only)"
+                    skip=1
+                    break
+                fi
+            done
+            [ "$skip" = "1" ] && continue
+
+            log_info "Linking $pkg_name..."
+            # Ignore ~/Library (macOS-specific path) on Linux
+            stow -vd "$STOW_PACKAGES_PATH" -t ~ --ignore='^Library$' "$pkg_name"
+        else
+            log_info "Linking $pkg_name..."
+            stow -vd "$STOW_PACKAGES_PATH" -t ~ "$pkg_name"
+        fi
     fi
 done
 log_success "All links created."
 
 ###########################################################
-# Configure macOS
+# Configure macOS (macOS only)
 ###########################################################
-log_title "macOS Defaults"
-if is_file ~/scripts/macos-defaults; then
-    ~/scripts/macos-defaults
-    log_success "macOS settings applied."
-else
-    log_warning "macos-defaults script not found."
+if [ "$DISTRO" = "macos" ]; then
+    log_title "macOS Defaults"
+    if is_file ~/scripts/macos-defaults; then
+        ~/scripts/macos-defaults
+        log_success "macOS settings applied."
+    else
+        log_warning "macos-defaults script not found."
+    fi
 fi
 
 ###########################################################
@@ -262,7 +359,6 @@ if [ ! "$skip_git" ]; then
     if [ -n "$current_signing_key" ] && is_file ~/.ssh/id_rsa.pub; then
         log_info "Signing key and SSH already set."
     else
-        # ... (略)
         log_success "Git security configuration updated."
     fi
 fi
@@ -271,11 +367,13 @@ fi
 # Finalizing with mise
 ###########################################################
 log_title "mise (Runtime Management)"
+# Ensure ~/.local/bin is in PATH (curl-installed mise on Linux)
+export PATH="$HOME/.local/bin:$PATH"
 if command -v mise >/dev/null 2>&1; then
     mise install
     log_success "Runtime versions installed."
 else
-    log_warning "mise not installed."
+    log_warning "mise not installed. Skipping runtime setup."
 fi
 
 ###########################################################
@@ -284,7 +382,6 @@ fi
 log_title "Rust Toolchain"
 if command -v rustup >/dev/null 2>&1; then
     log_info "Ensuring rustfmt is installed..."
-    # すでにインストールされている場合はスキップされるので安全です
     rustup component add rustfmt
     log_success "rustfmt is ready."
 else

@@ -1,7 +1,7 @@
 # ==========================================
 # 1. 基本パス・環境変数の設定
 # ==========================================
-export PATH="$HOME/scripts:$PATH"
+export PATH="$HOME/scripts:$HOME/.local/bin:$PATH"
 export GITHUB_PATH="$HOME/projects/github.com"
 export XDG_CONFIG_HOME="$HOME/.config"
 export GPG_TTY=$(tty)
@@ -9,21 +9,30 @@ export GPG_TTY=$(tty)
 os_type="$(uname)"
 arch_name="$(uname -m)"
 
+# Linux: ディストリビューション名を取得
+if [ "$os_type" = "Linux" ] && [ -f /etc/os-release ]; then
+    distro=$(. /etc/os-release && echo "${ID:-linux}" | tr '[:upper:]' '[:lower:]')
+else
+    distro="$os_type"
+fi
+
 # 対話シェルの時だけOS情報を表示
 if [[ $- == *i* ]]; then
     echo ">>> ${os_type}/${arch_name} <<<"
 fi
 
 # ==========================================
-# 2. Homebrew のセットアップと高速化
+# 2. Homebrew のセットアップ (macOS / Linux Homebrew)
 # ==========================================
 HOMEBREW_PREFIX_PATH=""
-if [ "${arch_name}" = "x86_64" ] && [ -f "/usr/local/bin/brew" ]; then
-    eval "$(/usr/local/bin/brew shellenv)"
-    HOMEBREW_PREFIX_PATH="/usr/local"
-elif [ "${arch_name}" = "arm64" ] && [ -f "/opt/homebrew/bin/brew" ]; then
-    eval "$(/opt/homebrew/bin/brew shellenv)"
-    HOMEBREW_PREFIX_PATH="/opt/homebrew"
+if [ "$os_type" = "Darwin" ]; then
+    if [ "${arch_name}" = "arm64" ] && [ -f "/opt/homebrew/bin/brew" ]; then
+        eval "$(/opt/homebrew/bin/brew shellenv)"
+        HOMEBREW_PREFIX_PATH="/opt/homebrew"
+    elif [ -f "/usr/local/bin/brew" ]; then
+        eval "$(/usr/local/bin/brew shellenv)"
+        HOMEBREW_PREFIX_PATH="/usr/local"
+    fi
 fi
 
 # ==========================================
@@ -44,17 +53,15 @@ fi
 # zoxide (ディレクトリジャンプ)
 if command -v zoxide > /dev/null; then
     eval "$(zoxide init zsh)"
-    alias zi="zi" # fzf連携モードで起動
+    alias zi="zi"
 fi
 
 # ==========================================
 # 4. fzf (インクリメンタルサーチ) の統合設定
 # ==========================================
 if command -v fzf > /dev/null; then
-    # 基本コマンド設定 (ripgrepを使用)
     export FZF_DEFAULT_COMMAND="rg --files --hidden -l -g '!.git/*' -g '!node_modules/*'"
-    
-    # 全体的な表示設定とプレビューの統合 (ezaを使用)
+
     export FZF_DEFAULT_OPTS="--height 100% --layout=reverse --border --multi --preview '
         if [ -d {} ]; then
             eza --icons --tree --level=2 {} | head -200
@@ -62,17 +69,27 @@ if command -v fzf > /dev/null; then
             cat {}
         fi'"
 
-    # Homebrew経由のキーバインド (Ctrl+R, Ctrl+T) を読み込む
+    # Homebrew経由 (macOS)
     if [ -n "$HOMEBREW_PREFIX_PATH" ]; then
-        [ -f "$HOMEBREW_PREFIX_PATH/opt/fzf/shell/key-bindings.zsh" ] && source "$HOMEBREW_PREFIX_PATH/opt/fzf/shell/key-bindings.zsh"
-        [ -f "$HOMEBREW_PREFIX_PATH/opt/fzf/shell/completion.zsh" ] && source "$HOMEBREW_PREFIX_PATH/opt/fzf/shell/completion.zsh"
+        [ -f "$HOMEBREW_PREFIX_PATH/opt/fzf/shell/key-bindings.zsh" ] && \
+            source "$HOMEBREW_PREFIX_PATH/opt/fzf/shell/key-bindings.zsh"
+        [ -f "$HOMEBREW_PREFIX_PATH/opt/fzf/shell/completion.zsh" ] && \
+            source "$HOMEBREW_PREFIX_PATH/opt/fzf/shell/completion.zsh"
     fi
+
+    # システムインストール (Fedora / Ubuntu)
+    [ -f "/usr/share/fzf/shell/key-bindings.zsh" ] && \
+        source "/usr/share/fzf/shell/key-bindings.zsh"
+    [ -f "/usr/share/fzf/shell/completion.zsh" ] && \
+        source "/usr/share/fzf/shell/completion.zsh"
+    # Ubuntu の場合
+    [ -f "/usr/share/doc/fzf/examples/key-bindings.zsh" ] && \
+        source "/usr/share/doc/fzf/examples/key-bindings.zsh"
 fi
 
 # ==========================================
 # 5. Yazi (ファイルマネージャー) の設定
 # ==========================================
-# 'y' コマンドで起動し、終了時にそのディレクトリへ移動する
 function y() {
     local tmp="$(mktemp -t "yazi-cwd.XXXXXX")"
     yazi "$@" --cwd-file="$tmp"
@@ -83,19 +100,27 @@ function y() {
 }
 
 # ==========================================
-# 6. 開発環境のパス設定 (dotnet, Android, pnpm, etc.)
+# 6. 開発環境のパス設定
 # ==========================================
-# dotnet
+# dotnet (mise管理)
 export DOTNET_ROOT="$HOME/.mise/installs/dotnet/latest"
 export PATH="$DOTNET_ROOT:$PATH"
 
-# Android
-export ANDROID_HOME="$HOME/Library/Android/sdk"
+# Android SDK (macOS と Linux でパスが異なる)
+if [ "$os_type" = "Darwin" ]; then
+    export ANDROID_HOME="$HOME/Library/Android/sdk"
+else
+    export ANDROID_HOME="$HOME/Android/sdk"
+fi
 export PATH="$ANDROID_HOME/emulator:$ANDROID_HOME/tools/bin:$ANDROID_HOME/platform-tools:$ANDROID_HOME/cmdline-tools/latest/bin:$PATH"
 
-# Node / Python / Flutter / scripts
-export PNPM_HOME="$HOME/Library/pnpm"
-export PATH="$HOME/.local/bin:$HOME/.pub-cache/bin:$GITHUB_PATH/dotfiles/packages/common/cli/scripts:$PNPM_HOME:$PATH"
+# pnpm (macOS と Linux でパスが異なる)
+if [ "$os_type" = "Darwin" ]; then
+    export PNPM_HOME="$HOME/Library/pnpm"
+else
+    export PNPM_HOME="$HOME/.local/share/pnpm"
+fi
+export PATH="$HOME/.pub-cache/bin:$GITHUB_PATH/dotfiles/packages/common/cli/scripts:$PNPM_HOME:$PATH"
 
 # SQLite3 (Homebrew)
 if [ -n "$HOMEBREW_PREFIX_PATH" ]; then
@@ -105,16 +130,24 @@ fi
 # ==========================================
 # 7. エイリアス
 # ==========================================
-alias code="open -a 'Visual Studio Code'"
 alias syncsh=". syncsh"
 alias cdrepo=". cdrepo"
 alias lscmd="ls ~/scripts"
 alias vi="nvim"
-alias top="ytop"
-alias battery="ioreg -c AppleSmartBattery | grep -i Capacity"
 
-# Xcode Simulator (動的パス取得)
-alias sim='sim_path="$(ls -dr /Applications/Xcode-* | head -n1)" && open "${sim_path}/Contents/Developer/Applications/Simulator.app/"'
+# top: ytop があれば使用、なければ htop
+if command -v ytop > /dev/null; then
+    alias top="ytop"
+elif command -v htop > /dev/null; then
+    alias top="htop"
+fi
+
+# macOS 専用エイリアス
+if [ "$os_type" = "Darwin" ]; then
+    alias code="open -a 'Visual Studio Code'"
+    alias battery="ioreg -c AppleSmartBattery | grep -i Capacity"
+    alias sim='sim_path="$(ls -dr /Applications/Xcode-* | head -n1)" && open "${sim_path}/Contents/Developer/Applications/Simulator.app/"'
+fi
 
 # eza (lsの代替)
 if command -v eza > /dev/null; then
@@ -133,8 +166,17 @@ if [ -z "$TMUX" ] && [ "$TERM_PROGRAM" != "vscode" ]; then
     tmux attach-session || tmux new-session
 fi
 
-# zsh-autosuggestions (爆速読み込み)
-if [ -n "$HOMEBREW_PREFIX_PATH" ] && [ -f "$HOMEBREW_PREFIX_PATH/share/zsh-autosuggestions/zsh-autosuggestions.zsh" ]; then
+# zsh-autosuggestions
+if [ -n "$HOMEBREW_PREFIX_PATH" ] && \
+   [ -f "$HOMEBREW_PREFIX_PATH/share/zsh-autosuggestions/zsh-autosuggestions.zsh" ]; then
+    # macOS (Homebrew)
     source "$HOMEBREW_PREFIX_PATH/share/zsh-autosuggestions/zsh-autosuggestions.zsh"
-    bindkey '^e' autosuggest-accept
+elif [ -f "/usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh" ]; then
+    # Fedora / Ubuntu (dnf / apt)
+    source "/usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh"
+elif [ -f "/usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh" ]; then
+    # Arch Linux (pacman)
+    source "/usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh"
 fi
+
+bindkey '^e' autosuggest-accept

@@ -46,10 +46,6 @@ action = "None"
 key = "W"
 mods = "Command"
 
-[terminal.shell]
-args = ["new-session", "-D", "-c", "#{pane_current_path}"]
-program = "/opt/homebrew/bin/tmux"
-
 [window]
 decorations = "full"
 dynamic_padding = true
