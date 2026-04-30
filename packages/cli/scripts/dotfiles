@@ -83,6 +83,28 @@ detect_distro() {
 
 detect_distro
 
+###########################################################
+# Bootstrap: Ensure git is installed
+###########################################################
+if ! command -v git >/dev/null 2>&1; then
+    echo "  ❯ git not found. Bootstrapping..."
+    case "$DISTRO" in
+        macos)
+            # macOSの場合はHomebrewのインストールプロセスでgitが入るため、
+            # ここでは何もしなくても後のsetup_homebrewで解決されます
+            ;;
+        fedora)
+            sudo dnf install -y git
+            ;;
+        arch)
+            sudo pacman -S --needed --noconfirm git
+            ;;
+        ubuntu|debian)
+            sudo apt-get update -y && sudo apt-get install -y git
+            ;;
+    esac
+fi
+
 show_header
 log_info "OS: ${os_type} / Arch: ${arch_name} / Distro: ${DISTRO}"
 
