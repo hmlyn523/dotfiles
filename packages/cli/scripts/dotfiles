@@ -17,27 +17,27 @@ NC='\033[0m'
 # Utils / Visual Enhancements
 ###########################################################
 log_title() {
-    echo "\n${BOLD}${PURPLE}==========================================================${NC}"
-    echo "${BOLD}${PURPLE}  🚀 $1${NC}"
-    echo "${BOLD}${PURPLE}==========================================================${NC}"
+    echo -e "\n${BOLD}${PURPLE}==========================================================${NC}"
+    echo -e "${BOLD}${PURPLE}  🚀 $1${NC}"
+    echo -e "${BOLD}${PURPLE}==========================================================${NC}"
 }
 
-log_info()    { echo "${CYAN}  ❯${NC} $1"; }
-log_success() { echo "${GREEN}  ✔${NC} ${BOLD}$1${NC}"; }
-log_warning() { echo "${YELLOW}  ⚠${NC} $1"; }
-log_error()   { echo "${RED}  ✖${NC} ${BOLD}$1${NC}"; }
+log_info()    { echo -e "${CYAN}  ❯${NC} $1"; }
+log_success() { echo -e "${GREEN}  ✔${NC} ${BOLD}$1${NC}"; }
+log_warning() { echo -e "${YELLOW}  ⚠${NC} $1"; }
+log_error()   { echo -e "${RED}  ✖${NC} ${BOLD}$1${NC}"; }
 
 show_header() {
     local CYAN='\033[0;36m'
     local MAGENTA='\033[0;35m'
     local BOLD='\033[1m'
     local NC='\033[0m'
-    echo ""
-    echo "${MAGENTA}${BOLD}   ◆ Dotfiles${NC} :: ${CYAN}${BOLD}Setup Wizard${NC}"
-    echo "   ──────────────────────────────────────────"
-    echo "   👤 User   : ${BOLD}html523${NC}"
-    echo "   🔧 Status : ${CYAN}Initializing...${NC}"
-    echo ""
+    echo -e ""
+    echo -e "${MAGENTA}${BOLD}   ◆ Dotfiles${NC} :: ${CYAN}${BOLD}Setup Wizard${NC}"
+    echo -e "   ──────────────────────────────────────────"
+    echo -e "   👤 User   : ${BOLD}html523${NC}"
+    echo -e "   🔧 Status : ${CYAN}Initializing...${NC}"
+    echo -e ""
 }
 
 show_spinner() {
@@ -70,7 +70,7 @@ detect_distro() {
         DISTRO="macos"
     elif [ "$os_type" = "Linux" ]; then
         if [ -f /etc/os-release ]; then
-            DISTRO=$(. /etc/os-release && echo "${ID:-linux-unknown}" | tr '[:upper:]' '[:lower:]')
+            DISTRO=$(. /etc/os-release && echo -e "${ID:-linux-unknown}" | tr '[:upper:]' '[:lower:]')
         elif [ -f /etc/arch-release ]; then
             DISTRO="arch"
         else
@@ -88,7 +88,7 @@ detect_distro
 ###########################################################
 # git または zsh がない場合に実行
 if ! command -v git >/dev/null 2>&1 || ! command -v zsh >/dev/null 2>&1; then
-    echo "  ❯ Prerequisites (git/zsh) not found. Bootstrapping..."
+    echo -e "  ❯ Prerequisites (git/zsh) not found. Bootstrapping..."
     case "$DISTRO" in
         fedora)
             sudo dnf install -y git zsh
@@ -106,7 +106,7 @@ fi
 # Bootstrap: Ensure git is installed
 ###########################################################
 if ! command -v git >/dev/null 2>&1; then
-    echo "  ❯ git not found. Bootstrapping..."
+    echo -e "  ❯ git not found. Bootstrapping..."
     case "$DISTRO" in
         macos)
             # macOSの場合はHomebrewのインストールプロセスでgitが入るため、
@@ -296,8 +296,8 @@ if [ ! "$skip_apps" ]; then
             fi
 
             after_list=$( (brew list --formula 2>/dev/null; brew list --cask 2>/dev/null) | sort)
-            echo "$before_list" > /tmp/dotfiles_before_list.txt
-            echo "$after_list"  > /tmp/dotfiles_after_list.txt
+            echo -e "$before_list" > /tmp/dotfiles_before_list.txt
+            echo -e "$after_list"  > /tmp/dotfiles_after_list.txt
             installed=$(comm -23 /tmp/dotfiles_after_list.txt /tmp/dotfiles_before_list.txt)
             uninstalled=$(comm -13 /tmp/dotfiles_after_list.txt /tmp/dotfiles_before_list.txt)
             rm /tmp/dotfiles_before_list.txt /tmp/dotfiles_after_list.txt
@@ -309,12 +309,12 @@ if [ ! "$skip_apps" ]; then
                 log_success "All packages are up to date."
             fi
             if [ -n "$installed" ]; then
-                echo "[$timestamp] INSTALLED: $installed" >> "$log_file"
-                log_success "Installed: $(echo "$installed" | tr '\n' ' ')"
+                echo -e "[$timestamp] INSTALLED: $installed" >> "$log_file"
+                log_success "Installed: $(echo -e "$installed" | tr '\n' ' ')"
             fi
             if [ -n "$uninstalled" ]; then
-                echo "[$timestamp] UNINSTALLED: $uninstalled" >> "$log_file"
-                log_warning "Removed: $(echo "$uninstalled" | tr '\n' ' ')"
+                echo -e "[$timestamp] UNINSTALLED: $uninstalled" >> "$log_file"
+                log_warning "Removed: $(echo -e "$uninstalled" | tr '\n' ' ')"
             fi
         fi
     else
@@ -443,7 +443,7 @@ if [ "$(basename "$SHELL")" != "zsh" ]; then
         # /etc/shells に登録されていない場合は追記する (Fedora対策)
         if ! grep -q "$ZSH_PATH" /etc/shells; then
             log_info "Registering $ZSH_PATH to /etc/shells..."
-            echo "$ZSH_PATH" | sudo tee -a /etc/shells > /dev/null
+            echo -e "$ZSH_PATH" | sudo tee -a /etc/shells > /dev/null
         fi
 
         # chshを実行
@@ -458,4 +458,4 @@ if [ "$(basename "$SHELL")" != "zsh" ]; then
     fi
 fi
 
-echo "\n${BOLD}${GREEN}✨ ALL DONE! Enjoy your new environment! ✨${NC}\n"
+echo -e "\n${BOLD}${GREEN}✨ ALL DONE! Enjoy your new environment! ✨${NC}\n"
