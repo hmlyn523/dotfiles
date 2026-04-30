@@ -215,8 +215,8 @@ install_linux_packages() {
     case "$DISTRO" in
         fedora)
             log_info "Installing packages via dnf..."
-            # shellcheck disable=SC2086
-            sudo dnf install -y $packages
+            # --skip-unavailable を追加して、リポジトリにないパッケージで止まらないようにする
+            sudo dnf install -y --skip-unavailable $packages
             ;;
         arch)
             log_info "Installing packages via pacman..."
