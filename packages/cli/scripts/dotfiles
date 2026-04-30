@@ -84,6 +84,25 @@ detect_distro() {
 detect_distro
 
 ###########################################################
+# Bootstrap: Ensure git and zsh are installed
+###########################################################
+# git または zsh がない場合に実行
+if ! command -v git >/dev/null 2>&1 || ! command -v zsh >/dev/null 2>&1; then
+    echo "  ❯ Prerequisites (git/zsh) not found. Bootstrapping..."
+    case "$DISTRO" in
+        fedora)
+            sudo dnf install -y git zsh
+            ;;
+        arch)
+            sudo pacman -S --needed --noconfirm git zsh
+            ;;
+        ubuntu|debian)
+            sudo apt-get update -y && sudo apt-get install -y git zsh
+            ;;
+    esac
+fi
+
+###########################################################
 # Bootstrap: Ensure git is installed
 ###########################################################
 if ! command -v git >/dev/null 2>&1; then
@@ -408,6 +427,35 @@ if command -v rustup >/dev/null 2>&1; then
     log_success "rustfmt is ready."
 else
     log_warning "rustup not found. Skipping rustfmt installation."
+fi
+
+###########################################################
+# Switch Default Shell to zsh
+###########################################################
+# 現在のシェルが zsh でない場合に実行
+if [ "$(basename "$SHELL")" != "zsh" ]; then
+    log_title "Finalizing Shell Setup"
+    log_info "Changing default shell to zsh..."
+    
+    ZSH_PATH=$(command -v zsh)
+
+    if [ -n "$ZSH_PATH" ]; then
+        # /etc/shells に登録されていない場合は追記する (Fedora対策)
+        if ! grep -q "$ZSH_PATH" /etc/shells; then
+            log_info "Registering $ZSH_PATH to /etc/shells..."
+            echo "$ZSH_PATH" | sudo tee -a /etc/shells > /dev/null
+        fi
+
+        # chshを実行
+        if sudo chsh -s "$ZSH_PATH" "$USER"; then
+            log_success "Default shell changed to $ZSH_PATH"
+            log_warning "Please restart your terminal or re-login to apply the changes."
+        else
+            log_error "Failed to change shell. Try manual: sudo chsh -s $ZSH_PATH $USER"
+        fi
+    else
+        log_error "zsh not found. Could not change default shell."
+    fi
 fi
 
 echo "\n${BOLD}${GREEN}✨ ALL DONE! Enjoy your new environment! ✨${NC}\n"
