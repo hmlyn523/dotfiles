@@ -60,7 +60,7 @@ fi
 # 4. fzf (インクリメンタルサーチ) の統合設定
 # ==========================================
 if command -v fzf > /dev/null; then
-    export FZF_DEFAULT_COMMAND="rg --files --hidden -l -g '!.git/*' -g '!node_modules/*'"
+    export FZF_DEFAULT_COMMAND="rg --files --hidden -g '!.git/*' -g '!node_modules/*'"
 
     export FZF_DEFAULT_OPTS="--height 100% --layout=reverse --border --multi --preview '
         if [ -d {} ]; then
