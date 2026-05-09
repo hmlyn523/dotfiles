@@ -17,27 +17,27 @@ NC='\033[0m'
 # Utils / Visual Enhancements
 ###########################################################
 log_title() {
-    echo -e "\n${BOLD}${PURPLE}==========================================================${NC}"
-    echo -e "${BOLD}${PURPLE}  🚀 $1${NC}"
-    echo -e "${BOLD}${PURPLE}==========================================================${NC}"
+    printf "\n${BOLD}${PURPLE}==========================================================${NC}\n"
+    printf "${BOLD}${PURPLE}  🚀 $1${NC}\n"
+    printf "${BOLD}${PURPLE}==========================================================${NC}\n"
 }
 
-log_info()    { echo -e "${CYAN}  ❯${NC} $1"; }
-log_success() { echo -e "${GREEN}  ✔${NC} ${BOLD}$1${NC}"; }
-log_warning() { echo -e "${YELLOW}  ⚠${NC} $1"; }
-log_error()   { echo -e "${RED}  ✖${NC} ${BOLD}$1${NC}"; }
+log_info()    { printf "${CYAN}  ❯${NC} %s\n" "$1"; }
+log_success() { printf "${GREEN}  ✔${NC} ${BOLD}%s${NC}\n" "$1"; }
+log_warning() { printf "${YELLOW}  ⚠${NC} %s\n" "$1"; }
+log_error()   { printf "${RED}  ✖${NC} ${BOLD}%s${NC}\n" "$1"; }
 
 show_header() {
     local CYAN='\033[0;36m'
     local MAGENTA='\033[0;35m'
     local BOLD='\033[1m'
     local NC='\033[0m'
-    echo -e ""
-    echo -e "${MAGENTA}${BOLD}   ◆ Dotfiles${NC} :: ${CYAN}${BOLD}Setup Wizard${NC}"
-    echo -e "   ──────────────────────────────────────────"
-    echo -e "   👤 User   : ${BOLD}html523${NC}"
-    echo -e "   🔧 Status : ${CYAN}Initializing...${NC}"
-    echo -e ""
+    printf "\n"
+    printf "${MAGENTA}${BOLD}   ◆ Dotfiles${NC} :: ${CYAN}${BOLD}Setup Wizard${NC}\n"
+    printf "   ──────────────────────────────────────────\n"
+    printf "   👤 User   : ${BOLD}html523${NC}\n"
+    printf "   🔧 Status : ${CYAN}Initializing...${NC}\n"
+    printf "\n"
 }
 
 show_spinner() {
@@ -49,7 +49,7 @@ show_spinner() {
         spinstr=$temp${spinstr%"$temp"}
         sleep 0.1
     done
-    printf "\r\033[K"
+    printf "\r\033[K\n"
 }
 
 ###########################################################
@@ -70,7 +70,7 @@ detect_distro() {
         DISTRO="macos"
     elif [ "$os_type" = "Linux" ]; then
         if [ -f /etc/os-release ]; then
-            DISTRO=$(. /etc/os-release && echo -e "${ID:-linux-unknown}" | tr '[:upper:]' '[:lower:]')
+            DISTRO=$(. /etc/os-release && printf "%s" "${ID:-linux-unknown}" | tr '[:upper:]' '[:lower:]')
         elif [ -f /etc/arch-release ]; then
             DISTRO="arch"
         else
@@ -88,7 +88,7 @@ detect_distro
 ###########################################################
 # git または zsh がない場合に実行
 if ! command -v git >/dev/null 2>&1 || ! command -v zsh >/dev/null 2>&1; then
-    echo -e "  ❯ Prerequisites (git/zsh) not found. Bootstrapping..."
+    printf "  ❯ Prerequisites (git/zsh) not found. Bootstrapping...\n"
     case "$DISTRO" in
         fedora)
             sudo dnf install -y git zsh
@@ -106,7 +106,7 @@ fi
 # Bootstrap: Ensure git is installed
 ###########################################################
 if ! command -v git >/dev/null 2>&1; then
-    echo -e "  ❯ git not found. Bootstrapping..."
+    printf "  ❯ git not found. Bootstrapping...\n"
     case "$DISTRO" in
         macos)
             # macOSの場合はHomebrewのインストールプロセスでgitが入るため、
@@ -149,11 +149,76 @@ is_dir()  { [ -d "$1" ]; }
 ensure_dir() { if ! is_dir "$1"; then mkdir -p "$1"; fi; }
 
 ###########################################################
-# Stow unlink
+# 自作 Stow 関数 (依存なしでリンクとアンリンクを実現)
+###########################################################
+
+# シンボリックリンクを展開する関数
+_link_package() {
+    local src_dir="$1"
+    local dest_root="$2"
+    local ignore_pattern="$3"
+
+    [ ! -d "$src_dir" ] && return 1
+
+    # ディレクトリの中身をループ
+    for entry in "$src_dir"/* "$src_dir"/.[!.]*; do
+        [ -e "$entry" ] || continue # ファイルが存在しない場合はスキップ
+
+        local name=$(basename "$entry")
+        
+        # 除外設定
+        [[ "$name" == ".DS_Store" ]] && continue
+        if [ -n "$ignore_pattern" ] && printf "%s\n" "$name" | grep -qE "$ignore_pattern"; then
+            continue
+        fi
+
+        local dest="${dest_root}/${name}"
+
+        if [ -d "$entry" ] && [ -d "$dest" ] && [ ! -L "$dest" ]; then
+            # 【重要】両方にディレクトリがある場合は、さらに深く潜ってリンクを貼る
+            _link_package "$entry" "$dest" "$ignore_pattern"
+        else
+            # ファイル、またはターゲット側にディレクトリがない場合はリンクを貼る
+            local abs_src="$(cd "$(dirname "$entry")" && pwd)/$name"
+            
+            if [ -L "$dest" ]; then
+                ln -sf "$abs_src" "$dest"
+                printf "   Relinked: %s\n" "$name"
+            elif [ -e "$dest" ]; then
+                printf "⚠️  Skipped: $dest (Already exists as a real file/dir)\n"
+            else
+                ln -s "$abs_src" "$dest"
+                printf "   Linked: %s\n" "$name"
+            fi
+        fi
+    done
+}
+
+# シンボリックリンクを解除(削除)する関数
+_unlink_package() {
+    local src_dir="$1"
+    local dest_root="$2"
+
+    [ ! -d "$src_dir" ] && return 1
+
+    find "$src_dir" -type f | while read -r src; do
+        local rel_path="${src#$src_dir/}"
+        local dest="${dest_root}/${rel_path}"
+
+        if [ -L "$dest" ]; then
+            rm "$dest"
+            printf "   Unlinked: %s\n" "$rel_path"
+        fi
+    done
+}
+
+###########################################################
+# Stow unlink (置き換え)
 ###########################################################
 if [ -n "$unlink_packages" ]; then
     log_title "Unlinking dotfiles"
-    stow -vD -d "$STOW_PACKAGES_PATH" -t ~ "$unlink_packages"
+    # 元: stow -vD -d "$STOW_PACKAGES_PATH" -t ~ "$unlink_packages"
+    _unlink_package "$STOW_PACKAGES_PATH/$unlink_packages" "$HOME"
     log_success "Unlink complete."
     exit
 fi
@@ -296,8 +361,8 @@ if [ ! "$skip_apps" ]; then
             fi
 
             after_list=$( (brew list --formula 2>/dev/null; brew list --cask 2>/dev/null) | sort)
-            echo -e "$before_list" > /tmp/dotfiles_before_list.txt
-            echo -e "$after_list"  > /tmp/dotfiles_after_list.txt
+            printf "$before_list\n" > /tmp/dotfiles_before_list.txt
+            printf "$after_list\n"  > /tmp/dotfiles_after_list.txt
             installed=$(comm -23 /tmp/dotfiles_after_list.txt /tmp/dotfiles_before_list.txt)
             uninstalled=$(comm -13 /tmp/dotfiles_after_list.txt /tmp/dotfiles_before_list.txt)
             rm /tmp/dotfiles_before_list.txt /tmp/dotfiles_after_list.txt
@@ -309,12 +374,12 @@ if [ ! "$skip_apps" ]; then
                 log_success "All packages are up to date."
             fi
             if [ -n "$installed" ]; then
-                echo -e "[$timestamp] INSTALLED: $installed" >> "$log_file"
-                log_success "Installed: $(echo -e "$installed" | tr '\n' ' ')"
+                printf "[$timestamp] INSTALLED: $installed\n" >> "$log_file"
+                log_success "Installed: $(printf "%s" "$installed" | tr '\n' ' ')"
             fi
             if [ -n "$uninstalled" ]; then
-                echo -e "[$timestamp] UNINSTALLED: $uninstalled" >> "$log_file"
-                log_warning "Removed: $(echo -e "$uninstalled" | tr '\n' ' ')"
+                printf "[$timestamp] UNINSTALLED: $uninstalled\n" >> "$log_file"
+                log_warning "Removed: $(printf "%s" "$uninstalled" | tr '\n' ' ')"
             fi
         fi
     else
@@ -323,9 +388,9 @@ if [ ! "$skip_apps" ]; then
 fi
 
 ###########################################################
-# Stow link
+# Stow link (置き換え)
 ###########################################################
-log_title "Symbolic Linking (Stow)"
+log_title "Symbolic Linking (Custom Stow)"
 ensure_dir ~/.config/alacritty
 ensure_dir ~/.config/starship
 ensure_dir ~/.config/yarn/global
@@ -339,7 +404,6 @@ for pkg_path in "$STOW_PACKAGES_PATH"/*; do
         pkg_name=$(basename "$pkg_path")
 
         if [ "$DISTRO" != "macos" ]; then
-            # Skip macOS-only packages
             skip=0
             for macos_pkg in $MACOS_ONLY_PACKAGES; do
                 if [ "$pkg_name" = "$macos_pkg" ]; then
@@ -351,11 +415,13 @@ for pkg_path in "$STOW_PACKAGES_PATH"/*; do
             [ "$skip" = "1" ] && continue
 
             log_info "Linking $pkg_name..."
-            # Ignore ~/Library (macOS-specific path) on Linux
-            stow -vd "$STOW_PACKAGES_PATH" -t ~ --ignore='^Library$' "$pkg_name"
+            # 元: stow -vd "$STOW_PACKAGES_PATH" -t ~ --ignore='^Library$' "$pkg_name"
+            # 代替: 第三引数に正規表現の除外パターンを渡す
+            _link_package "$pkg_path" "$HOME" "^Library/"
         else
             log_info "Linking $pkg_name..."
-            stow -vd "$STOW_PACKAGES_PATH" -t ~ "$pkg_name"
+            # 元: stow -vd "$STOW_PACKAGES_PATH" -t ~ "$pkg_name"
+            _link_package "$pkg_path" "$HOME"
         fi
     fi
 done
@@ -443,7 +509,7 @@ if [ "$(basename "$SHELL")" != "zsh" ]; then
         # /etc/shells に登録されていない場合は追記する (Fedora対策)
         if ! grep -q "$ZSH_PATH" /etc/shells; then
             log_info "Registering $ZSH_PATH to /etc/shells..."
-            echo -e "$ZSH_PATH" | sudo tee -a /etc/shells > /dev/null
+            printf "%s\n" "$ZSH_PATH" | sudo tee -a /etc/shells > /dev/null
         fi
 
         # chshを実行
@@ -458,4 +524,5 @@ if [ "$(basename "$SHELL")" != "zsh" ]; then
     fi
 fi
 
-echo -e "\n${BOLD}${GREEN}✨ ALL DONE! Enjoy your new environment! ✨${NC}\n"
+printf "\n${BOLD}${GREEN}✨ ALL DONE! Enjoy your new environment! ✨${NC}\n\n"
+

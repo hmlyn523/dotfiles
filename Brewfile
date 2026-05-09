@@ -1,4 +1,6 @@
+# ================================
 # Taps
+# ================================
 tap "adoptopenjdk/openjdk"
 tap "cjbassi/ytop"
 tap "convco/formulae"
@@ -8,83 +10,73 @@ tap "homebrew/services"
 tap "koekeishiya/formulae"
 tap "wix/brew"
 
+# ================================
 # Cask arguments
+# ================================
 cask_args appdir: "/Applications"
 
+# ================================
 # Formulae
+# ================================
 brew "applesimutils"
 brew "cmake"
-brew "curl"
-brew "eza"
-brew "freetype"
-brew "fzf"
 brew "gemini-cli"
 brew "gh"
 brew "git"
 brew "git-cliff"
 brew "git-delta"
-brew "grep"
-brew "htop"
 brew "ios-deploy"
-brew "jq"
 brew "mise"
-brew "ninja"
 brew "nvim"
 brew "p7zip"
 brew "pipx"
 brew "pkg-config"
-brew "postgresql@17"
-brew "python"
 brew "rtk"
-brew "ruby"
-brew "sqlite"
-brew "starship"
-brew "stow"
-brew "tealdeer"
-brew "tmux"
-brew "tree"
-brew "w3m"
-brew "watch"
-brew "wget"
-brew "yazi"
-brew "ytop"
-brew "zoxide"
-brew "zsh"
-brew "zsh-autosuggestions"
 
+# ================================
 # Casks
+# ================================
+# Terminal & Fonts (Core)
 cask "alacritty"
-cask "alt-tab"
-cask "balenaetcher"
-cask "battery"
-cask "blender"
+cask "font-udev-gothic-nf"
+cask "font-hack-nerd-font"
+cask "fontforge"
+
+#Browsing & Knowledge
 cask "brave-browser"
-cask "chatgpt"
+cask "google-chrome"
+cask "obsidian"
+
+# Development & Virtuallization (Minimum)
+cask "orbstack"
+cask "sourcetree"
+cask "utm"
+cask "visual-studio-code"
+
+# AI Tools
 cask "claude-code"
 cask "codex"
 cask "codex-app"
+cask "chatgpt"
 cask "copilot-cli"
-cask "font-hack-nerd-font"
-cask "font-udev-gothic-nf"
-cask "fontforge"
+
+# Creative Engines (Heavyweight)
+cask "blender"
 cask "gimp"
-cask "google-chrome"
-cask "gpg-suite"
 cask "inkscape"
-cask "iterm2"
-cask "logi-options+"
-cask "meld"
-cask "microsoft-remote-desktop"
-cask "mist"
-cask "obsidian"
-cask "ollama"
-cask "orbstack"
-cask "sourcetree"
 cask "unity-hub"
-cask "utm"
-cask "virtualbox"
-cask "visual-studio-code"
+
+# System Utilities & Integration
+cask "alt-tab"
+cask "logi-options+"
+cask "gpg-suite"
+cask "microsoft-remote-desktop"
 cask "xquartz"
+
+# Single-purpose Utilities
+cask "balenaetcher"
+cask "battery"
+cask "mist"
 
 # Mac App Store (commented out as not working)
 # mas "Bitwarden", id: 1137397744
